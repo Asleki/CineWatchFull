@@ -1,0 +1,255 @@
+// --- TMDB API Configuration ---
+// Your actual v3 API key from TMDB.
+const TMDB_API_KEY = '9c198aabc1df9fa96ea8d65e183cb8a3';
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/'; // Base URL for images
+const POSTER_SIZE = 'w300'; // Common sizes: 'w92', 'w154', 'w185', 'w300', 'w500', 'w780', 'original'
+
+/**
+ * Fetches a list of popular TV shows from TMDB.
+ * @returns {Promise<Array>} A promise that resolves to an array of TV show objects.
+ */
+async function fetchPopularTvShows() {
+    const url = `${TMDB_BASE_URL}/tv/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // TMDB responses have a 'results' array containing the actual items
+        return data.results;
+    } catch (error) {
+        console.error("Error fetching popular TV shows:", error);
+        showMessageBox(`Failed to load popular shows: ${error.message}`, "fas fa-exclamation-triangle red-icon");
+        return []; // Return an empty array on error
+    }
+}
+
+/**
+ * Displays a list of TV shows in a designated area, limited to the first 5.
+ * For demonstration, this will create simple list items.
+ * In your actual app, you'd integrate this with your carousel rendering.
+ * @param {Array} shows - Array of show objects from TMDB.
+ * @param {HTMLElement} containerElement - The DOM element to append shows to.
+ */
+function displayTvShows(shows, containerElement) {
+    if (!containerElement) {
+        console.error("Container element not found for displaying TV shows.");
+        return;
+    }
+    containerElement.innerHTML = ''; // Clear existing content
+
+    // Limit to the first 5 shows
+    const showsToDisplay = shows.slice(0, 5);
+
+    if (showsToDisplay.length === 0) {
+        containerElement.innerHTML = '<p>No shows found to display.</p>';
+        return;
+    }
+
+    showsToDisplay.forEach(show => {
+        const showDiv = document.createElement('div');
+        showDiv.classList.add('tmdb-show-item'); // Add a class for potential styling
+        
+        // Construct the full poster URL
+        const posterUrl = show.poster_path
+            ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${show.poster_path}`
+            : 'https://placehold.co/300x450/cccccc/000000?text=No+Poster'; // Placeholder if no poster
+
+        showDiv.innerHTML = `
+            <img src="${posterUrl}" alt="${show.name || show.title} Poster" class="tmdb-poster" onerror="this.onerror=null;this.src='https://placehold.co/300x450/cccccc/000000?text=No+Poster';">
+            <h3>${show.name || show.title}</h3>
+            <p>Rating: ${show.vote_average ? show.vote_average.toFixed(1) : 'N/A'}</p>
+            <p>First Air Date: ${show.first_air_date || 'N/A'}</p>
+            <button class="details-button" data-tmdb-id="${show.id}" data-type="tv">View Details</button>
+        `;
+        containerElement.appendChild(showDiv);
+
+        // Add event listener to the details button
+        showDiv.querySelector('.details-button').addEventListener('click', (e) => {
+            const tmdbId = e.target.dataset.tmdbId;
+            const type = e.target.dataset.type;
+            showMessageBox(`Simulating navigation to details page for ID: ${tmdbId} (Type: ${type})`, "fas fa-info-circle blue-icon");
+            // In a real application, you would navigate to show_details.html?id=${tmdbId}&type=${type}
+        });
+    });
+}
+
+// Example usage on page load (you'd integrate this where you populate your carousels)
+document.addEventListener('DOMContentLoaded', async () => {
+    // Basic CSS for the demo container, matching your site's dark/light mode
+    const style = document.createElement('style');
+    style.textContent = `
+        .tmdb-show-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px var(--card-shadow);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .tmdb-show-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .tmdb-show-item h3 {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 5px;
+        }
+        .tmdb-show-item p {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.8;
+        }
+        .tmdb-show-item .details-button {
+            background-color: var(--highlight);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 10px;
+        }
+        .tmdb-show-item .details-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    `;
+    document.head.appendChild(style);
+
+
+    // Create a temporary container for this demonstration
+    const demoContainer = document.createElement('div');
+    demoContainer.id = 'tmdb-popular-shows-demo';
+    demoContainer.style.marginTop = '20px';
+    demoContainer.style.padding = '20px';
+    demoContainer.style.backgroundColor = 'var(--carousel-bg)';
+    demoContainer.style.borderRadius = '15px';
+    demoContainer.style.display = 'grid';
+    demoContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(180px, 1fr))';
+    demoContainer.style.gap = '20px';
+    demoContainer.style.color = 'var(--text)';
+    demoContainer.innerHTML = '<h2 style="color:var(--text); grid-column: 1 / -1; text-align: center; margin-bottom: 20px;">TMDB Popular TV Shows (Demo)</h2>';
+    document.querySelector('main').appendChild(demoContainer);
+
+    const popularShows = await fetchPopularTvShows();
+    displayTvShows(popularShows, demoContainer);
+});
+
+
+// Existing showMessageBox and Dark Mode Toggle functions (as in Part 1)
+// ... (your existing showMessageBox, toggleDarkMode, updateAccountDropdown functions)
+
+/**
+ * Displays a custom alert/message box to the user.
+ * @param {string} message - The message to display.
+ * @param {string} iconClasses - Font Awesome classes for the icon (e.g., "fas fa-check-circle green-icon").
+ */
+function showMessageBox(message, iconClasses = "fas fa-info-circle blue-icon") {
+    const customAlert = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = customAlert.querySelector('.alert-icon');
+    const closeAlertBtn = document.getElementById('closeAlertBtn');
+
+    if (customAlert && alertMessage && alertIcon && closeAlertBtn) {
+        alertMessage.textContent = message;
+        alertIcon.className = 'alert-icon ' + iconClasses;
+        customAlert.classList.add('show');
+
+        const closeHandler = () => {
+            customAlert.classList.remove('show');
+            closeAlertBtn.removeEventListener('click', closeHandler);
+        };
+        closeAlertBtn.addEventListener('click', closeHandler);
+
+        const overlayClickHandler = (event) => {
+            if (event.target === customAlert) {
+                customAlert.classList.remove('show');
+                customAlert.removeEventListener('click', overlayClickHandler);
+            }
+        };
+        customAlert.addEventListener('click', overlayClickHandler);
+    } else {
+        console.error("MessageBox elements not found. Cannot show message.");
+    }
+}
+
+/**
+ * Toggles dark mode on/off.
+ */
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        if (document.body.classList.contains('dark-mode')) {
+            darkModeToggle.classList.replace('fa-moon', 'fa-sun');
+            darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+        } else {
+            darkModeToggle.classList.replace('fa-sun', 'fa-moon');
+            darkModeToggle.setAttribute('title', 'Toggle Dark Mode');
+        }
+    }
+}
+
+/**
+ * Updates the visibility of login/logout/profile links in the account dropdown.
+ * @param {boolean} isLoggedIn - True if the user is logged in, false otherwise.
+ */
+function updateAccountDropdown(isLoggedIn) {
+    const loginLink = document.getElementById('loginLink');
+    const registerLink = document.getElementById('registerLink');
+    const profileLink = document.getElementById('profileLink');
+    const logoutLink = document.getElementById('logoutLink');
+    const mobileLoginLink = document.getElementById('mobileLoginLink');
+    const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+    const mobileProfileLink = document.getElementById('mobileProfileLink');
+
+    const accountItems = document.querySelectorAll('.account-item');
+
+    if (isLoggedIn) {
+        if (loginLink) loginLink.style.display = 'none';
+        if (registerLink) registerLink.style.display = 'none';
+        if (profileLink) profileLink.style.display = 'flex';
+        if (logoutLink) logoutLink.style.display = 'flex';
+        if (mobileLoginLink) mobileLoginLink.style.display = 'none';
+        if (mobileLogoutLink) mobileLogoutLink.style.display = 'flex';
+        if (mobileProfileLink) mobileProfileLink.style.display = 'flex';
+
+        accountItems.forEach(item => {
+            if (item.id !== 'loginLink' && item.id !== 'registerLink' && item.id !== 'logoutLink' && item.id !== 'profileLink' && item.id !== 'settingsLink') {
+                item.style.display = 'flex';
+            }
+        });
+
+    } else {
+        if (loginLink) loginLink.style.display = 'flex';
+        if (registerLink) registerLink.style.display = 'flex';
+        if (profileLink) profileLink.style.display = 'none';
+        if (logoutLink) logoutLink.style.display = 'none';
+        if (mobileLoginLink) mobileLoginLink.style.display = 'flex';
+        if (mobileLogoutLink) mobileLogoutLink.style.display = 'none';
+        if (mobileProfileLink) mobileProfileLink.style.display = 'none';
+
+        accountItems.forEach(item => {
+            if (item.id !== 'loginLink' && item.id !== 'registerLink' && item.id !== 'logoutLink' && item.id !== 'profileLink' && item.id !== 'settingsLink') {
+                item.style.display = 'none';
+            }
+        });
+    }
+    userLoggedIn = isLoggedIn;
+}
+
+// Ensure these functions are globally available or properly scoped if you're
+// inserting this code into your existing script.
+// The `showMessageBox` and `toggleDarkMode` functions are included here
+// again for completeness of this self-contained demo, but you likely
+// already have them in your main `cinewatch_home_updated.html` file.
