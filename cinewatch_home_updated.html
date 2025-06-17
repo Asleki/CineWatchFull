@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CineWatch - Stream, Discover, Repeat</title>
+  
+  <!-- Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Inter Font (for consistent typography across the site) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Consolidated Main Stylesheet -->
+  <style>
+    /* Root Theme Variables */
+    :root {
+      --bg: #fff;
+      --text: #111;
+      --header-bg: #f0ecec;
+      --search-bg: #f4f4f4;
+      --card-bg: #fdfdfd;
+      --card-border: #eee;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --highlight: #007bff;
+      --accent: #28a745;
+      --danger: #dc3545;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --carousel-bg: #f8f8f8;
+      --genre-tag-bg: #e0e0e0;
+      --genre-tag-text: #333;
+      --modal-bg: rgba(0, 0, 0, 0.5);
+      --modal-content-bg: #fff;
+      --modal-text: #111;
+      --hero-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+      --hero-text: #fff;
+      --hero-quote-bg: rgba(0, 0, 0, 0.7);
+      --hero-quote-border: #444;
+      --search-area-height: 120px; /* Approximate height of expanded search area */
+    }
+
+    /* Dark Mode Variables */
+    body.dark-mode {
+      --bg: #1a1a1a;
+      --text: #f0f0f0;
+      --header-bg: #2a2a2a;
+      --search-bg: #333;
+      --card-bg: #282828;
+      --card-border: #444;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --highlight: #66b3ff;
+      --accent: #4CAF50;
+      --danger: #ff6b6b;
+      --info: #00bcd4;
+      --warning: #ffeb3b;
+      --carousel-bg: #222;
+      --genre-tag-bg: #444;
+      --genre-tag-text: #f0f0f0;
+      --modal-bg: rgba(0, 0, 0, 0.7);
+      --modal-content-bg: #282828;
+      --modal-text: #f0f0f0;
+      --hero-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
+      --hero-text: #f0f0f0;
+      --hero-quote-bg: rgba(0, 0, 0, 0.8);
+      --hero-quote-border: #666;
+    }
+
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--highlight);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--accent);
+    }
+
+    /* Accessibility: Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--highlight);
+      outline-offset: 2px;
+    }
+
+    /* Global Header Wrapper */
+    .main-global-header {
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    /* Utility Header (Top Row) */
+    .utility-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border); /* Separator */
+    }
+
+    .logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--highlight);
+      text-transform: capitalize; /* Ensures initial caps as requested */
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-utility-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-bar-toggle button {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .search-bar-toggle button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-menu {
+      position: relative;
+    }
+
+    .account-button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      display: flex; /* Centers the icon */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .account-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: var(--header-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+      padding: 10px 0;
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .account-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .account-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      color: var(--text);
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .account-dropdown a:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--highlight);
+    }
+
+    .account-dropdown a i {
+      width: 20px; /* Ensures consistent icon alignment */
+      text-align: center;
+    }
+
+    .mobile-menu-toggle {
+      display: none; /* Hidden by default on desktop */
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Main Navigation Header (Bottom Row - Desktop Nav) */
+    .main-nav-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .main-nav-header a {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 1rem;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .main-nav-header a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .main-nav-header a:hover::after {
+      width: 100%;
+    }
+
+    /* Dynamic Search Area */
+    .dynamic-search-area {
+      background-color: var(--header-bg);
+      padding: 15px 20px;
+      overflow: hidden;
+      max-height: 0; /* Initially hidden */
+      opacity: 0;
+      transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .dynamic-search-area.show {
+      max-height: var(--search-area-height); /* Expands to reveal */
+      opacity: 1;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px; /* Space between input and filters */
+    }
+
+    .dynamic-search-area input[type="text"] {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--card-border);
+      border-radius: 25px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .dynamic-search-area input[type="text"]:focus {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    .search-icon-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.2s ease;
+    }
+    .search-icon-btn:hover {
+        color: var(--highlight);
+    }
+
+    .search-button-label {
+      background-color: var(--highlight);
+      color: #fff;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-button-label:hover {
+      background-color: #0056b3;
+    }
+
+    .search-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center; /* Centers filters */
+    }
+
+    .search-filters select,
+    .search-filters input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      min-width: 120px;
+      flex: 1; /* Allows items to grow/shrink */
+      max-width: 200px; /* Max width for filter inputs */
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      height: 500px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end; /* Aligns content to the bottom */
+      color: var(--hero-text);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      overflow: hidden; /* Ensures background doesn't overflow */
+      width: 100%; /* Ensures it spans full width */
+      transition: background-image 0.5s ease-in-out, margin-top 0.4s ease-out; /* Smooth transition for background and margin-top */
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--hero-overlay);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 30px;
+      max-width: 800px;
+      text-align: left;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      max-width: 600px;
+    }
+
+    .hero-buttons .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .hero-buttons .btn-primary {
+      background-color: var(--highlight);
+      color: #fff;
+      border: 2px solid var(--highlight);
+    }
+
+    .hero-buttons .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .hero-buttons .btn-secondary {
+      background-color: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+    }
+
+    .hero-buttons .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Quote Card (New) */
+    .hero-quote-card {
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
+      background-color: var(--hero-quote-bg);
+      border: 1px solid var(--hero-quote-border);
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 350px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .hero-quote-card .quote-text {
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .hero-quote-card .quote-author {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Main Content */
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content-section {
+      margin-bottom: 40px;
+    }
+
+    .content-section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--text);
+      border-bottom: 2px solid var(--highlight);
+      padding-bottom: 5px;
+      display: inline-block;
+    }
+
+    /* Show Cards (New Style) */
+    .show-card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Reduced min width */
+        gap: 20px;
+        background-color: var(--carousel-bg); /* Carousel background */
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Inner shadow for carousel feel */
+    }
+
+    .show-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 15px; /* Consistent rounded corners */
+        overflow: hidden;
+        box-shadow: 0 4px 10px var(--card-shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensures cards in a grid have consistent height */
+    }
+
+    .show-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px var(--card-shadow);
+    }
+
+    .show-card img {
+        width: 100%;
+        height: 250px; /* Fixed height for consistency */
+        object-fit: cover; /* Covers the area, crops if necessary */
+        display: block;
+    }
+
+    .show-card-info {
+        padding: 15px;
+        flex-grow: 1; /* Allows info section to expand */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes button to bottom */
+    }
+
+    .show-card-info h3 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: var(--text);
+        text-align: center;
+    }
+
+    .show-card-info p {
+        font-size: 0.85rem;
+        color: var(--text);
+        opacity: 0.8;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .show-card-info .btn-watch {
+        display: block; /* Makes button full width */
+        width: calc(100% - 20px); /* Adjusts for padding if needed */
+        margin: 0 auto; /* Centers the button */
+        padding: 8px 15px;
+        background-color: var(--highlight);
+        color: #fff;
+        border: none;
+        border-radius: 8px; /* Slightly more rounded buttons */
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        cursor: pointer;
+    }
+
+    .show-card-info .btn-watch:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    /* Featured Content Section (for individual cards) */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .featured-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px var(--card-shadow);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .featured-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px var(--card-shadow);
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .featured-card-info {
+      padding: 20px;
+    }
+
+    .featured-card-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .featured-card-info p {
+      font-size: 0.95rem;
+      color: var(--text);
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+
+    .featured-card-info .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--highlight);
+      color: #fff;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .featured-card-info .btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Show Card with Details Overlay (New Feature) */
+    .show-card-overlay {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .show-card-overlay .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .show-card-overlay:hover .overlay {
+        opacity: 1;
+    }
+
+    .overlay h4 {
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    .overlay p {
+        margin-bottom: 10px;
+    }
+
+    .overlay .btn {
+        background-color: var(--highlight);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+    }
+
+    .overlay .btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Carousel Navigation */
+    .carousel-container {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .carousel-container h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: var(--text);
+        border-bottom: 2px solid var(--highlight);
+        padding-bottom: 5px;
+        display: inline-block;
+        width: auto; /* Allows H2 to take only necessary width */
+    }
+
+    .carousel {
+        display: flex;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        padding: 10px 0; /* Adds some padding for the ends of the carousel */
+        gap: 20px; /* Space between cards */
+        background-color: var(--carousel-bg);
+        border-radius: 15px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .carousel::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .carousel::-webkit-scrollbar-track {
+        background: var(--card-border);
+        border-radius: 10px;
+    }
+
+    .carousel::-webkit-scrollbar-thumb {
+        background: var(--highlight);
+        border-radius: 10px;
+    }
+
+    .carousel::-webkit-scrollbar-thumb:hover {
+        background: #0056b3;
+    }
+
+    .carousel .show-card {
+        flex: 0 0 auto; /* Does not grow, does not shrink, uses intrinsic width */
+        width: 180px; /* Fixed width for carousel items */
+        scroll-snap-align: start;
+    }
+
+    .carousel-nav-buttons {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        pointer-events: none; /* Allows clicks to pass through */
+        padding: 0 10px; /* Padding to keep buttons inside container */
+    }
+
+    .carousel-nav-buttons button {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+        pointer-events: auto; /* Re-enables clicks on buttons */
+        z-index: 10; /* Ensures buttons are above carousel items */
+    }
+
+    .carousel-nav-buttons button:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Genre Tags (New) */
+    .genre-tags {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .genre-tag {
+      background-color: var(--genre-tag-bg);
+      color: var(--genre-tag-text);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .genre-tag:hover {
+      background-color: var(--highlight);
+      color: #fff;
+    }
+
+    /* Modal / Custom Alert Box */
+    .custom-alert {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 2000; /* High z-index to be on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: var(--modal-bg);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .custom-alert.show {
+      display: flex; /* Shows when active */
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .alert-content {
+      background-color: var(--modal-content-bg);
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .custom-alert.show .alert-content {
+      transform: translateY(0);
+    }
+
+    .alert-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .alert-icon.red-icon { color: var(--danger); }
+    .alert-icon.blue-icon { color: var(--info); }
+    .alert-icon.green-icon { color: var(--accent); }
+    .alert-icon.yellow-icon { color: var(--warning); }
+
+
+    #alertMessage {
+      font-size: 1.1rem;
+      color: var(--modal-text);
+      margin-bottom: 20px;
+    }
+
+    #closeAlertBtn {
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+
+    #closeAlertBtn:hover {
+      background-color: #0056b3;
+    }
+
+
+    /* Footer */
+    .main-footer {
+      background-color: var(--header-bg);
+      color: var(--text);
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.9rem;
+      margin-top: 50px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-section {
+      flex: 1 1 200px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .footer-section h4 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--highlight);
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+
+    .footer-section ul li a {
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .footer-section ul li a:hover {
+      color: var(--highlight);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .footer-bottom p {
+      margin-bottom: 10px;
+    }
+
+    .social-icons {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .social-icons a {
+      color: var(--text);
+      font-size: 1.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--highlight);
+    }
+
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      /* Header Re-arrangement for small screens */
+      .utility-header {
+        flex-direction: column;
+        text-align: center;
+        padding-bottom: 10px;
+      }
+
+      .header-utility-actions {
+        width: 100%;
+        justify-content: center; /* Centers icons */
+        margin-top: 10px;
+      }
+
+      .main-nav-header {
+        display: none; /* Hides desktop nav links initially on small screens */
+        flex-direction: column;
+        padding: 0; /* Handled by mobile-nav-links */
+      }
+
+      .mobile-menu-toggle {
+        display: block; /* Shows hamburger icon */
+      }
+      
+      /* Mobile nav links, toggled by JS */
+      .mobile-nav-links {
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        background-color: var(--header-bg);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .mobile-nav-links.show-mobile-menu { /* Class added by JS to show the mobile menu */
+          display: flex;
+      }
+
+      .mobile-nav-links a {
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05); /* Light separator */
+        color: var(--text);
+      }
+
+      .mobile-nav-links a:last-child {
+        border-bottom: none;
+      }
+
+      .logo a {
+        font-size: 1.5rem;
+      }
+
+      .hero-section {
+        height: 400px;
+        align-items: center; /* Centers content vertically */
+        text-align: center;
+      }
+
+      .hero-content {
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-content p {
+        font-size: 0.95rem;
+      }
+
+      .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-buttons .btn {
+        margin-right: 0;
+        width: 80%; /* Makes buttons wider */
+        max-width: 250px;
+      }
+
+      .hero-quote-card {
+        position: static; /* Removes absolute positioning */
+        transform: translateY(0);
+        margin: 20px auto; /* Centers it below hero content */
+        max-width: 90%;
+        width: auto;
+      }
+
+      main {
+        padding: 15px;
+      }
+
+      .content-section h2 {
+        font-size: 1.8rem;
+        text-align: center;
+        width: 100%; /* Ensures border-bottom spans full width */
+      }
+      
+      .show-card-container {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Further reduced min width for small screens */
+        padding: 15px;
+      }
+
+      .show-card img {
+        height: 220px; /* Adjusts height for smaller cards */
+      }
+
+      .carousel .show-card {
+        width: 160px; /* Adjusts fixed width for smaller screens */
+      }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-section {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+
+      .social-icons {
+        justify-content: center;
+      }
+
+      .dynamic-search-area.show {
+        max-height: 180px; /* Adjusts height for mobile filters */
+      }
+
+      .search-input-wrapper {
+        flex-wrap: wrap; /* Allows icons to wrap if needed */
+        justify-content: center;
+      }
+
+      .search-input-wrapper input[type="text"] {
+        width: 100%; /* Full width input */
+        max-width: none;
+      }
+
+      .search-filters {
+        flex-direction: column; /* Stacks filters vertically */
+        align-items: center;
+      }
+
+      .search-filters select,
+      .search-filters input[type="text"] {
+        width: 90%; /* Makes filters wider */
+        max-width: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero-buttons .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .show-card-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Even smaller min width for very small screens */
+      }
+
+      .carousel .show-card {
+        width: 140px; /* Further adjusts fixed width */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Alert/Message Box Structure -->
+  <div id="customAlert" class="custom-alert">
+    <div class="alert-content">
+      <i id="alertIcon" class="alert-icon fas fa-info-circle blue-icon"></i>
+      <p id="alertMessage">This is a custom alert message.</p>
+      <button id="closeAlertBtn">OK</button>
+    </div>
+  </div>
+
+  <header class="main-global-header">
+    <!-- Utility Header: Logo, Search Toggle, Account, Dark Mode, Mobile Menu Toggle -->
+    <div class="utility-header">
+      <div class="logo">
+        <a href="index.html">CineWatch</a> <!-- Logo links to Home, casing corrected -->
+      </div>
+      <div class="header-utility-actions">
+        <!-- Search Icon (toggles expanded search bar) -->
+        <div class="search-bar-toggle">
+          <button class="search-toggle-button" id="searchToggleButton" aria-label="Toggle Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        
+        <!-- Account Menu -->
+        <div class="account-menu">
+          <button class="account-button" id="accountButton" aria-label="Account Menu">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div class="account-dropdown" id="accountDropdown">
+            <a href="profile.html" id="profileLink" class="account-item"><i class="fas fa-user"></i> Profile</a>
+            <a href="settings.html" id="settingsLink" class="account-item"><i class="fas fa-cog"></i> Settings</a>
+            <a href="watchlist.html" id="watchlistLink" class="account-item"><i class="fas fa-bookmark"></i> Watchlist</a>
+            <a href="history.html" id="historyLink" class="account-item"><i class="fas fa-history"></i> History</a>
+            <a href="login.html" id="loginLink" class="account-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="register.html" id="registerLink" class="account-item"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="#" id="logoutLink" class="account-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+        
+        <!-- Dark Mode Toggle -->
+        <button class="account-button" id="darkModeToggle" aria-label="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Navigation Header (Desktop Only) -->
+    <nav class="main-nav-header" id="mainNavHeader">
+      <a href="movies.html">Movies</a>
+      <a href="tvshows.html">TV Shows</a>
+      <a href="categories.html">Categories</a>
+      <a href="cinema_guide.html">Cinemaguide</a>
+      <a href="about_us.html">About Us</a>
+    </nav>
+  </header>
+
+  <!-- Mobile Navigation Menu (Hidden by default, shown by JS toggle) -->
+  <nav class="mobile-nav-links" id="mobileNavLinks">
+    <a href="movies.html">Movies</a>
+    <a href="tvshows.html">TV Shows</a>
+    <a href="categories.html">Categories</a>
+    <a href="cinema_guide.html">Cinemaguide</a>
+    <a href="about_us.html">About Us</a>
+    <!-- Account links for mobile -->
+    <a href="profile.html" id="mobileProfileLink">Profile</a>
+    <a href="settings.html" id="mobileSettingsLink">Settings</a>
+    <a href="watchlist.html" id="mobileWatchlistLink">Watchlist</a>
+    <a href="history.html" id="mobileHistoryLink">History</a>
+    <a href="login.html" id="mobileLoginLink">Login</a>
+    <a href="register.html" id="mobileRegisterLink">Register</a>
+    <a href="#" id="mobileLogoutLink">Logout</a>
+  </nav>
+
+  <!-- Dynamic Search Input Area (Animated reveal) -->
+  <section class="dynamic-search-area" id="dynamicSearchArea">
+    <div class="search-input-wrapper">
+      <input type="text" id="expandedSearchBar" placeholder="Search movies, shows, cast..." aria-label="Expanded Search Bar">
+      <button class="search-icon-btn" id="micIconBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+      <button class="search-icon-btn clear-search-btn" id="clearSearchBtn" aria-label="Clear Search"><i class="fas fa-times"></i></button>
+      <button class="search-button-label" id="searchActionBtn">Search</button>
+    </div>
+    <div class="search-filters">
+      <select id="genreFilter" aria-label="Filter by Genre">
+        <option value="">All Genres</option>
+        <!-- Genres will be dynamically populated here by JS -->
+      </select>
+      <select id="yearFilter" aria-label="Filter by Release Year">
+        <option value="">All Years</option>
+        <!-- Years will be dynamically populated here by JS -->
+      </select>
+      <input type="text" id="castFilter" placeholder="Filter by Cast" aria-label="Filter by Cast">
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="heroSection" style="background-image: url('https://placehold.co/1200x500/A3C1AD/2E4057?text=Loading+Hero+...');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Discover Your Next Obsession.</h1>
+      <p>Stream unlimited movies and TV shows, hand-picked for you. Dive into a world of entertainment with CineWatch.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="showMessageBox('Starting movie...', 'fas fa-play green-icon')">
+          <i class="fas fa-play"></i> Watch Now
+        </button>
+        <button class="btn btn-secondary" onclick="showMessageBox('Adding to watchlist...', 'fas fa-plus-circle blue-icon')">
+          <i class="fas fa-plus"></i> Add to Watchlist
+        </button>
+      </div>
+    </div>
+    <div class="hero-quote-card">
+      <p class="quote-text">"The greatest trick the devil ever pulled was convincing the world he didn't exist."</p>
+      <p class="quote-author">- Verbal Kint, 'The Usual Suspects'</p>
+    </div>
+  </section>
+
+  <main>
+    <!-- TMDB Popular TV Shows Section -->
+    <section class="content-section" id="tmdb-popular-shows-section">
+        <h2 style="color:var(--text); margin-bottom: 20px; border-bottom: 2px solid var(--highlight); padding-bottom: 5px; display: inline-block;">Popular TV Shows (from TMDB)</h2>
+        <div class="show-card-container" id="popularTvShowsGrid">
+            <!-- Dynamic popular TV show cards will load here -->
+        </div>
+    </section>
+
+    <!-- Trending Movies Section -->
+    <section class="content-section carousel-container">
+      <h2>Trending Movies</h2>
+      <div class="carousel" id="trendingMoviesCarousel">
+        <!-- Movies will be dynamically loaded here by JS -->
+      </div>
+      <div class="carousel-nav-buttons">
+        <button class="carousel-prev" data-carousel-id="trendingMoviesCarousel"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-next" data-carousel-id="trendingMoviesCarousel"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- New Releases TV Shows Section -->
+    <section class="content-section carousel-container">
+      <h2>New Releases (TV Shows)</h2>
+      <div class="carousel" id="newReleasesCarousel">
+        <!-- TV Shows will be dynamically loaded here by JS -->
+      </div>
+      <div class="carousel-nav-buttons">
+        <button class="carousel-prev" data-carousel-id="newReleasesCarousel"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-next" data-carousel-id="newReleasesCarousel"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Documentaries Section -->
+    <section class="content-section carousel-container">
+        <h2>Documentaries</h2>
+        <div class="carousel" id="documentariesCarousel">
+          <!-- Documentaries will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="documentariesCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="documentariesCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Reality TV Shows Section -->
+    <section class="content-section carousel-container">
+        <h2>Reality TV Shows</h2>
+        <div class="carousel" id="realityTvCarousel">
+          <!-- Reality TV will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="realityTvCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="realityTvCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Kenyan Drama Section -->
+    <section class="content-section carousel-container">
+        <h2>Kenyan Drama</h2>
+        <div class="carousel" id="kenyanDramaCarousel">
+          <!-- Kenyan Drama will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="kenyanDramaCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="kenyanDramaCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Swahili Content Section -->
+    <section class="content-section carousel-container">
+        <h2>Swahili</h2>
+        <div class="carousel" id="swahiliCarousel">
+          <!-- Swahili content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="swahiliCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="swahiliCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Nollywood Section -->
+    <section class="content-section carousel-container">
+        <h2>Nollywood</h2>
+        <div class="carousel" id="nollywoodCarousel">
+          <!-- Nollywood content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="nollywoodCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="nollywoodCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Bollywood Section -->
+    <section class="content-section carousel-container">
+        <h2>Bollywood</h2>
+        <div class="carousel" id="bollywoodCarousel">
+          <!-- Bollywood content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="bollywoodCarousel"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-next" data-carousel-id="bollywoodCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- International Hits Section -->
+    <section class="content-section carousel-container">
+        <h2>International Hits</h2>
+        <div class="carousel" id="internationalHitsCarousel">
+          <!-- International Hits content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="internationalHitsCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="internationalHitsCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- K-Drama Section -->
+    <section class="content-section carousel-container">
+        <h2>K-Drama</h2>
+        <div class="carousel" id="kDramaCarousel">
+          <!-- K-Drama content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="kDramaCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="kDramaCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Chinese Cinema Section -->
+    <section class="content-section carousel-container">
+        <h2>Chinese Cinema</h2>
+        <div class="carousel" id="chineseCinemaCarousel">
+          <!-- Chinese Cinema content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="chineseCinemaCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="chineseCinemaCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Coming Soon Section -->
+    <section class="content-section carousel-container">
+        <h2>Coming Soon</h2>
+        <div class="carousel" id="comingSoonCarousel">
+          <!-- Coming Soon content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="comingSoonCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="comingSoonCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Season Finale Section -->
+    <section class="content-section carousel-container">
+        <h2>Season Finale</h2>
+        <div class="carousel" id="seasonFinaleCarousel">
+          <!-- Season Finale content will be dynamically loaded here by JS -->
+        </div>
+        <div class="carousel-nav-buttons">
+          <button class="carousel-prev" data-carousel-id="seasonFinaleCarousel"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-next" data-carousel-id="seasonFinaleCarousel"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="content-section text-center">
+        <h2>Ready to Dive In?</h2>
+        <p>Join CineWatch today and unlock a universe of entertainment. Cancel anytime.</p>
+        <div class="hero-buttons" style="justify-content: center;">
+          <a href="register.html" class="btn btn-primary">Start Your Free Trial</a>
+          <a href="pricing.html" class="btn btn-secondary">View Pricing Plans</a>
+        </div>
+      </section>
+
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About CineWatch</h4>
+        <ul>
+          <li><a href="about_us.html">Our Story</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="investors.html">Investors</a></li>
+          <li><a href="about_developer.html">About Developer</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Help & Support</h4>
+        <ul>
+          <li><a href="support.html">FAQ</a></li>
+          <li><a href="terms_of_service.html">Terms of Service</a></li>
+          <li><a href="privacy_policy.html">Privacy Policy</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="movies.html">Movies</a></li>
+          <li><a href="tvshows.html">TV Shows</a></li>
+          <li><a href="categories.html">Genres</a></li>
+          <li><a href="new_releases.html">New Releases</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Connect with Us</h4>
+        <p>Stay updated on our latest releases and news.</p>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/aslekiymastamynd" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/yourhandle" target="_blank" aria-label="X (formerly Twitter)"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/yourprofile" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/alexmalunda" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="current-year"></span> CineWatch. All rights reserved.</p>
+      <p>Last Modified: <span id="last-modified"></span></p>
+    </div>
+  </footer>
+
+  <script>
+    // Global state for user login (simulated)
+    let userLoggedIn = false;
+
+    // TMDB API Configuration
+    const TMDB_API_KEY = '9c198aabc1df9fa96ea8d65e183cb8a3';
+    const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+    const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/'; 
+    const POSTER_SIZE = 'w300'; 
+    const BACKDROP_SIZE = 'w1280'; 
+
+    /**
+     * Displays a custom alert/message box to the user.
+     * @param {string} message - The message to display.
+     * @param {string} iconClasses - Font Awesome classes for the icon.
+     */
+    function showMessageBox(message, iconClasses = "fas fa-info-circle blue-icon") {
+        const customAlert = document.getElementById('customAlert');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertIcon = customAlert.querySelector('.alert-icon');
+        const closeAlertBtn = document.getElementById('closeAlertBtn');
+
+        if (customAlert && alertMessage && alertIcon && closeAlertBtn) {
+            alertMessage.textContent = message;
+            alertIcon.className = 'alert-icon ' + iconClasses;
+            customAlert.classList.add('show');
+
+            const closeHandler = () => {
+                customAlert.classList.remove('show');
+                closeAlertBtn.removeEventListener('click', closeHandler);
+            };
+            closeAlertBtn.addEventListener('click', closeHandler);
+
+            const overlayClickHandler = (event) => {
+                if (event.target === customAlert) {
+                    customAlert.classList.remove('show');
+                    customAlert.removeEventListener('click', overlayClickHandler);
+                }
+            };
+            customAlert.addEventListener('click', overlayClickHandler);
+        } else {
+            console.error("MessageBox elements not found. Cannot show message.");
+        }
+    }
+
+    /**
+     * Fetches popular TV shows from TMDB.
+     * @returns {Promise<Array>} An array of TV show objects.
+     */
+    async function fetchPopularTvShows() {
+        const url = `${TMDB_BASE_URL}/tv/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`;
+        console.log("Fetching TMDB URL:", url); 
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.results;
+        } catch (error) {
+            console.error("Error fetching popular TV shows:", error);
+            showMessageBox(`Failed to load popular shows: ${error.message}. Please try again later.`, "fas fa-exclamation-triangle red-icon");
+            return [];
+        }
+    }
+
+    /**
+     * Fetches genres from TMDB for a specific type (movie or tv).
+     * @param {string} type - 'movie' or 'tv'.
+     * @returns {Promise<Array>} An array of genre objects.
+     */
+    async function fetchGenres(type) {
+        const url = `${TMDB_BASE_URL}/genre/${type}/list?api_key=${TMDB_API_KEY}&language=en-US`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.genres;
+        } catch (error) {
+            console.error(`Error fetching ${type} genres:`, error);
+            return [];
+        }
+    }
+
+    /**
+     * Populates a select element with genre options.
+     * @param {HTMLElement} selectElement - The select element to populate.
+     * @param {Array} genres - Array of genre objects.
+     */
+    function populateGenreFilter(selectElement, genres) {
+        if (!selectElement) return;
+        genres.forEach(genre => {
+            const option = document.createElement('option');
+            option.value = genre.id;
+            option.textContent = genre.name;
+            selectElement.appendChild(option);
+        });
+    }
+
+    /**
+     * Populates a select element with year options.
+     * @param {HTMLElement} selectElement - The select element to populate.
+     * @param {number} startYear - The starting year.
+     * @param {number} endYear - The ending year.
+     */
+    function populateYearFilter(selectElement, startYear, endYear) {
+        if (!selectElement) return;
+        for (let year = endYear; year >= startYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            selectElement.appendChild(option);
+        }
+    }
+
+    /**
+     * Displays a list of TV shows in a designated container from TMDB API data.
+     * @param {Array} shows - Array of show objects from TMDB.
+     * @param {HTMLElement} containerElement - The DOM element to append shows to.
+     */
+    function displayTvShows(shows, containerElement) {
+        if (!containerElement) {
+            console.error("Container element not found for displaying TV shows.");
+            return;
+        }
+        containerElement.innerHTML = ''; // Clears any existing content
+
+        if (!shows || shows.length === 0) {
+            containerElement.innerHTML = '<p style="text-align: center; color: var(--text); padding: 20px;">No popular TV shows found at this time.</p>';
+            return;
+        }
+
+        shows.forEach(show => {
+            const showCard = document.createElement('div');
+            showCard.classList.add('show-card', 'show-card-overlay');
+
+            const posterUrl = show.poster_path
+                ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${show.poster_path}`
+                : 'https://placehold.co/300x450/cccccc/000000?text=No+Poster'; // Fallback placeholder image
+            
+            const detailsPageUrl = `show_details.html?id=${show.id}&type=tv`;
+
+            showCard.innerHTML = `
+                <img src="${posterUrl}" alt="${show.name || show.title || 'Unknown Title'} Poster"
+                     onerror="this.onerror=null;this.src='https://placehold.co/300x450/cccccc/000000?text=No+Poster';" loading="lazy">
+                <div class="show-card-info">
+                    <h3>${show.name || show.title || 'N/A'}</h3>
+                    <p>${show.first_air_date ? new Date(show.first_air_date).getFullYear() : 'N/A'}</p>
+                    <a href="${detailsPageUrl}" class="btn-watch">Watch Now</a>
+                </div>
+                <div class="overlay">
+                    <h4>${show.name || show.title || 'N/A'}</h4>
+                    <p>${show.overview ? show.overview.substring(0, 150) + '...' : 'No overview available.'}</p>
+                    <a href="${detailsPageUrl}" class="btn">Details</a>
+                </div>
+            `;
+            containerElement.appendChild(showCard);
+        });
+    }
+
+    /**
+     * Renders a list of static/mock shows in a designated carousel.
+     * @param {string} carouselId - The ID of the carousel div.
+     * @param {Array<Object>} showsData - An array of mock show objects.
+     * @param {string} contentType - The type of content ('movie' or 'tv').
+     */
+    function renderStaticCarousel(carouselId, showsData, contentType) {
+        const carouselElement = document.getElementById(carouselId);
+        if (!carouselElement) {
+            console.error(`Carousel element with ID ${carouselId} not found.`);
+            return;
+        }
+        carouselElement.innerHTML = ''; // Clears existing content
+
+        showsData.forEach(show => {
+            const showCard = document.createElement('div');
+            showCard.classList.add('show-card', 'show-card-overlay');
+
+            // Use 'placehold.co' for static images and provide alt text based on content
+            const imageUrl = show.image || `https://placehold.co/300x450/A3C1AD/2E4057?text=${encodeURIComponent(show.title.replace(/\s/g, '+'))}`;
+            const altText = `${show.title} Poster`;
+            const overview = show.overview || 'No overview available.';
+            const year = show.year || 'N/A';
+            const genres = show.genres || [];
+            const detailsPageUrl = `show_details.html?id=${show.id}&type=${contentType}`;
+
+            showCard.innerHTML = `
+                <img src="${imageUrl}" alt="${altText}" loading="lazy">
+                <div class="show-card-info">
+                    <h3>${show.title}</h3>
+                    <p>${genres.join(', ')}</p>
+                    <p>${year}</p>
+                    <a href="${detailsPageUrl}" class="btn-watch">Watch Now</a>
+                </div>
+                <div class="overlay">
+                    <h4>${show.title}</h4>
+                    <p>${overview.substring(0, 150) + (overview.length > 150 ? '...' : '')}</p>
+                    <a href="${detailsPageUrl}" class="btn">Details</a>
+                </div>
+            `;
+            carouselElement.appendChild(showCard);
+        });
+    }
+
+    /**
+     * Toggles dark mode on/off.
+     */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.classList.replace('fa-moon', 'fa-sun');
+                darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+                localStorage.setItem('theme', 'dark'); // Saves preference
+            } else {
+                darkModeToggle.classList.replace('fa-sun', 'fa-moon');
+                darkModeToggle.setAttribute('title', 'Toggle Dark Mode');
+                localStorage.setItem('theme', 'light'); // Saves preference
+            }
+        }
+    }
+
+    /**
+     * Updates the visibility of login/logout/profile links in the account dropdown and mobile menu.
+     * @param {boolean} isLoggedIn - True if the user is logged in, false otherwise.
+     */
+    function updateAccountDropdown(isLoggedIn) {
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const profileLink = document.getElementById('profileLink');
+        const settingsLink = document.getElementById('settingsLink');
+        const watchlistLink = document.getElementById('watchlistLink');
+        const historyLink = document.getElementById('historyLink');
+        const logoutLink = document.getElementById('logoutLink');
+        
+        // Mobile-specific links
+        const mobileProfileLink = document.getElementById('mobileProfileLink');
+        const mobileSettingsLink = document.getElementById('mobileSettingsLink');
+        const mobileWatchlistLink = document.getElementById('mobileWatchlistLink');
+        const mobileHistoryLink = document.getElementById('mobileHistoryLink');
+        const mobileLoginLink = document.getElementById('mobileLoginLink');
+        const mobileRegisterLink = document.getElementById('mobileRegisterLink');
+        const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+        const elementsToToggle = [
+            { desktop: loginLink, mobile: mobileLoginLink, display: !isLoggedIn },
+            { desktop: registerLink, mobile: mobileRegisterLink, display: !isLoggedIn },
+            { desktop: profileLink, mobile: mobileProfileLink, display: isLoggedIn },
+            { desktop: settingsLink, mobile: mobileSettingsLink, display: isLoggedIn },
+            { desktop: watchlistLink, mobile: mobileWatchlistLink, display: isLoggedIn },
+            { desktop: historyLink, mobile: mobileHistoryLink, display: isLoggedIn },
+            { desktop: logoutLink, mobile: mobileLogoutLink, display: isLoggedIn }
+        ];
+
+        elementsToToggle.forEach(item => {
+            if (item.desktop) item.desktop.style.display = item.display ? 'flex' : 'none';
+            if (item.mobile) item.mobile.style.display = item.display ? 'flex' : 'none';
+        });
+        userLoggedIn = isLoggedIn; // Updates global state
+    }
+
+    // Carousel Navigation Logic
+    function setupCarouselNavigation() {
+      document.querySelectorAll('.carousel-nav-buttons button').forEach(button => {
+        button.addEventListener('click', function() {
+          const carouselId = this.dataset.carouselId;
+          const carousel = document.getElementById(carouselId);
+          if (carousel) {
+            const scrollAmount = carousel.clientWidth * 0.8; // Scrolls by 80% of visible width
+            if (this.classList.contains('carousel-prev')) {
+              carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else if (this.classList.contains('carousel-next')) {
+              carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+          }
+        });
+      });
+    }
+
+    // DOMContentLoaded event listener
+    document.addEventListener('DOMContentLoaded', async () => {
+        const accountButton = document.getElementById('accountButton');
+        const accountDropdown = document.getElementById('accountDropdown');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileNavLinks = document.getElementById('mobileNavLinks');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const logoutLink = document.getElementById('logoutLink');
+        const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+        const heroSection = document.getElementById('heroSection'); 
+        const searchToggleButton = document.getElementById('searchToggleButton');
+        const dynamicSearchArea = document.getElementById('dynamicSearchArea');
+        const expandedSearchBar = document.getElementById('expandedSearchBar');
+        const micIconBtn = document.getElementById('micIconBtn');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const searchActionBtn = document.getElementById('searchActionBtn');
+        const genreFilter = document.getElementById('genreFilter');
+        const yearFilter = document.getElementById('yearFilter');
+
+        // Toggles Account Dropdown
+        if (accountButton && accountDropdown) {
+            accountButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                accountDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if (!accountDropdown.contains(e.target) && !accountButton.contains(e.target)) {
+                    accountDropdown.classList.remove('show');
+                }
+            });
+        } else {
+            console.warn("Account button or dropdown not found.");
+        }
+
+        // Toggles Mobile Menu
+        if (mobileMenuToggle && mobileNavLinks) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileNavLinks.classList.toggle('show-mobile-menu'); // Toggles class to show/hide
+            });
+        } else {
+            console.warn("Mobile menu toggle or nav links not found.");
+        }
+
+        // Toggles Dark Mode
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+        } else {
+            console.warn("Dark mode toggle not found.");
+        }
+
+        // Handles Logout functionality (simulated)
+        const performLogout = () => {
+            showMessageBox('You have been logged out.', 'fas fa-check-circle green-icon');
+            updateAccountDropdown(false);
+        };
+
+        if (logoutLink) {
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                performLogout();
+            });
+        }
+        if (mobileLogoutLink) {
+            mobileLogoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                performLogout();
+                mobileNavLinks.classList.remove('show-mobile-menu'); // Hides mobile menu after logout
+            });
+        }
+
+        // Initializes carousel navigation for all carousels
+        setupCarouselNavigation();
+
+        // Initializes Dark Mode based on localStorage
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                darkModeToggle.classList.replace('fa-moon', 'fa-sun');
+                darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+            }
+        }
+        updateAccountDropdown(false); // Initializes account dropdown based on userLoggedIn state
+
+        // Updates the current year in the footer
+        const currentYearSpan = document.getElementById('current-year');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Sets Last Modified Date in footer
+        const lastModifiedSpan_footer = document.getElementById('last-modified');
+        if (lastModifiedSpan_footer) {
+            lastModifiedSpan_footer.textContent = new Date(document.lastModified).toLocaleDateString();
+        } else {
+            console.warn("Last Modified span not found in footer.");
+        }
+
+        // Handles Dynamic Search Bar Logic
+        if (searchToggleButton && dynamicSearchArea && expandedSearchBar && searchActionBtn && heroSection) {
+            searchToggleButton.addEventListener('click', () => {
+                const isShowing = dynamicSearchArea.classList.toggle('show');
+                if (isShowing) {
+                    expandedSearchBar.focus();
+                    heroSection.style.marginTop = `var(--search-area-height)`; // Pushes hero down
+                } else {
+                    heroSection.style.marginTop = '0'; // Resets hero margin
+                }
+            });
+
+            // Shows/hides searchActionBtn and manages clearSearchBtn based on input
+            expandedSearchBar.addEventListener('input', () => {
+                if (expandedSearchBar.value.length > 0) {
+                    searchActionBtn.style.display = 'inline-block';
+                    clearSearchBtn.style.display = 'inline-block'; // Ensures 'x' is visible when typing
+                } else {
+                    searchActionBtn.style.display = 'none';
+                    clearSearchBtn.style.display = 'none'; // Hides 'x' when input is empty
+                }
+            });
+
+            // Handles clear search button click
+            clearSearchBtn.addEventListener('click', () => {
+                expandedSearchBar.value = '';
+                searchActionBtn.style.display = 'none';
+                clearSearchBtn.style.display = 'none';
+            });
+
+            // Handles mic icon button click (placeholder)
+            micIconBtn.addEventListener('click', () => {
+                showMessageBox('Voice search activated. (Functionality not yet implemented)', 'fas fa-microphone blue-icon');
+            });
+
+            // Handles search action button click or Enter key press
+            const performSearch = () => {
+                const query = expandedSearchBar.value.trim();
+                const genreId = genreFilter.value;
+                const year = yearFilter.value;
+                const cast = document.getElementById('castFilter').value.trim();
+
+                if (query || genreId || year || cast) {
+                    let searchMessage = `Searching for: "${query}"`;
+                    if (genreId) searchMessage += `, Genre ID: ${genreId}`;
+                    if (year) searchMessage += `, Year: ${year}`;
+                    if (cast) searchMessage += `, Cast: ${cast}`;
+                    showMessageBox(searchMessage, 'fas fa-search blue-icon');
+                } else {
+                    showMessageBox('Please enter a search term or select filters.', 'fas fa-info-circle yellow-icon');
+                }
+            };
+
+            searchActionBtn.addEventListener('click', performSearch);
+            expandedSearchBar.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Populates filters on load
+            const currentYear = new Date().getFullYear();
+            populateYearFilter(yearFilter, 1950, currentYear); // Years from 1950 to current
+
+            const genres = await fetchGenres('tv'); 
+            populateGenreFilter(genreFilter, genres);
+        } else {
+            console.error("One or more dynamic search bar elements not found.");
+        }
+        // Ensures search button label is hidden initially
+        searchActionBtn.style.display = 'none';
+        clearSearchBtn.style.display = 'none';
+
+
+        // Populates TMDB Popular TV Shows section and sets hero backdrop
+        const popularTvShowsGrid = document.getElementById('popularTvShowsGrid');
+        if (popularTvShowsGrid) {
+            const popularShows = await fetchPopularTvShows();
+
+            // Sets dynamic hero backdrop using the first popular show
+            if (popularShows && popularShows.length > 0 && popularShows[0].backdrop_path && heroSection) {
+                const backdropUrl = `${TMDB_IMAGE_BASE_URL}${BACKDROP_SIZE}${popularShows[0].backdrop_path}`;
+                heroSection.style.backgroundImage = `url('${backdropUrl}')`;
+            } else if (heroSection) {
+                // Fallback for hero section if no backdrop is available or no shows
+                heroSection.style.backgroundImage = `url('https://placehold.co/1200x500/A3C1AD/2E4057?text=CineWatch+Home')`;
+            }
+
+            displayTvShows(popularShows, popularTvShowsGrid);
+        } else {
+            console.error("Popular TV Shows grid element not found.");
+        }
+
+        // --- Populate Static Carousels with Mock Data ---
+        const trendingMoviesData = [
+            { id: 1001, title: 'The Green Frontier', genres: ['Adventure', 'Mystery'], year: '2023', overview: 'A thriller following a young detective to the Amazon jungle on a murder investigation, uncovering magic and an ancient secret.', image: 'https://placehold.co/300x450/4CAF50/FFFFFF?text=Action+Packed' },
+            { id: 1002, title: 'City of Angels', genres: ['Fantasy', 'Romance'], year: '1998', overview: 'An angel falls in love with a human, grappling with the choice between immortality and mortal love.', image: 'https://placehold.co/300x450/2196F3/FFFFFF?text=Urban+Fantasy' },
+            { id: 1003, title: 'The Golden Compass', genres: ['Adventure', 'Fantasy'], year: '2007', overview: 'A young girl journeys to the Arctic to save her best friend and other kidnapped children from a mysterious organization.', image: 'https://placehold.co/300x450/FF9800/FFFFFF?text=Epic+Quest' },
+            { id: 1004, title: 'Silent Hill', genres: ['Horror', 'Mystery'], year: '2006', overview: 'A desperate mother searches for her missing daughter in the eerie, foggy town of Silent Hill.', image: 'https://placehold.co/300x450/9C27B0/FFFFFF?text=Psychological+Horror' },
+            { id: 1005, title: 'The Lighthouse', genres: ['Drama', 'Horror'], year: '2019', overview: 'Two lighthouse keepers try to maintain their sanity on a remote and mysterious New England island in the 1890s.', image: 'https://placehold.co/300x450/E91E63/FFFFFF?text=Isolating+Drama' },
+            { id: 1006, title: 'Arrival', genres: ['Sci-Fi', 'Drama'], year: '2016', overview: 'A linguist is recruited by the military to assist in translating alien communications.', image: 'https://placehold.co/300x450/00BCD4/FFFFFF?text=First+Contact' }
+        ];
+        renderStaticCarousel('trendingMoviesCarousel', trendingMoviesData, 'movie');
+
+        const newReleasesTvData = [
+            { id: 2001, title: 'The Midnight Gospel', genres: ['Animation', 'Adventure'], year: '2020', overview: 'Clancy, a spacecaster who uses a multiverse simulator to interview beings living in other worlds.', image: 'https://placehold.co/300x450/FFEB3B/333333?text=Deep+Thoughts' },
+            { id: 2002, title: 'Mindhunter', genres: ['Crime', 'Drama'], year: '2017', overview: 'FBI agents Holden Ford and Bill Tench interview imprisoned serial killers to understand their motives.', image: 'https://placehold.co/300x450/795548/FFFFFF?text=Criminal+Minds' },
+            { id: 2003, title: 'Dark', genres: ['Sci-Fi', 'Thriller'], year: '2017', overview: 'A family saga with a supernatural twist, where two children disappear, exposing the double lives and fractured relationships among four families.', image: 'https://placehold.co/300x450/607D8B/FFFFFF?text=Time+Travel' },
+            { id: 2004, title: 'Chernobyl', genres: ['Drama', 'History'], year: '2019', overview: 'The true story of the 1986 nuclear disaster and the brave men and women who sacrificed to save Europe from unimaginable catastrophe.', image: 'https://placehold.co/300x450/FFC107/333333?text=Nuclear+Disaster' },
+            { id: 2005, title: 'The Queen\'s Gambit', genres: ['Drama'], year: '2020', overview: 'Orphaned chess prodigy Beth Harmon struggles with addiction in her quest to become the greatest chess player in the world.', image: 'https://placehold.co/300x450/FF5722/FFFFFF?text=Chess+Master' },
+            { id: 2006, title: 'The Crown', genres: ['Drama', 'History'], year: '2016', overview: 'Follows the political rivalries and romance of Queen Elizabeth II\'s reign and the events that shaped the second half of the 20th century.', image: 'https://placehold.co/300x450/673AB7/FFFFFF?text=Royal+Saga' }
+        ];
+        renderStaticCarousel('newReleasesCarousel', newReleasesTvData, 'tv');
+
+        const documentariesData = [
+            { id: 3001, title: 'Our Planet', genres: ['Nature', 'Science'], year: '2019', overview: 'Showcases the planet\'s most precious species and fragile habitats.', image: 'https://placehold.co/300x450/8BC34A/000000?text=Nature\'s+Wonder' },
+            { id: 3002, title: 'Making a Murderer', genres: ['Crime', 'Legal'], year: '2015', overview: 'Examines the case of Steven Avery, a man exonerated of sexual assault, only to be convicted of murder.', image: 'https://placehold.co/300x450/FF5722/FFFFFF?text=True+Crime' },
+            { id: 3003, title: 'Cosmos: A Spacetime Odyssey', genres: ['Science', 'History'], year: '2014', overview: 'Neil deGrasse Tyson explores the universe and our place in it.', image: 'https://placehold.co/300x450/673AB7/FFFFFF?text=Space+Odyssey' },
+            { id: 3004, title: 'Chef\'s Table', genres: ['Food', 'Lifestyle'], year: '2015', overview: 'Explores the lives and kitchens of the world\'s most renowed chefs.', image: 'https://placehold.co/300x450/F44336/FFFFFF?text=Food+Explained' }
+        ];
+        renderStaticCarousel('documentariesCarousel', documentariesData, 'tv'); // Documentaries often structured as TV series
+
+        const realityTvData = [
+            { id: 4001, title: 'Survivor', genres: ['Competition'], year: '2000', overview: 'Contestants are stranded in a remote location, competing in challenges.', image: 'https://placehold.co/300x450/E91E63/FFFFFF?text=Survival+Challenge' },
+            { id: 4002, title: 'MasterChef', genres: ['Cooking', 'Competition'], year: '2010', overview: 'Amateur cooks compete for the title of MasterChef.', image: 'https://placehold.co/300x450/009688/FFFFFF?text=Cooking+Show' },
+            { id: 4003, title: 'Fixer Upper', genres: ['Home', 'Lifestyle'], year: '2013', overview: 'Chip and Joanna Gaines help clients find and renovate homes.', image: 'https://placehold.co/300x450/CDDC39/333333?text=Home+Renovation' },
+            { id: 4004, title: 'Selling Sunset', genres: ['Real Estate', 'Drama'], year: '2019', overview: 'Follows the Oppenheim Group, a high-end real estate brokerage firm.', image: 'https://placehold.co/300x450/2196F3/FFFFFF?text=Luxury+Homes' }
+        ];
+        renderStaticCarousel('realityTvCarousel', realityTvData, 'tv');
+
+        const kenyanDramaData = [
+            { id: 5001, title: 'Pete', genres: ['Drama', 'Action'], year: '2018', overview: 'A gripping tale of power struggles and betrayal set in a coastal community.', image: 'https://placehold.co/300x450/B0E0E6/2F4F4F?text=Kenyan+Drama+1' },
+            { id: 5002, title: 'Selina', genres: ['Drama', 'Romance'], year: '2018', overview: 'The story of a girl from a humble background navigating love and life in the city.', image: 'https://placehold.co/300x450/ADD8E6/2F4F4F?text=Kenyan+Drama+2' },
+            { id: 5003, title: 'Maria', genres: ['Drama', 'Family'], year: '2019', overview: 'A beloved Kenyan drama following a young girl\'s journey through life\'s challenges.', image: 'https://placehold.co/300x450/87CEEB/2F4F4F?text=Kenyan+Drama+3' },
+            { id: 5004, title: 'Kina', genres: ['Drama', 'Thriller'], year: '2019', overview: 'A rich family\'s secrets unravel in this thrilling Kenyan series.', image: 'https://placehold.co/300x450/4682B4/2F4F4F?text=Kenyan+Drama+4' }
+        ];
+        renderStaticCarousel('kenyanDramaCarousel', kenyanDramaData, 'tv');
+
+        const swahiliData = [
+            { id: 6001, title: 'Nairobi Half Life', genres: ['Drama'], year: '2012', overview: 'A young aspiring actor from upcountry Kenya journeys to Nairobi to realize his dream.', image: 'https://placehold.co/300x450/808000/FFFFFF?text=Swahili+1' },
+            { id: 6002, title: 'Utandu', genres: ['Mystery', 'Thriller'], year: '2021', overview: 'A web of secrets and intrigue unfolds in this Swahili thriller series.', image: 'https://placehold.co/300x450/6B8E23/FFFFFF?text=Swahili+2' },
+            { id: 6003, title: 'Mali', genres: ['Drama'], year: '2011', overview: 'A family\'s struggle for wealth and power in a dramatic Swahili series.', image: 'https://placehold.co/300x450/3CB371/FFFFFF?text=Swahili+3' },
+            { id: 6004, title: 'Monica', genres: ['Drama'], year: '2018', overview: 'A compelling Swahili drama exploring complex family dynamics.', image: 'https://placehold.co/300x450/2E8B57/FFFFFF?text=Swahili+4' }
+        ];
+        renderStaticCarousel('swahiliCarousel', swahiliData, 'tv');
+
+        const nollywoodData = [
+            { id: 7001, title: 'Living in Bondage: Breaking Free', genres: ['Drama', 'Thriller'], year: '2019', overview: 'A young man\'s quest for quick wealth leads him into a dangerous cult.', image: 'https://placehold.co/300x450/800000/FFFFFF?text=Nollywood+1' },
+            { id: 7002, title: 'King of Boys', genres: ['Crime', 'Thriller'], year: '2018', overview: 'A powerful businesswoman\'s political ambitions are threatened by her past.', image: 'https://placehold.co/300x450/B22222/FFFFFF?text=Nollywood+2' },
+            { id: 7003, title: 'Chief Daddy', genres: ['Comedy'], year: '2018', overview: 'Chaos ensues when a wealthy patriarch suddenly dies, leaving his family and mistresses in disarray.', image: 'https://placehold.co/300x450/DC143C/FFFFFF?text=Nollywood+3' },
+            { id: 7004, title: 'The Wedding Party', genres: ['Comedy', 'Romance'], year: '2016', overview: 'A Nigerian wedding filled with unexpected drama, humor, and romance.', image: 'https://placehold.co/300x450/FF6347/FFFFFF?text=Nollywood+4' }
+        ];
+        renderStaticCarousel('nollywoodCarousel', nollywoodData, 'movie'); // Assuming these are movies
+
+        const bollywoodData = [
+            { id: 8001, title: 'Dangal', genres: ['Sport', 'Drama'], year: '2016', overview: 'A former wrestler trains his daughters to become world-class wrestlers.', image: 'https://placehold.co/300x450/8A2BE2/FFFFFF?text=Bollywood+1' },
+            { id: 8002, title: '3 Idiots', genres: ['Comedy', 'Drama'], year: '2009', overview: 'Two friends search for a lost companion who inspired them to think differently.', image: 'https://placehold.co/300x450/4B0082/FFFFFF?text=Bollywood+2' },
+            { id: 8003, title: 'Lagaan', genres: ['Musical', 'Sport'], year: '2001', overview: 'Villagers challenge the British to a game of cricket to avoid paying taxes.', image: 'https://placehold.co/300x450/9400D3/FFFFFF?text=Bollywood+3' },
+            { id: 8004, title: 'Dilwale Dulhania Le Jayenge', genres: ['Romance', 'Drama'], year: '1995', overview: 'A classic Bollywood romance between an Indian couple in Europe.', image: 'https://placehold.co/300x450/DA70D6/FFFFFF?text=Bollywood+4' }
+        ];
+        renderStaticCarousel('bollywoodCarousel', bollywoodData, 'movie');
+
+        const internationalHitsData = [
+            { id: 9001, title: 'Parasite', genres: ['Thriller', 'Drama'], year: '2019', overview: 'A poor family schemes to become employed by a wealthy family.', image: 'https://placehold.co/300x450/FFD700/000000?text=Intl+Hit+1' },
+            { id: 9002, title: 'La Casa de Papel (Money Heist)', genres: ['Crime', 'Thriller'], year: '2017', overview: 'A criminal mastermind plans two of the biggest heists in Spanish history.', image: 'https://placehold.co/300x450/ADFF2F/000000?text=Intl+Hit+2' },
+            { id: 9003, title: 'Dark', genres: ['Sci-Fi', 'Thriller'], year: '2017', overview: 'A family saga with a supernatural twist, where two children disappear, exposing double lives.', image: 'https://placehold.co/300x450/66CDAA/000000?text=Intl+Hit+3' },
+            { id: 9004, title: 'Squid Game', genres: ['Thriller', 'Drama'], year: '2021', overview: 'Hundreds of cash-strapped players accept an invitation to compete in children\'s games for a tempting prize.', image: 'https://placehold.co/300x450/40E0D0/000000?text=Intl+Hit+4' }
+        ];
+        renderStaticCarousel('internationalHitsCarousel', internationalHitsData, 'tv'); // Assuming Money Heist & Squid Game are TV shows, Parasite is movie
+
+        const kDramaData = [
+            { id: 10001, title: 'Crash Landing on You', genres: ['Romance', 'Comedy'], year: '2019', overview: 'A South Korean heiress accidentally crash-lands in North Korea and falls in love with an army officer.', image: 'https://placehold.co/300x450/FFB6C1/8B0000?text=K-Drama+1' },
+            { id: 10002, title: 'Goblin (Guardian: The Lonely and Great God)', genres: ['Fantasy', 'Romance'], year: '2016', overview: 'A goblin must find his human bride to end his immortal life.', image: 'https://placehold.co/300x450/F08080/8B0000?text=K-Drama+2' },
+            { id: 10003, title: 'Descendants of the Sun', genres: ['Romance', 'Action'], year: '2016', overview: 'The love story between a special forces captain and a surgeon in a war-torn country.', image: 'https://placehold.co/300x450/CD5C5C/8B0000?text=K-Drama+3' },
+            { id: 10004, title: 'Itaewon Class', genres: ['Drama', 'Business'], year: '2020', overview: 'A determined ex-convict fights for success against an unfair world.', image: 'https://placehold.co/300x450/B22222/8B0000?text=K-Drama+4' }
+        ];
+        renderStaticCarousel('kDramaCarousel', kDramaData, 'tv');
+
+        const chineseCinemaData = [
+            { id: 11001, title: 'Hero', genres: ['Action', 'Drama'], year: '2002', overview: 'A nameless man is recruited to protect the Qin emperor from assassins.', image: 'https://placehold.co/300x450/FFEFD5/8B4513?text=Hero' },
+            { id: 11002, title: 'Crouching Tiger, Hidden Dragon', genres: ['Action', 'Drama'], year: '2000', overview: 'A young woman\'s journey to claim a legendary sword in Qing Dynasty China.', image: 'https://placehold.co/300x450/F5DEB3/8B4513?text=Crouching+Tiger' },
+            { id: 11003, title: 'House of Flying Daggers', genres: ['Action', 'Romance'], year: '2004', overview: 'A loyal soldier helps a beautiful rebel escape, leading to a complex love triangle.', image: 'https://placehold.co/300x450/DEB887/8B4513?text=Flying+Daggers' },
+            { id: 11004, title: 'Fearless', genres: ['Action', 'Biography'], year: '2006', overview: 'Jet Li portrays martial arts master Huo Yuanjia, who challenges foreign fighters.', image: 'https://placehold.co/300x450/D2B48C/8B4513?text=Fearless' }
+        ];
+        renderStaticCarousel('chineseCinemaCarousel', chineseCinemaData, 'movie');
+
+        const comingSoonData = [
+            { id: 12001, title: 'New Frontiers', genres: ['Sci-Fi', 'Adventure'], year: '2025', overview: 'A crew embarks on a perilous journey to explore uncharted galaxies.', image: 'https://placehold.co/300x450/5DADE2/FFFFFF?text=Sci-Fi+Future' },
+            { id: 12002, title: 'The Last Kingdom: Dawn', genres: ['Action', 'Historical'], year: '2025', overview: 'The next chapter in the saga of Uhtred of Bebbanburg.', image: 'https://placehold.co/300x450/9C27B0/FFFFFF?text=Historical+Epic' },
+            { id: 12003, title: 'The Magical Forest', genres: ['Animation', 'Family'], year: '2025', overview: 'A heartwarming tale of magical creatures protecting their enchanted home.', image: 'https://placehold.co/300x450/FFC107/333333?text=Animated+Wonder' },
+            { id: 12004, title: 'Echoes of the Past', genres: ['Thriller', 'Mystery'], year: '2025', overview: 'A detective uncovers a long-buried secret that threatens to unravel his life.', image: 'https://placehold.co/300x450/4CAF50/FFFFFF?text=Mystery+Thriller' }
+        ];
+        renderStaticCarousel('comingSoonCarousel', comingSoonData, 'movie');
+
+        const seasonFinaleData = [
+            { id: 13001, title: 'The Dragon\'s Ascent', genres: ['Fantasy', 'Drama'], year: 'Season 3 Finale', overview: 'The highly anticipated conclusion to the third season, revealing the fate of the realms.', image: 'https://placehold.co/300x450/8BC34A/000000?text=Epic+Conclusion' },
+            { id: 13002, title: 'Undercover Operation', genres: ['Crime', 'Thriller'], year: 'Season 2 Finale', overview: 'The gripping finale where agents must confront a dangerous crime syndicate.', image: 'https://placehold.co/300x450/FF5722/FFFFFF?text=Crime+Climax' },
+            { id: 13003, title: 'Beyond the Stars', genres: ['Sci-Fi', 'Mystery'], year: 'Season 1 Finale', overview: 'The crew discovers the true purpose of their mission in a shocking season end.', image: 'https://placehold.co/300x450/673AB7/FFFFFF?text=Sci-Fi+Resolution' },
+            { id: 13004, title: 'Life & Death', genres: ['Medical', 'Drama'], year: 'Season 5 Finale', overview: 'A critical surgery and personal revelations lead to a dramatic hospital finale.', image: 'https://placehold.co/300x450/F44336/FFFFFF?text=Medical+Drama' }
+        ];
+        renderStaticCarousel('seasonFinaleCarousel', seasonFinaleData, 'tv');
+    });
+
+  </script>
+</body>
+</html>

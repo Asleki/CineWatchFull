@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">CineWatch - Details</title>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Inter Font (for consistent typography across the site) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing global styles from index.html for consistency */
+        :root {
+            --bg: #fff;
+            --text: #111;
+            --header-bg: #f0ecec;
+            --search-bg: #f4f4f4; /* Added for search bar */
+            --card-border: #eee;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --highlight: #007bff;
+            --accent: #28a745;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --modal-bg: rgba(0, 0, 0, 0.5);
+            --modal-content-bg: #fff;
+            --modal-text: #111;
+            --search-area-height: 120px; /* Approximate height of expanded search area */ /* Added for search bar */
+            --section-padding: 40px 20px;
+            --button-hover: #0056b3;
+            --detail-bg-light: #f8f8f8; /* For sections like seasons/cast */
+            --detail-border-light: #e0e0e0;
+            --hero-overlay: rgba(0, 0, 0, 0.6); /* Added for hero section */
+            --suggestions-bg: #fff; /* Added for search suggestions */
+            --suggestions-border: #ddd; /* Added for search suggestions */
+            --suggestions-item-hover-bg: #f0f0f0; /* Added for search suggestions */
+        }
+
+        body.dark-mode {
+            --bg: #1a1a1a;
+            --text: #f0f0f0;
+            --header-bg: #2a2a2a;
+            --search-bg: #333; /* Added for search bar */
+            --card-border: #444;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --highlight: #66b3ff;
+            --accent: #4CAF50;
+            --danger: #ff6b6b;
+            --info: #00bcd4;
+            --warning: #ffeb3b;
+            --modal-bg: rgba(0, 0, 0, 0.7);
+            --modal-content-bg: #282828;
+            --modal-text: #f0f0f0;
+            --button-hover: #4a90d9;
+            --detail-bg-light: #222;
+            --detail-border-light: #555;
+            --hero-overlay: rgba(0, 0, 0, 0.75); /* Added for hero section */
+            --suggestions-bg: #282828; /* Added for search suggestions */
+            --suggestions-border: #444; /* Added for search suggestions */
+            --suggestions-item-hover-bg: #3a3a3a; /* Added for search suggestions */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--highlight);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--highlight);
+            outline-offset: 2px;
+        }
+
+        .main-global-header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .utility-header {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo a {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--highlight);
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-utility-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-bar-toggle button { /* Added for search bar */
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-bar-toggle button:hover { /* Added for search bar */
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .account-menu {
+            position: relative;
+        }
+
+        .account-button, .theme-toggle-button {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-button:hover, .theme-toggle-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .account-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--header-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            padding: 10px 0;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+
+        .account-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .account-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--text);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .account-dropdown a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--highlight);
+        }
+
+        .account-dropdown a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+        }
+
+        .main-nav-header {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .main-nav-header a {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 1rem;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .main-nav-header a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--highlight);
+            transition: width 0.3s ease;
+        }
+
+        .main-nav-header a:hover::after {
+            width: 100%;
+        }
+
+        /* Dynamic Search Area (Copied from index.html) */
+        .dynamic-search-area {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            overflow: hidden;
+            max-height: 0; /* Initially hidden */
+            opacity: 0;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative; /* For positioning search suggestions */
+        }
+
+        .dynamic-search-area.show {
+            max-height: var(--search-area-height); /* Expands to reveal */
+            opacity: 1;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px; /* Space between input and filters */
+            position: relative; /* For suggestions container positioning */
+            z-index: 1050; /* Ensure search bar is above suggestions */
+        }
+
+        .dynamic-search-area input[type="text"] {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            background-color: var(--search-bg);
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .dynamic-search-area input[type="text"]:focus {
+            border-color: var(--highlight);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .search-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s ease;
+        }
+        .search-icon-btn:hover {
+            color: var(--highlight);
+        }
+
+        .search-button-label {
+            background-color: var(--highlight);
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-button-label:hover {
+            background-color: #0056b3;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center; /* Centers filters */
+        }
+
+        .search-filters select,
+        .search-filters input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            background-color: var(--search-bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            min-width: 120px;
+            flex: 1; /* Allows items to grow/shrink */
+            max-width: 200px; /* Max width for filter inputs */
+        }
+
+        /* Search Suggestions Dropdown (Copied from index.html) */
+        .search-suggestions-container {
+            position: absolute;
+            top: calc(100% + 5px); /* Position below the search bar */
+            left: 0;
+            right: 0;
+            background-color: var(--suggestions-bg);
+            border: 1px solid var(--suggestions-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 1000; /* Below search bar, above other content */
+            display: none; /* Hidden by default */
+        }
+
+        .search-suggestions-container.show {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid var(--suggestions-border);
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover {
+            background-color: var(--suggestions-item-hover-bg);
+        }
+
+        .search-suggestion-item img {
+            width: 40px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 10px;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .search-suggestion-info {
+            flex-grow: 1;
+            color: var(--text);
+        }
+
+        .search-suggestion-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-suggestion-info p {
+            font-size: 0.85rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        /* Hero Section Styles (Copied from index.html) */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 400px; /* Adjusted height for details page */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--hero-overlay);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin-left: 5%; /* Align content to the left */
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem; /* Adjusted font size */
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem; /* Adjusted font size */
+            margin-bottom: 25px;
+            max-width: 600px;
+        }
+
+        .hero-buttons .btn {
+            background-color: var(--highlight);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-right: 15px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-buttons .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .hero-quote-card {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            max-width: 300px;
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: right;
+            z-index: 2;
+        }
+
+
+        main {
+            flex-grow: 1;
+            padding: var(--section-padding);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .details-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px var(--card-shadow);
+            padding: 30px;
+            align-items: flex-start;
+        }
+
+        .details-poster {
+            flex-shrink: 0; /* Prevent shrinking */
+            width: 300px; /* Fixed width for poster */
+            height: 450px; /* Adjust height based on aspect ratio */
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: var(--card-border); /* Placeholder background */
+            display: block;
+        }
+
+        .details-poster.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--text);
+            opacity: 0.7;
+            padding: 20px;
+        }
+
+        .details-content {
+            flex-grow: 1;
+            min-width: 300px; /* Ensure content doesn't get too narrow */
+        }
+
+        .details-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--highlight);
+        }
+
+        .details-meta {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .details-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .details-meta i {
+            color: var(--accent);
+        }
+
+        .details-synopsis {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .synopsis-collapsed {
+            max-height: 100px; /* Limit height for collapsed synopsis */
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--highlight);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 5px 0;
+            margin-top: 5px;
+            display: block; /* Ensures it's on its own line */
+            transition: color 0.2s ease;
+        }
+
+        .read-more-btn:hover {
+            color: var(--accent);
+        }
+
+        .details-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            margin-bottom: 30px;
+        }
+
+        .details-buttons .btn {
+            background-color: var(--highlight);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .details-buttons .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .sections-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--detail-bg-light);
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px var(--card-shadow);
+        }
+
+        .sections-nav button {
+            background-color: var(--highlight);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .sections-nav button:hover {
+            background-color: var(--button-hover);
+        }
+
+        /* Sub-sections like Cast, Seasons */
+        .sub-section {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: var(--detail-bg-light);
+            border-radius: 15px;
+            box-shadow: 0 2px 10px var(--card-shadow);
+        }
+
+        .sub-section h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--highlight);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .sub-section h3::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--highlight);
+            border-radius: 2px;
+        }
+
+        .cast-grid, .season-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .cast-item, .season-item {
+            text-align: center;
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cast-item:hover, .season-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cast-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid var(--highlight);
+        }
+        .cast-item img.no-image-person {
+            content: url('https://placehold.co/80x80/282828/f0f0f0?text=👤'); /* Placeholder for person */
+            border: none;
+            width: 80px;
+            height: 80px;
+            object-fit: contain; /* Ensure emoji is visible */
+        }
+
+        .cast-item p, .season-item p {
+            font-size: 0.9rem;
+            color: var(--card-text);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .cast-item span {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        .season-item a {
+            display: block; /* Make the whole item clickable */
+            color: inherit; /* Inherit color from parent */
+            text-decoration: none;
+        }
+
+        .season-item p.season-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+        }
+        .season-item p.episode-count {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        .season-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .season-item img.no-image-season {
+            content: url('https://placehold.co/150x150/282828/f0f0f0?text=No+Poster');
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        /* Person details specific styles */
+        .person-details-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px var(--card-shadow);
+            padding: 30px;
+            align-items: flex-start;
+        }
+        .person-image {
+            flex-shrink: 0;
+            width: 250px;
+            height: 375px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: var(--card-border);
+            display: block;
+        }
+        .person-image.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-align: center;
+            color: var(--text);
+            opacity: 0.7;
+            padding: 20px;
+        }
+        .person-content {
+            flex-grow: 1;
+            min-width: 300px;
+        }
+        .person-name {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--highlight);
+        }
+        .person-meta p {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+            opacity: 0.9;
+        }
+        .person-biography {
+            font-size: 1rem;
+            line-height: 1.7;
+            text-align: justify;
+            margin-top: 20px;
+        }
+        .person-known-for-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .known-for-item {
+            background-color: var(--detail-bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .known-for-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .known-for-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid var(--detail-border-light);
+        }
+        .known-for-item img.no-image-show {
+            content: url('https://placehold.co/150x200/282828/f0f0f0?text=No+Poster');
+            height: 200px;
+            object-fit: contain;
+        }
+        .known-for-item-info {
+            padding: 10px;
+            text-align: center;
+        }
+        .known-for-item-info p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--card-text);
+            margin-bottom: 5px;
+        }
+        .known-for-item-info span {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        /* Footer (reused) */
+        .main-footer {
+            background-color: var(--header-bg);
+            color: var(--text);
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-section {
+            flex: 1 1 200px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--highlight);
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text);
+            transition: color 0.2s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--highlight);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .footer-bottom p {
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .social-icons a {
+            color: var(--text);
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--highlight);
+        }
+        /* Custom Alert/Message Box Structure (reused) */
+        .custom-alert {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: var(--modal-bg);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .custom-alert.show {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .alert-content {
+            background-color: var(--modal-content-bg);
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .custom-alert.show .alert-content {
+            transform: translateY(0);
+        }
+
+        .alert-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .alert-icon.red-icon { color: var(--danger); }
+        .alert-icon.blue-icon { color: var(--info); }
+        .alert-icon.green-icon { color: var(--accent); }
+        .alert-icon.yellow-icon { color: var(--warning); }
+
+
+        #alertMessage {
+            font-size: 1.1rem;
+            color: var(--modal-text);
+            margin-bottom: 20px;
+        }
+
+        #closeAlertBtn {
+            background-color: var(--highlight);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        #closeAlertBtn:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .utility-header {
+                flex-direction: column;
+                text-align: center;
+                padding-bottom: 10px;
+            }
+
+            .header-utility-actions {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .main-nav-header {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .mobile-nav-links {
+                display: none;
+                flex-direction: column;
+                background-color: var(--header-bg);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                padding: 10px 20px;
+                border-bottom: 1px solid var(--card-border);
+            }
+
+            .mobile-nav-links.show-mobile-menu {
+                display: flex;
+            }
+
+            .mobile-nav-links a {
+                padding: 10px 0;
+                text-align: center;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                color: var(--text);
+            }
+
+            .mobile-nav-links a:last-child {
+                border-bottom: none;
+            }
+
+            .logo a {
+                font-size: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-section {
+                flex: 1 1 100%;
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            /* Responsive Search Area */
+            .dynamic-search-area.show {
+                max-height: 180px; /* Adjusts height for mobile filters */
+            }
+
+            .search-input-wrapper {
+                flex-wrap: wrap; /* Allows icons to wrap if needed */
+                justify-content: center;
+            }
+
+            .search-input-wrapper input[type="text"] {
+                width: 100%; /* Full width input */
+                max-width: none;
+            }
+
+            .search-filters {
+                flex-direction: column; /* Stacks filters vertically */
+                align-items: center;
+            }
+
+            .search-filters select,
+            .search-filters input[type="text"] {
+                width: 90%; /* Makes filters wider */
+                max-width: 300px;
+            }
+
+            /* Responsive Hero Section */
+            .hero-section {
+                height: 300px; /* Further adjust height for mobile */
+            }
+            .hero-content {
+                margin-left: 0;
+                text-align: center;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            .hero-content p {
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .hero-buttons .btn {
+                margin-right: 0;
+                width: 200px; /* Constrain button width */
+                justify-content: center;
+            }
+            .hero-quote-card {
+                display: none; /* Hide on small screens for simplicity */
+            }
+
+
+            .details-container, .person-details-container {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+            .details-poster, .person-image {
+                width: 200px;
+                height: auto;
+            }
+            .details-content, .person-content {
+                min-width: unset; /* Remove min-width for mobile */
+                width: 100%;
+                text-align: center;
+            }
+            .details-title, .person-name {
+                font-size: 2rem;
+            }
+            .details-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .details-buttons {
+                justify-content: center;
+            }
+            .sections-nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .cast-grid, .season-list, .person-known-for-list {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            .cast-item img, .cast-item img.no-image-person {
+                width: 60px;
+                height: 60px;
+            }
+            .season-item img {
+                height: 120px;
+            }
+            .known-for-item img {
+                height: 150px;
+            }
+        }
+
+        /* Explicitly hide mobile navigation on large screens to prevent accidental display */
+        @media (min-width: 769px) {
+            .mobile-nav-links {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Alert/Message Box Structure -->
+    <div id="customAlert" class="custom-alert">
+        <div class="alert-content">
+            <i id="alertIcon" class="alert-icon fas fa-info-circle blue-icon"></i>
+            <p id="alertMessage">This is a custom alert message.</p>
+            <button id="closeAlertBtn">OK</button>
+        </div>
+    </div>
+
+    <header class="main-global-header">
+        <div class="utility-header">
+            <div class="logo">
+                <a href="index.html">CineWatch</a>
+            </div>
+            <div class="header-utility-actions">
+                <!-- Search Icon (toggles expanded search bar) -->
+                <div class="search-bar-toggle">
+                    <button class="search-toggle-button" id="searchToggleButton" aria-label="Toggle Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="account-menu">
+                    <button class="account-button" id="accountButton" aria-label="Account Menu">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <div class="account-dropdown" id="accountDropdown">
+                        <a href="profile.html" id="desktopProfileLink" class="account-item"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html" id="desktopSettingsLink" class="account-item"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="watchlist.html" id="desktopWatchlistLink" class="account-item"><i class="fas fa-bookmark"></i> Watchlist</a>
+                        <a href="history.html" id="desktopHistoryLink" class="account-item"><i class="fas fa-history"></i> History</a>
+                        <a href="login.html" id="desktopLoginLink" class="account-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="register.html" id="desktopRegisterLink" class="account-item"><i class="fas fa-user-plus"></i> Register</a>
+                        <a href="#" id="desktopLogoutLink" class="account-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+                <button class="theme-toggle-button" id="darkModeToggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="main-nav-header" id="mainNavHeader">
+            <a href="movies.html">Movies</a>
+            <a href="tvshows.html">TV Shows</a>
+            <a href="categories.html">Categories</a>
+            <a href="cinema_guide.html">Cinemaguide</a>
+            <a href="about_us.html">About Us</a>
+        </nav>
+    </header>
+
+    <!-- Mobile Navigation Menu (Hidden by default, shown by JS toggle) -->
+    <nav class="mobile-nav-links" id="mobileNavLinks">
+        <a href="movies.html">Movies</a>
+        <a href="tvshows.html">TV Shows</a>
+        <a href="categories.html">Categories</a>
+        <a href="cinema_guide.html">Cinemaguide</a>
+        <a href="about_us.html">About Us</a>
+        <a href="profile.html" id="mobileProfileLink">Profile</a>
+        <a href="settings.html" id="mobileSettingsLink">Settings</a>
+        <a href="watchlist.html" id="mobileWatchlistLink">Watchlist</a>
+        <a href="history.html" id="mobileHistoryLink">History</a>
+        <a href="login.html" id="mobileLoginLink">Login</a>
+        <a href="register.html" id="mobileRegisterLink">Register</a>
+        <a href="#" id="mobileLogoutLink">Logout</a>
+    </nav>
+
+    <!-- Dynamic Search Input Area (Animated reveal) - Copied from index.html -->
+    <section class="dynamic-search-area" id="dynamicSearchArea">
+        <div class="search-input-wrapper">
+            <input type="text" id="expandedSearchBar" placeholder="Search movies, shows, cast..." aria-label="Expanded Search Bar">
+            <button class="search-icon-btn" id="micIconBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+            <button class="search-icon-btn clear-search-btn" id="clearSearchBtn" aria-label="Clear Search"><i class="fas fa-times"></i></button>
+            <button class="search-button-label" id="searchActionBtn">Search</button>
+        </div>
+        <!-- Search Suggestions Container -->
+        <div class="search-suggestions-container" id="searchSuggestionsContainer">
+            <!-- Suggestions will be populated here -->
+        </div>
+        <div class="search-filters">
+            <select id="genreFilter" aria-label="Filter by Genre">
+                <option value="">All Genres</option>
+                <!-- Genres will be dynamically populated here by JS -->
+            </select>
+            <select id="yearFilter" aria-label="Filter by Release Year">
+                <option value="">All Years</option>
+                <!-- Years will be dynamically populated here by JS -->
+            </select>
+            <input type="text" id="castFilter" placeholder="Filter by Cast" aria-label="Filter by Cast">
+        </div>
+    </section>
+
+    <!-- Hero Section (New for details.html) -->
+    <section class="hero-section" id="detailsHeroSection">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 id="heroTitle"></h1>
+            <p id="heroSynopsis"></p>
+            <div class="hero-buttons">
+                <a href="#" class="btn" id="heroWatchNowBtn"><i class="fas fa-play"></i> Watch Now</a>
+                <a href="#" class="btn" id="heroAddToWatchlistBtn"><i class="fas fa-plus"></i> Add to Watchlist</a>
+            </div>
+        </div>
+        <div class="hero-quote-card">
+            "Every story leaves a mark."
+        </div>
+    </section>
+
+    <main id="mainContent">
+        <section class="details-section" id="showDetailsSection">
+            <!-- Content will be dynamically loaded here based on type (movie/tv/person) -->
+            <div id="loadingSpinner" style="text-align: center; padding: 50px; display: block;">
+                <i class="fas fa-spinner fa-spin fa-3x"></i>
+                <p>Loading details...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About CineWatch</h4>
+                <ul>
+                    <li><a href="about_us.html">Our Story</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="careers.html">Careers</a></li>
+                    <li><a href="investors.html">Investors</a></li>
+                    <li><a href="about_developer.html">About Developer</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Help & Support</h4>
+                <ul>
+                    <li><a href="support.html">FAQ</a></li>
+                    <li><a href="terms_of_service.html">Terms of Service</a></li>
+                    <li><a href="privacy_policy.html">Privacy Policy</a></li>
+                    <li><a href="sitemap.xml">Sitemap</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="tvshows.html">TV Shows</a></li>
+                    <li><a href="categories.html">Genres</a></li>
+                    <li><a href="new_releases.html">New Releases</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect with Us</h4>
+                <p>Stay updated on our latest releases and news.</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/aslekiymastamynd" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/yourhandle" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/alexmalunda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> CineWatch. All rights reserved.</p>
+            <p>Last Modified: <span id="last-modified"></span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Global state for user login (simulated)
+        let userLoggedIn = false;
+
+        // TMDB API Configuration
+        const TMDB_API_KEY = '9c198aabc1df9fa96ea8d65e183cb8a3'; 
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3'; 
+        const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
+        const POSTER_SIZE = 'w342'; 
+        const BACKDROP_SIZE = 'w1280';
+        const PROFILE_SIZE = 'w185';
+        const CAST_PHOTO_SIZE = 'w185';
+        const STILL_SIZE = 'w300'; // For season/episode stills
+        const IMAGE_NOT_FOUND_URL = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+        /**
+         * Displays a custom alert/message box to the user.
+         * @param {string} message - The message to display.
+         * @param {string} iconClasses - Font Awesome classes for the icon.
+         */
+        function showMessageBox(message, iconClasses = "fas fa-info-circle blue-icon") {
+            const customAlert = document.getElementById('customAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertIcon = customAlert.querySelector('.alert-icon');
+            const closeAlertBtn = document.getElementById('closeAlertBtn');
+
+            if (customAlert && alertMessage && alertIcon && closeAlertBtn) {
+                alertMessage.textContent = message;
+                alertIcon.className = 'alert-icon ' + iconClasses;
+                customAlert.classList.add('show');
+
+                const closeHandler = () => {
+                    customAlert.classList.remove('show');
+                    closeAlertBtn.removeEventListener('click', closeHandler);
+                };
+                closeAlertBtn.addEventListener('click', closeHandler);
+
+                const overlayClickHandler = (event) => {
+                    if (event.target === customAlert) {
+                        customAlert.classList.remove('show');
+                        customAlert.removeEventListener('click', overlayClickHandler);
+                    }
+                };
+                customAlert.addEventListener('click', overlayClickHandler);
+            } else {
+                console.error("MessageBox elements not found. Cannot show message.");
+            }
+        }
+
+        /**
+         * Toggles dark mode on/off.
+         */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                    darkModeToggle.setAttribute('aria-label', 'Toggle Light Mode');
+                    darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    darkModeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+                    darkModeToggle.setAttribute('aria-label', 'Toggle Dark Mode');
+                    darkModeToggle.setAttribute('title', 'Toggle Dark Mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            }
+        }
+
+        /**
+         * Updates the visibility of login/logout/profile links.
+         */
+        function updateAccountDropdown(isLoggedIn) {
+            const desktopLoginLink = document.getElementById('desktopLoginLink');
+            const desktopRegisterLink = document.getElementById('desktopRegisterLink');
+            const desktopProfileLink = document.getElementById('desktopProfileLink');
+            const desktopSettingsLink = document.getElementById('desktopSettingsLink');
+            const desktopWatchlistLink = document.getElementById('desktopWatchlistLink');
+            const desktopHistoryLink = document.getElementById('desktopHistoryLink');
+            const desktopLogoutLink = document.getElementById('desktopLogoutLink');
+            
+            const mobileLoginLink = document.getElementById('mobileLoginLink');
+            const mobileRegisterLink = document.getElementById('mobileRegisterLink');
+            const mobileProfileLink = document.getElementById('mobileProfileLink');
+            const mobileSettingsLink = document.getElementById('mobileSettingsLink');
+            const mobileWatchlistLink = document.getElementById('mobileWatchlistLink');
+            const mobileHistoryLink = document.getElementById('mobileHistoryLink');
+            const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+            const elementsToToggle = [
+                { desktop: desktopLoginLink, mobile: mobileLoginLink, display: !isLoggedIn },
+                { desktop: desktopRegisterLink, mobile: mobileRegisterLink, display: !isLoggedIn },
+                { desktop: desktopProfileLink, mobile: mobileProfileLink, display: isLoggedIn },
+                { desktop: desktopSettingsLink, mobile: mobileSettingsLink, display: isLoggedIn },
+                { desktop: desktopWatchlistLink, mobile: mobileWatchlistLink, display: isLoggedIn },
+                { desktop: desktopHistoryLink, mobile: mobileHistoryLink, display: isLoggedIn },
+                { desktop: desktopLogoutLink, mobile: mobileLogoutLink, display: isLoggedIn }
+            ];
+
+            elementsToToggle.forEach(item => {
+                if (item.desktop) item.desktop.style.display = item.display ? 'flex' : 'none';
+                if (item.mobile) item.mobile.style.display = item.display ? 'flex' : 'none';
+            });
+            userLoggedIn = isLoggedIn;
+        }
+
+        /**
+         * Fetches detailed information for a movie or TV show.
+         * @param {string} id - The ID of the movie/TV show.
+         * @param {string} type - 'movie' or 'tv'.
+         * @returns {Promise<Object|null>} Detailed show object.
+         */
+        async function fetchShowDetails(id, type) {
+            try {
+                const url = `${TMDB_BASE_URL}/${type}/${id}?api_key=${TMDB_API_KEY}&language=en-US&append_to_response=credits,external_ids,videos,recommendations`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error(`Error fetching ${type} details for ID ${id}:`, error);
+                return null;
+            }
+        }
+
+        /**
+         * Fetches detailed information for a person.
+         * @param {string} id - The ID of the person.
+         * @returns {Promise<Object|null>} Detailed person object.
+         */
+        async function fetchPersonDetails(id) {
+            try {
+                const url = `${TMDB_BASE_URL}/person/${id}?api_key=${TMDB_API_KEY}&language=en-US&append_to_response=combined_credits`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error(`Error fetching person details for ID ${id}:`, error);
+                return null;
+            }
+        }
+
+        /**
+         * Updates the hero section with content details.
+         * @param {Object} content - The movie/TV show/person details object.
+         * @param {string} type - 'movie', 'tv', or 'person'.
+         */
+        function populateHeroSection(content, type) {
+            const heroSection = document.getElementById('detailsHeroSection');
+            const heroTitle = document.getElementById('heroTitle');
+            const heroSynopsis = document.getElementById('heroSynopsis');
+            const heroWatchNowBtn = document.getElementById('heroWatchNowBtn');
+            const heroAddToWatchlistBtn = document.getElementById('heroAddToWatchlistBtn');
+
+            if (!heroSection || !heroTitle || !heroSynopsis || !heroWatchNowBtn || !heroAddToWatchlistBtn) {
+                console.warn("Hero section elements not found.");
+                return;
+            }
+
+            let title = '';
+            let synopsis = '';
+            let backdropPath = '';
+
+            if (type === 'movie' || type === 'tv') {
+                title = content.title || content.name || 'Details';
+                synopsis = content.tagline || content.overview || 'Explore more about this title.';
+                backdropPath = content.backdrop_path ? `${TMDB_IMAGE_BASE_URL}${BACKDROP_SIZE}${content.backdrop_path}` : '';
+                heroWatchNowBtn.style.display = 'inline-flex';
+                heroAddToWatchlistBtn.style.display = 'inline-flex';
+            } else if (type === 'person') {
+                title = content.name || 'Person Details';
+                synopsis = content.biography ? content.biography.substring(0, 150) + '...' : 'Learn more about this person.'; // Shortened biography
+                heroWatchNowBtn.style.display = 'none'; // Hide for person
+                heroAddToWatchlistBtn.style.display = 'none'; // Hide for person
+                
+                // Try to find a backdrop from their known_for movies/TV shows
+                if (content.combined_credits && content.combined_credits.cast.length > 0) {
+                    const popularKnownFor = content.combined_credits.cast.sort((a,b) => b.popularity - a.popularity)
+                                                                       .find(item => item.backdrop_path);
+                    if (popularKnownFor) {
+                        backdropPath = `${TMDB_IMAGE_BASE_URL}${BACKDROP_SIZE}${popularKnownFor.backdrop_path}`;
+                    }
+                }
+            }
+
+            heroTitle.textContent = title;
+            heroSynopsis.textContent = synopsis;
+            if (backdropPath) {
+                heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${backdropPath}')`;
+            } else {
+                heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://placehold.co/1280x400/282828/f0f0f0?text=CineWatch+Details')`;
+            }
+        }
+
+
+        /**
+         * Renders details for a movie or TV show.
+         * @param {Object} details - The movie/TV show details object.
+         * @param {string} type - 'movie' or 'tv'.
+         */
+        function renderShowDetails(details, type) {
+            const container = document.getElementById('showDetailsSection');
+            if (!container) return;
+            document.getElementById('loadingSpinner').style.display = 'none';
+
+            // Populate Hero Section first
+            populateHeroSection(details, type);
+
+            const title = details.title || details.name;
+            const releaseDate = details.release_date || details.first_air_date;
+            const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
+            const runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time && details.episode_run_time.length > 0 ? `${details.episode_run_time[0]} min/episode` : 'N/A');
+            const genres = details.genres ? details.genres.map(g => g.name).join(', ') : 'N/A';
+            const tagline = details.tagline ? `<em>"${details.tagline}"</em>` : '';
+            const synopsis = details.overview || 'No synopsis available.';
+            const posterPath = details.poster_path ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${details.poster_path}` : 'https://placehold.co/342x450/282828/f0f0f0?text=No+Poster';
+            const voteAverage = details.vote_average ? details.vote_average.toFixed(1) : 'N/A';
+            const languages = details.spoken_languages && details.spoken_languages.length > 0 ? details.spoken_languages.map(lang => lang.english_name).join(', ') : 'N/A';
+            const productionCountries = details.production_countries && details.production_countries.length > 0 ? details.production_countries.map(country => country.iso_3166_1).join(', ') : 'N/A';
+
+            // Placeholder for IMDb and Rotten Tomatoes - requires external APIs or scraping, not directly from TMDB
+            const imdbRating = 'N/A'; 
+            const rtRating = 'N/A'; 
+
+
+            container.innerHTML = `
+                <div class="details-container">
+                    <img src="${posterPath}" alt="${title} Poster" class="details-poster ${!details.poster_path ? 'no-image' : ''}" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/342x450/282828/f0f0f0?text=No+Poster'; this.classList.add('no-image');">
+                    <div class="details-content">
+                        <h1 class="details-title">${title} (${year})</h1>
+                        ${tagline ? `<p class="details-tagline">${tagline}</p>` : ''}
+                        <p class="details-meta">
+                            <span><i class="fas fa-film"></i> ${type === 'movie' ? 'Movie' : 'TV Show'}</span>
+                            <span><i class="fas fa-calendar-alt"></i> ${releaseDate}</span>
+                            <span><i class="fas fa-clock"></i> ${runtime}</span>
+                            <span><i class="fas fa-tags"></i> ${genres}</span>
+                            <span><i class="fas fa-star"></i> TMDB: ${voteAverage}</span>
+                            <span><i class="fab fa-imdb"></i> IMDb: ${imdbRating}</span>
+                            <span><i class="fas fa-egg"></i> RT: ${rtRating}</span>
+                            <span><i class="fas fa-language"></i> Lang: ${languages}</span>
+                            <span><i class="fas fa-globe"></i> Country: ${productionCountries}</span>
+                        </p>
+                        <div class="details-synopsis" id="synopsisText">
+                            ${synopsis}
+                        </div>
+                        <button class="read-more-btn" id="readMoreBtn">Read More</button>
+
+                        <div class="details-buttons">
+                            <a href="#" class="btn"><i class="fas fa-play"></i> Watch Trailer</a>
+                            <a href="#" class="btn"><i class="fas fa-plus"></i> Add to Watchlist</a>
+                        </div>
+                        
+                        <div class="sections-nav">
+                            <button onclick="document.getElementById('castSection').scrollIntoView({ behavior: 'smooth' });">Cast</button>
+                            ${type === 'tv' ? `<button onclick="document.getElementById('seasonsSection').scrollIntoView({ behavior: 'smooth' });">Seasons</button>` : ''}
+                            <button onclick="showMessageBox('Reviews functionality coming soon!', 'fas fa-comment blue-icon');">Reviews</button>
+                            <button onclick="showMessageBox('Recommendations coming soon!', 'fas fa-thumbs-up blue-icon');">Recommendations</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="castSection" class="sub-section">
+                    <h3>Cast</h3>
+                    <div class="cast-grid">
+                        <!-- Cast will be populated here -->
+                    </div>
+                </div>
+
+                ${type === 'tv' ? `
+                <div id="seasonsSection" class="sub-section">
+                    <h3>Seasons</h3>
+                    <div class="season-list">
+                        <!-- Seasons will be populated here -->
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            // Handle synopsis read more/less
+            const synopsisText = document.getElementById('synopsisText');
+            const readMoreBtn = document.getElementById('readMoreBtn');
+            if (synopsisText && readMoreBtn) {
+                if (synopsisText.scrollHeight > synopsisText.clientHeight) {
+                    synopsisText.classList.add('synopsis-collapsed');
+                    readMoreBtn.style.display = 'block';
+                } else {
+                    readMoreBtn.style.display = 'none';
+                }
+
+                readMoreBtn.addEventListener('click', () => {
+                    if (synopsisText.classList.contains('synopsis-collapsed')) {
+                        synopsisText.classList.remove('synopsis-collapsed');
+                        readMoreBtn.textContent = 'Read Less';
+                    } else {
+                        synopsisText.classList.add('synopsis-collapsed');
+                        readMoreBtn.textContent = 'Read More';
+                    }
+                });
+            }
+
+            // Populate Cast
+            const castGrid = container.querySelector('.cast-grid');
+            if (castGrid && details.credits && details.credits.cast) {
+                details.credits.cast.slice(0, 15).forEach(castMember => { // Limit cast members
+                    const castItem = document.createElement('div');
+                    castItem.classList.add('cast-item');
+                    const profilePath = castMember.profile_path ? `${TMDB_IMAGE_BASE_URL}${PROFILE_SIZE}${castMember.profile_path}` : IMAGE_NOT_FOUND_URL;
+                    const altText = castMember.profile_path ? `${castMember.name} photo` : `No image for ${castMember.name}`;
+                    const imgClass = castMember.profile_path ? '' : 'no-image-person';
+
+                    castItem.innerHTML = `
+                        <a href="details.html?id=${castMember.id}&type=person">
+                            <img src="${profilePath}" alt="${altText}" class="${imgClass}"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/185x185/282828/f0f0f0?text=👤'; this.classList.add('no-image-person');">
+                            <p>${castMember.name}</p>
+                            <span>${castMember.character || ''}</span>
+                        </a>
+                    `;
+                    castGrid.appendChild(castItem);
+                });
+            } else if (castGrid) {
+                castGrid.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.7;">No cast information available.</p>`;
+            }
+
+            // Populate Seasons for TV Shows
+            if (type === 'tv') {
+                const seasonList = container.querySelector('.season-list');
+                if (seasonList && details.seasons) {
+                    details.seasons.forEach(season => {
+                        const seasonItem = document.createElement('div');
+                        seasonItem.classList.add('season-item');
+                        const posterPathSeason = season.poster_path ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${season.poster_path}` : IMAGE_NOT_FOUND_URL;
+                        const seasonAltText = season.poster_path ? `${season.name} poster` : `No poster for ${season.name}`;
+                        const seasonImgClass = season.poster_path ? '' : 'no-image-season';
+                        
+                        seasonItem.innerHTML = `
+                            <a href="details.html?id=${details.id}&type=tv&season=${season.season_number}">
+                                <img src="${posterPathSeason}" alt="${seasonAltText}" class="${seasonImgClass}"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/342x150/282828/f0f0f0?text=No+Poster'; this.classList.add('no-image-season');">
+                                <p class="season-name">${season.name}</p>
+                                <p class="episode-count">${season.episode_count} Episodes</p>
+                            </a>
+                        `;
+                        seasonList.appendChild(seasonItem);
+                    });
+                } else if (seasonList) {
+                    seasonList.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.7;">No season information available.</p>`;
+                }
+            }
+            document.getElementById('pageTitle').textContent = `CineWatch - ${title}`;
+        }
+
+        /**
+         * Renders details for a person.
+         * @param {Object} details - The person details object.
+         */
+        function renderPersonDetails(details) {
+            const container = document.getElementById('showDetailsSection');
+            if (!container) return;
+            document.getElementById('loadingSpinner').style.display = 'none';
+
+            // Populate Hero Section first
+            populateHeroSection(details, 'person');
+
+            const profilePath = details.profile_path ? `${TMDB_IMAGE_BASE_URL}${PROFILE_SIZE}${details.profile_path}` : 'https://placehold.co/250x375/282828/f0f0f0?text=👤';
+            const biography = details.biography || 'No biography available.';
+            const birthday = details.birthday ? new Date(details.birthday).toLocaleDateString() : 'N/A';
+            const birthplace = details.place_of_birth || 'N/A';
+            const knownForDepartment = details.known_for_department || 'N/A';
+
+            container.innerHTML = `
+                <div class="person-details-container">
+                    <img src="${profilePath}" alt="${details.name} photo" class="person-image ${!details.profile_path ? 'no-image' : ''}"
+                         onerror="this.onerror=null; this.src='https://placehold.co/250x375/282828/f0f0f0?text=👤'; this.classList.add('no-image');">
+                    <div class="person-content">
+                        <h1 class="person-name">${details.name}</h1>
+                        <p class="person-meta">
+                            <p><strong>Known For:</strong> ${knownForDepartment}</p>
+                            <p><strong>Birthday:</strong> ${birthday}</p>
+                            <p><strong>Place of Birth:</strong> ${birthplace}</p>
+                        </p>
+                        <h3 style="margin-top: 30px; margin-bottom: 10px; color: var(--highlight);">Biography</h3>
+                        <div class="person-biography" id="biographyText">
+                            ${biography}
+                        </div>
+                        <button class="read-more-btn" id="readMoreBtn">Read More</button>
+                    </div>
+                </div>
+
+                <div class="sub-section" id="knownForSection">
+                    <h3>Known For</h3>
+                    <div class="person-known-for-list">
+                        <!-- Known for movies/TV shows will be populated here -->
+                    </div>
+                </div>
+            `;
+            
+            // Handle biography read more/less
+            const biographyText = document.getElementById('biographyText');
+            const readMoreBtn = document.getElementById('readMoreBtn');
+            if (biographyText && readMoreBtn) {
+                if (biographyText.scrollHeight > biographyText.clientHeight) {
+                    biographyText.classList.add('synopsis-collapsed'); // Reusing class for collapsed text
+                    readMoreBtn.style.display = 'block';
+                } else {
+                    readMoreBtn.style.display = 'none';
+                }
+
+                readMoreBtn.addEventListener('click', () => {
+                    if (biographyText.classList.contains('synopsis-collapsed')) {
+                        biographyText.classList.remove('synopsis-collapsed');
+                        readMoreBtn.textContent = 'Read Less';
+                    } else {
+                        biographyText.classList.add('synopsis-collapsed');
+                        readMoreBtn.textContent = 'Read More';
+                    }
+                });
+            }
+
+            // Populate Known For
+            const knownForList = document.querySelector('.person-known-for-list');
+            if (knownForList && details.combined_credits && details.combined_credits.cast) {
+                // Filter to only include movies and TV shows
+                const knownForShows = details.combined_credits.cast.filter(item => item.media_type === 'movie' || item.media_type === 'tv')
+                                                                  .sort((a, b) => b.popularity - a.popularity) // Sort by popularity
+                                                                  .slice(0, 20); // Limit to top 20 known for
+
+                if (knownForShows.length > 0) {
+                    knownForShows.forEach(item => {
+                        const knownForItem = document.createElement('div');
+                        knownForItem.classList.add('known-for-item');
+                        const itemPosterPath = item.poster_path ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${item.poster_path}` : IMAGE_NOT_FOUND_URL;
+                        const itemTitle = item.title || item.name;
+                        const itemYear = (item.release_date || item.first_air_date) ? new Date(item.release_date || item.first_air_date).getFullYear() : 'N/A';
+                        const itemType = item.media_type === 'movie' ? 'Movie' : 'TV Show';
+                        const itemImgClass = item.poster_path ? '' : 'no-image-show';
+
+                        knownForItem.innerHTML = `
+                            <a href="details.html?id=${item.id}&type=${item.media_type}">
+                                <img src="${itemPosterPath}" alt="${itemTitle} Poster" class="${itemImgClass}"
+                                    onerror="this.onerror=null; this.src='https://placehold.co/342x200/282828/f0f0f0?text=No+Poster'; this.classList.add('no-image-show');">
+                                <div class="known-for-item-info">
+                                    <p>${itemTitle}</p>
+                                    <span>${itemType} (${itemYear})</span>
+                                </div>
+                            </a>
+                        `;
+                        knownForList.appendChild(knownForItem);
+                    });
+                } else {
+                    knownForList.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.7;">No known for titles available.</p>`;
+                }
+            } else if (knownForList) {
+                knownForList.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.7;">No known for titles available.</p>`;
+            }
+            document.getElementById('pageTitle').textContent = `CineWatch - ${details.name}`;
+        }
+
+
+        /**
+         * Fetches genres from TMDB for a specific type (movie or tv).
+         * @param {string} type - 'movie' or 'tv'.
+         * @returns {Promise<Array>} An array of genre objects.
+         */
+        async function fetchGenres(type) {
+            const url = `${TMDB_BASE_URL}/genre/${type}/list?api_key=${TMDB_API_KEY}&language=en-US`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    console.warn(`Could not fetch ${type} genres. Status: ${response.status}.`);
+                    return []; 
+                }
+                const data = await response.json();
+                return data.genres;
+            } catch (error) {
+                console.warn(`Error fetching ${type} genres:`, error);
+                return [];
+            }
+        }
+
+        /**
+         * Populates a select element with genre options.
+         * @param {HTMLElement} selectElement - The select element to populate.
+         * @param {Array} genres - Array of genre objects.
+         */
+        function populateGenreFilter(selectElement, genres) {
+            if (!selectElement) return;
+            // Clear existing options except the first one ("All Genres")
+            while (selectElement.options.length > 1) {
+                selectElement.remove(1);
+            }
+            genres.forEach(genre => {
+                const option = document.createElement('option');
+                option.value = genre.id;
+                option.textContent = genre.name;
+                selectElement.appendChild(option);
+            });
+        }
+
+        /**
+         * Populates a select element with year options.
+         * @param {HTMLElement} selectElement - The select element to populate.
+         * @param {number} startYear - The starting year.
+         * @param {number} endYear - The ending year.
+         */
+        function populateYearFilter(selectElement, startYear, endYear) {
+            if (!selectElement) return;
+            // Clear existing options except the first one ("All Years")
+            while (selectElement.options.length > 1) {
+                selectElement.remove(1);
+            }
+            for (let year = endYear; year >= startYear; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                selectElement.appendChild(option);
+            }
+        }
+
+        /**
+         * Fetches search results from TMDB's multi-search endpoint.
+         * @param {string} query - The search query.
+         * @returns {Promise<Array>} An array of search results (movies, TV shows, people).
+         */
+        async function fetchSearchResults(query) {
+            if (!query) return [];
+            try {
+                const url = `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(query)}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                // Filter out results without a title/name, and media_type not useful for direct display (e.g., 'collection')
+                return data.results.filter(item => 
+                    (item.media_type === 'movie' || item.media_type === 'tv' || item.media_type === 'person') && 
+                    (item.title || item.name)
+                );
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+                return [];
+            }
+        }
+
+        /**
+         * Displays search results as suggestions in a dropdown.
+         * @param {Array} results - Array of search result objects.
+         */
+        function displaySearchResults(results) {
+            const container = document.getElementById('searchSuggestionsContainer');
+            if (!container) return;
+
+            container.innerHTML = ''; // Clear previous suggestions
+
+            if (results.length === 0) {
+                container.classList.remove('show');
+                return;
+            }
+
+            results.slice(0, 7).forEach(item => { // Limit to top 7 suggestions
+                const suggestionItem = document.createElement('div');
+                suggestionItem.classList.add('search-suggestion-item');
+                
+                let imageUrl, title, typeInfo, linkUrl;
+
+                if (item.media_type === 'movie' || item.media_type === 'tv') {
+                    imageUrl = item.poster_path ? `${TMDB_IMAGE_BASE_URL}w92${item.poster_path}` : IMAGE_NOT_FOUND_URL;
+                    title = item.title || item.name;
+                    const year = (item.release_date || item.first_air_date) ? new Date(item.release_date || item.first_air_date).getFullYear() : 'N/A';
+                    typeInfo = item.media_type === 'movie' ? `Movie (${year})` : `TV Show (${year})`;
+                    linkUrl = `details.html?id=${item.id}&type=${item.media_type}`;
+                } else if (item.media_type === 'person') {
+                    imageUrl = item.profile_path ? `${TMDB_IMAGE_BASE_URL}w92${item.profile_path}` : IMAGE_NOT_FOUND_URL;
+                    title = item.name;
+                    typeInfo = `Person`;
+                    linkUrl = `details.html?id=${item.id}&type=${item.media_type}`;
+                } else {
+                    return; // Skip other media types
+                }
+
+                suggestionItem.innerHTML = `
+                    <img src="${imageUrl}" alt="${title}" onerror="this.onerror=null;this.src='https://placehold.co/92x138/282828/f0f0f0?text=No+Image';">
+                    <div class="search-suggestion-info">
+                        <h4>${title}</h4>
+                        <p>${typeInfo}</p>
+                    </div>
+                `;
+
+                suggestionItem.addEventListener('click', () => {
+                    window.location.href = linkUrl;
+                    container.classList.remove('show'); // Hide suggestions
+                });
+                container.appendChild(suggestionItem);
+            });
+
+            container.classList.add('show');
+        }
+
+        /**
+         * Debounce function to limit how often a function is called.
+         * @param {Function} func - The function to debounce.
+         * @param {number} delay - The delay in milliseconds.
+         * @returns {Function} The debounced function.
+         */
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+
+        // DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', async () => {
+            const accountButton = document.getElementById('accountButton');
+            const accountDropdown = document.getElementById('accountDropdown');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileNavLinks = document.getElementById('mobileNavLinks');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const desktopLogoutLink = document.getElementById('desktopLogoutLink');
+            const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const mainContent = document.getElementById('mainContent');
+
+            // Search bar elements
+            const searchToggleButton = document.getElementById('searchToggleButton');
+            const dynamicSearchArea = document.getElementById('dynamicSearchArea');
+            const expandedSearchBar = document.getElementById('expandedSearchBar');
+            const micIconBtn = document.getElementById('micIconBtn');
+            const clearSearchBtn = document.getElementById('clearSearchBtn');
+            const searchActionBtn = document.getElementById('searchActionBtn');
+            const genreFilter = document.getElementById('genreFilter');
+            const yearFilter = document.getElementById('yearFilter');
+            const searchSuggestionsContainer = document.getElementById('searchSuggestionsContainer');
+
+
+            // Toggles Account Dropdown
+            if (accountButton && accountDropdown) {
+                accountButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    accountDropdown.classList.toggle('show');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!accountDropdown.contains(e.target) && !accountButton.contains(e.target)) {
+                        accountDropdown.classList.remove('show');
+                    }
+                    // Hide search suggestions if clicked outside
+                    if (searchSuggestionsContainer && !expandedSearchBar.contains(e.target) && !searchSuggestionsContainer.contains(e.target)) {
+                        searchSuggestionsContainer.classList.remove('show');
+                    }
+                });
+            }
+
+            // Toggles Mobile Menu
+            if (mobileMenuToggle && mobileNavLinks) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileNavLinks.classList.toggle('show-mobile-menu');
+                });
+            }
+
+            // Toggles Dark Mode
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', toggleDarkMode);
+            }
+
+            // Handles Logout functionality (simulated)
+            const performLogout = () => {
+                showMessageBox('You have been logged out.', 'fas fa-check-circle green-icon');
+                updateAccountDropdown(false);
+                if (mobileNavLinks) {
+                    mobileNavLinks.classList.remove('show-mobile-menu');
+                }
+            };
+
+            if (desktopLogoutLink) {
+                desktopLogoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    performLogout();
+                });
+            }
+            if (mobileLogoutLink) {
+                mobileLogoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    performLogout();
+                });
+            }
+
+            // Initializes Dark Mode based on localStorage
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (darkModeToggle) {
+                    darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                    darkModeToggle.setAttribute('aria-label', 'Toggle Light Mode');
+                    darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+                }
+            }
+            updateAccountDropdown(false); // Initialize account dropdown (simulated logged out)
+
+            // Updates the current year in the footer
+            const currentYearSpan = document.getElementById('current-year');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            // Sets Last Modified Date in footer
+            const lastModifiedSpan_footer = document.getElementById('last-modified');
+            if (lastModifiedSpan_footer) {
+                lastModifiedSpan_footer.textContent = new Date(document.lastModified).toLocaleDateString();
+            }
+
+            // Handles Dynamic Search Bar Logic (Copied from index.html)
+            if (searchToggleButton && dynamicSearchArea && expandedSearchBar && searchActionBtn) {
+                searchToggleButton.addEventListener('click', () => {
+                    const isShowing = dynamicSearchArea.classList.toggle('show');
+                    if (isShowing) {
+                        expandedSearchBar.focus();
+                    } else {
+                        // When hiding, also hide suggestions
+                        if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+                    }
+                });
+
+                // Debounced search input for suggestions
+                const debouncedSearch = debounce(async (query) => {
+                    const results = await fetchSearchResults(query);
+                    displaySearchResults(results);
+                }, 300); // 300ms debounce delay
+
+                expandedSearchBar.addEventListener('input', () => {
+                    const query = expandedSearchBar.value.trim();
+                    if (query.length > 2) { // Start suggesting after 2 characters
+                        debouncedSearch(query);
+                    } else {
+                        if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+                    }
+                    // Shows/hides searchActionBtn and manages clearSearchBtn based on input
+                    if (expandedSearchBar.value.length > 0) {
+                        searchActionBtn.style.display = 'inline-block';
+                        clearSearchBtn.style.display = 'inline-block';
+                    } else {
+                        searchActionBtn.style.display = 'none';
+                        clearSearchBtn.style.display = 'none';
+                    }
+                });
+
+                // Handles clear search button click
+                clearSearchBtn.addEventListener('click', () => {
+                    expandedSearchBar.value = '';
+                    searchActionBtn.style.display = 'none';
+                    clearSearchBtn.style.display = 'none';
+                    if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+                });
+
+                // Handles mic icon button click (placeholder)
+                micIconBtn.addEventListener('click', () => {
+                    showMessageBox('Voice search activated. (Functionality not yet implemented)', 'fas fa-microphone blue-icon');
+                });
+
+                // Handles search action button click or Enter key press
+                const performSearch = () => {
+                    const query = expandedSearchBar.value.trim();
+                    const genreId = genreFilter.value;
+                    const year = yearFilter.value;
+                    const cast = document.getElementById('castFilter').value.trim();
+
+                    if (query || genreId || year || cast) {
+                        // For broad searches, redirect to a category_details page with search parameters
+                        let searchParams = new URLSearchParams();
+                        searchParams.append('categoryName', 'Search Results'); // Generic category name
+                        searchParams.append('query', query);
+                        if (genreId) searchParams.append('genre', genreId);
+                        if (year) searchParams.append('year', year);
+                        if (cast) searchParams.append('cast', cast); // This would need further logic on category_details.html
+                        searchParams.append('endpoint', '/search/multi'); // Generic search endpoint
+                        searchParams.append('mediaType', 'all'); // Can be movie/tv/person/all
+                        window.location.href = `category_details.html?${searchParams.toString()}`;
+
+                        if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show'); // Hide suggestions on explicit search
+                    } else {
+                        showMessageBox('Please enter a search term or select filters.', 'fas fa-info-circle yellow-icon');
+                    }
+                };
+
+                searchActionBtn.addEventListener('click', performSearch);
+                expandedSearchBar.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+
+                // Populates filters on load
+                const currentYear = new Date().getFullYear();
+                populateYearFilter(yearFilter, 1950, currentYear); // Years from 1950 to current
+
+                // Fetch movie and TV genres and combine them for the general genre filter
+                const movieGenres = await fetchGenres('movie');
+                const tvGenres = await fetchGenres('tv');
+                // Combine and unique genres (by ID)
+                const allGenres = [...new Map([...movieGenres, ...tvGenres].map(genre => [genre.id, genre])).values()];
+                populateGenreFilter(genreFilter, allGenres);
+            } 
+            // Ensures search button label and clear button are hidden initially
+            if (searchActionBtn) searchActionBtn.style.display = 'none';
+            if (clearSearchBtn) clearSearchBtn.style.display = 'none';
+
+
+            // Fetch and render details based on URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const type = urlParams.get('type');
+            const seasonNumber = urlParams.get('season'); // For direct season deep-linking
+
+            if (id && type) {
+                loadingSpinner.style.display = 'block'; // Show spinner
+                mainContent.style.opacity = '0.5'; // Dim content while loading
+
+                if (type === 'movie' || type === 'tv') {
+                    const details = await fetchShowDetails(id, type);
+                    if (details) {
+                        renderShowDetails(details, type);
+                        // If seasonNumber is present, scroll to seasons section
+                        if (seasonNumber && document.getElementById('seasonsSection')) {
+                            document.getElementById('seasonsSection').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    } else {
+                        showMessageBox(`Could not load details for ${type} ID: ${id}`, 'fas fa-exclamation-triangle red-icon');
+                        mainContent.innerHTML = `<p style="text-align: center; padding: 50px; color: var(--danger);">Failed to load details. Please try again.</p>`;
+                    }
+                } else if (type === 'person') {
+                    const details = await fetchPersonDetails(id);
+                    if (details) {
+                        renderPersonDetails(details);
+                    } else {
+                        showMessageBox(`Could not load details for person ID: ${id}`, 'fas fa-exclamation-triangle red-icon');
+                        mainContent.innerHTML = `<p style="text-align: center; padding: 50px; color: var(--danger);">Failed to load person details. Please try again.</p>`;
+                    }
+                } else {
+                    showMessageBox('Invalid type parameter in URL.', 'fas fa-exclamation-triangle yellow-icon');
+                    mainContent.innerHTML = `<p style="text-align: center; padding: 50px; color: var(--danger);">Invalid details request.</p>`;
+                }
+                loadingSpinner.style.display = 'none'; // Hide spinner
+                mainContent.style.opacity = '1'; // Restore opacity
+            } else {
+                showMessageBox('Missing ID or type parameter in URL.', 'fas fa-exclamation-triangle yellow-icon');
+                mainContent.innerHTML = `<p style="text-align: center; padding: 50px; color: var(--danger);">No item selected to display details.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

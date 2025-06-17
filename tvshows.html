@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CineWatch - TV Shows</title>
+  
+  <!-- Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Inter Font (for consistent typography across the site) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Consolidated Main Stylesheet - Copied from movies.html for consistency -->
+  <style>
+    /* Root Theme Variables */
+    :root {
+      --bg: #fff;
+      --text: #111;
+      --header-bg: #f0ecec;
+      --search-bg: #f4f4f4;
+      --card-border: #eee; /* Used for header/footer borders */
+      --card-shadow: rgba(0, 0, 0, 0.05); /* Used for header shadow */
+      --highlight: #007bff;
+      --accent: #28a745;
+      --danger: #dc3545;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --modal-bg: rgba(0, 0, 0, 0.5);
+      --modal-content-bg: #fff;
+      --modal-text: #111;
+      --search-area-height: 120px; /* Approximate height of expanded search area */
+
+      /* New Variables for Homepage Content */
+      --hero-overlay: rgba(0, 0, 0, 0.6);
+      --section-padding: 40px 20px;
+      --carousel-gap: 20px;
+      --card-bg: #fff;
+      --card-text: #111;
+      --card-rating-bg: var(--accent);
+      --card-rating-text: #fff;
+      --button-hover: #0056b3;
+
+      /* Search Suggestions */
+      --suggestions-bg: #fff;
+      --suggestions-border: #ddd;
+      --suggestions-item-hover-bg: #f0f0f0;
+
+      /* Carousel Specific - Not directly used here, but kept for consistency */
+      --carousel-arrow-bg: rgba(0, 0, 0, 0.5);
+      --carousel-arrow-color: #fff;
+      --carousel-arrow-hover-bg: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Dark Mode Variables */
+    body.dark-mode {
+      --bg: #1a1a1a;
+      --text: #f0f0f0;
+      --header-bg: #2a2a2a;
+      --search-bg: #333;
+      --card-border: #444;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --highlight: #66b3ff;
+      --accent: #4CAF50;
+      --danger: #ff6b6b;
+      --info: #00bcd4;
+      --warning: #ffeb3b;
+      --modal-bg: rgba(0, 0, 0, 0.7);
+      --modal-content-bg: #282828;
+      --modal-text: #f0f0f0;
+
+      /* Dark Mode for New Homepage Content */
+      --hero-overlay: rgba(0, 0, 0, 0.75);
+      --card-bg: #282828;
+      --card-text: #f0f0f0;
+      --card-rating-bg: var(--accent);
+      --card-rating-text: #fff;
+      --button-hover: #4a90d9;
+
+      /* Search Suggestions Dark Mode */
+      --suggestions-bg: #282828;
+      --suggestions-border: #444;
+      --suggestions-item-hover-bg: #3a3a3a;
+
+      /* Carousel Specific Dark Mode */
+      --carousel-arrow-bg: rgba(255, 255, 255, 0.2);
+      --carousel-arrow-color: #f0f0f0;
+      --carousel-arrow-hover-bg: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      min-height: 100vh; /* Ensures body takes full viewport height */
+      display: flex;
+      flex-direction: column; /* Allows main content to push footer down */
+    }
+
+    a {
+      color: var(--highlight);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--accent);
+    }
+
+    /* Accessibility: Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--highlight);
+      outline-offset: 2px;
+    }
+
+    /* Global Header Wrapper */
+    .main-global-header {
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    /* Utility Header (Top Row) */
+    .utility-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border); /* Separator */
+    }
+
+    .logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--highlight);
+      text-transform: capitalize; /* Ensures initial caps as requested */
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-utility-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-bar-toggle button {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .search-bar-toggle button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-menu {
+      position: relative;
+    }
+
+    .account-button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      display: flex; /* Centers the icon */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .account-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .theme-toggle-button { /* New class for dark mode toggle */
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      display: flex; /* Centers the icon */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: var(--header-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+      padding: 10px 0;
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .account-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .account-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      color: var(--text);
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .account-dropdown a:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--highlight);
+    }
+
+    .account-dropdown a i {
+      width: 20px; /* Ensures consistent icon alignment */
+      text-align: center;
+    }
+
+    /* Mobile Menu Toggle - default state is hidden */
+    .mobile-menu-toggle {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none; /* Hide by default on all screens */
+    }
+
+    /* Main Navigation Header (Desktop Only) */
+    .main-nav-header {
+      padding: 10px 20px;
+      display: flex; /* Display by default for desktop */
+      justify-content: center;
+      gap: 30px;
+      align-items: center;
+    }
+
+    /* Mobile Navigation Menu (Hidden by default, shown by JS toggle) */
+    .mobile-nav-links {
+      flex-direction: column;
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--card-border);
+      display: none; /* Hide by default on all screens */
+    }
+
+    /* Dynamic Search Area */
+    .dynamic-search-area {
+      background-color: var(--header-bg);
+      padding: 15px 20px;
+      overflow: hidden;
+      max-height: 0; /* Initially hidden */
+      opacity: 0;
+      transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative; /* For positioning search suggestions */
+    }
+
+    .dynamic-search-area.show {
+      max-height: var(--search-area-height); /* Expands to reveal */
+      opacity: 1;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px; /* Space between input and filters */
+      position: relative; /* For suggestions container positioning */
+      z-index: 1050; /* Ensure search bar is above suggestions */
+    }
+
+    .dynamic-search-area input[type="text"] {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--card-border);
+      border-radius: 25px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .dynamic-search-area input[type="text"]:focus {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    .search-icon-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.2s ease;
+    }
+    .search-icon-btn:hover {
+        color: var(--highlight);
+    }
+
+    .search-button-label {
+      background-color: var(--highlight);
+      color: #fff;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-button-label:hover {
+      background-color: #0056b3;
+    }
+
+    .search-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center; /* Centers filters */
+    }
+
+    .search-filters select,
+    .search-filters input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      min-width: 120px;
+      flex: 1; /* Allows items to grow/shrink */
+      max-width: 200px; /* Max width for filter inputs */
+    }
+
+    /* Search Suggestions Dropdown */
+    .search-suggestions-container {
+        position: absolute;
+        top: calc(100% + 5px); /* Position below the search bar */
+        left: 0;
+        right: 0;
+        background-color: var(--suggestions-bg);
+        border: 1px solid var(--suggestions-border);
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 1000; /* Below search bar, above other content */
+        display: none; /* Hidden by default */
+    }
+
+    .search-suggestions-container.show {
+        display: block;
+    }
+
+    .search-suggestion-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid var(--suggestions-border);
+    }
+
+    .search-suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-suggestion-item:hover {
+        background-color: var(--suggestions-item-hover-bg);
+    }
+
+    .search-suggestion-item img {
+        width: 40px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 10px;
+        flex-shrink: 0; /* Prevent image from shrinking */
+    }
+
+    .search-suggestion-info {
+        flex-grow: 1;
+        color: var(--text);
+    }
+
+    .search-suggestion-info h4 {
+        font-size: 1rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .search-suggestion-info p {
+        font-size: 0.85rem;
+        color: var(--text);
+        opacity: 0.7;
+    }
+
+
+    /* Main Content Area - acts as a flexible spacer */
+    main {
+        flex-grow: 1; /* Pushes footer to the bottom */
+        display: flex;
+        flex-direction: column; /* Stack content vertically */
+        padding: 0; /* No padding here, sections will have their own */
+        color: var(--text);
+    }
+
+    /* Styles specific to movies.html grid and filters */
+    .filters-section {
+        padding: 20px;
+        background-color: var(--header-bg);
+        border-bottom: 1px solid var(--card-border);
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .filters-section h1 {
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        color: var(--highlight);
+    }
+
+    .filter-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .filter-controls select,
+    .filter-controls input[type="text"],
+    .filter-controls button {
+        padding: 10px 15px;
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        background-color: var(--search-bg);
+        color: var(--text);
+        font-size: 0.95rem;
+        transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+        flex: 1; /* Allows elements to grow and shrink */
+        min-width: 150px;
+        max-width: 250px;
+    }
+
+    .filter-controls select:focus,
+    .filter-controls input[type="text"]:focus {
+        border-color: var(--highlight);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    .filter-controls button {
+        cursor: pointer;
+        background-color: var(--highlight);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+    }
+
+    .filter-controls button:hover {
+        background-color: var(--button-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .shows-grid-section {
+        padding: var(--section-padding);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .shows-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Default to auto-fill for flexibility */
+        gap: 30px; /* Gap between cards */
+        justify-content: center;
+        padding-bottom: 30px; /* Space before load more button */
+    }
+
+    /* Enhanced Show Card for grid */
+    .show-card-grid {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px var(--card-shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+    }
+
+    .show-card-grid:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .show-card-grid a { /* Make entire card clickable */
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .show-card-grid-poster {
+        width: 100%;
+        height: 300px; /* Slightly larger posters for grid */
+        object-fit: cover;
+        display: block;
+        border-bottom: 1px solid var(--card-border);
+        transition: opacity 0.3s ease;
+    }
+
+    /* Fallback for missing images */
+    .show-card-grid.no-image .show-card-grid-poster {
+        display: none;
+    }
+
+    .show-card-grid.no-image .show-card-grid-content::before {
+        content: 'No Image Available';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px; /* Match poster height */
+        background-color: var(--card-border);
+        color: var(--text);
+        font-size: 1.1rem;
+        text-align: center;
+        border-bottom: 1px solid var(--card-border);
+        opacity: 0.7;
+    }
+
+    .show-card-grid-content {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .show-card-grid-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--card-text);
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+
+    .show-card-grid-meta {
+        font-size: 0.95rem;
+        color: var(--text);
+        opacity: 0.8;
+        margin-bottom: 8px;
+    }
+
+    .show-card-grid-meta span {
+        display: block; /* Each meta item on a new line for better readability */
+        margin-bottom: 4px;
+    }
+
+    .show-card-grid-meta span i {
+        margin-right: 5px;
+    }
+
+    .show-card-grid-rating {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: var(--card-rating-bg);
+        color: var(--card-rating-text);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .show-card-grid-network {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: auto; /* Push to bottom */
+        padding-top: 10px;
+        border-top: 1px solid var(--card-border);
+        font-size: 0.85rem;
+        color: var(--text);
+        opacity: 0.9;
+    }
+
+    .show-card-grid-network img {
+        width: 30px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 4px;
+    }
+
+    .show-card-grid-network a {
+        color: var(--text); /* Default network link color */
+        transition: color 0.2s ease;
+    }
+    .show-card-grid-network a:hover {
+        color: var(--highlight);
+    }
+
+    /* Load More Button for Grid */
+    .load-more-btn-grid-wrapper {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .load-more-btn-grid {
+        background-color: var(--accent);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+        display: inline-block;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .load-more-btn-grid:hover {
+        background-color: #218838; /* Darker green */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px; /* Or more, depending on desired visibility */
+        margin: 50px auto;
+        width: 100%;
+    }
+
+    .loading-spinner .dot {
+        width: 15px;
+        height: 15px;
+        margin: 0 5px;
+        background-color: var(--highlight);
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out both;
+        display: inline-block;
+    }
+
+    .loading-spinner .dot:nth-child(1) { animation-delay: -0.32s; }
+    .loading-spinner .dot:nth-child(2) { animation-delay: -0.16s; }
+    .loading-spinner .dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+
+    /* Modal / Custom Alert Box (Copied for consistency) */
+    .custom-alert {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 2000; /* High z-index to be on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: var(--modal-bg);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .custom-alert.show {
+      display: flex; /* Shows when active */
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .alert-content {
+      background-color: var(--modal-content-bg);
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .custom-alert.show .alert-content {
+      transform: translateY(0);
+    }
+
+    .alert-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .alert-icon.red-icon { color: var(--danger); }
+    .alert-icon.blue-icon { color: var(--info); }
+    .alert-icon.green-icon { color: var(--accent); }
+    .alert-icon.yellow-icon { color: var(--warning); }
+
+
+    #alertMessage {
+      font-size: 1.1rem;
+      color: var(--modal-text);
+      margin-bottom: 20px;
+    }
+
+    #closeAlertBtn {
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+
+    #closeAlertBtn:hover {
+      background-color: #0056b3;
+    }
+
+
+    /* Footer (Copied for consistency) */
+    .main-footer {
+      background-color: var(--header-bg);
+      color: var(--text);
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.9rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-section {
+      flex: 1 1 200px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .footer-section h4 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--highlight);
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+
+    .footer-section ul li a {
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .footer-section ul li a:hover {
+      color: var(--highlight);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .footer-bottom p {
+      margin-bottom: 10px;
+    }
+
+    .social-icons {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .social-icons a {
+      color: var(--text);
+      font-size: 1.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--highlight);
+    }
+
+
+    /* Responsive Design adjustments */
+    @media (min-width: 1025px) { /* For large screens, force 4 columns */
+        .shows-grid-container {
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 30px; /* Maintain gap */
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .shows-grid-container {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 3-4 per row on tablets */
+            gap: 20px;
+        }
+        .show-card-grid-poster {
+            height: 270px;
+        }
+    }
+
+    @media (max-width: 768px) {
+      /* Header Re-arrangement for small screens */
+      .utility-header {
+        flex-direction: column;
+        text-align: center;
+        padding-bottom: 10px;
+      }
+      .logo a { /* Explicitly set font size for mobile logo */
+        font-size: 1.5rem;
+      }
+
+      .header-utility-actions {
+        width: 100%;
+        justify-content: center; /* Centers icons */
+        margin-top: 10px;
+      }
+
+      /* Hide desktop navigation on small screens */
+      .main-nav-header {
+        display: none; 
+      }
+      
+      /* Show mobile menu toggle icon on small screens */
+      .mobile-menu-toggle {
+        display: block; /* Show only on small screens */
+      }
+      /* Mobile nav links, hidden by default on mobile, toggled by JS */
+      .mobile-nav-links {
+          display: none; /* Explicitly hide on mobile unless 'show-mobile-menu' */
+          flex-direction: column; /* Ensure it stacks vertically when displayed */
+          background-color: var(--header-bg); /* Apply styles consistently */
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          padding: 10px 20px;
+          border-bottom: 1px solid var(--card-border);
+      }
+      /* Class added by JS to show the mobile menu */
+      .mobile-nav-links.show-mobile-menu { 
+          display: flex;
+      }
+      .mobile-nav-links a { /* Added style for mobile menu links */
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05); /* Light separator */
+        color: var(--text);
+      }
+      .mobile-nav-links a:last-child {
+        border-bottom: none;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-section {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+
+      .social-icons {
+        justify-content: center;
+      }
+
+      .dynamic-search-area.show {
+        max-height: 180px; /* Adjusts height for mobile filters */
+      }
+
+      .search-input-wrapper {
+        flex-wrap: wrap; /* Allows icons to wrap if needed */
+        justify-content: center;
+      }
+
+      .search-input-wrapper input[type="text"] {
+        width: 100%; /* Full width input */
+        max-width: none;
+      }
+
+      .search-filters {
+        flex-direction: column; /* Stacks filters vertically */
+        align-items: center;
+      }
+
+      .search-filters select,
+      .search-filters input[type="text"] {
+        width: 90%; /* Makes filters wider */
+        max-width: 300px;
+      }
+
+      .filter-controls {
+          flex-direction: column;
+          align-items: center;
+      }
+      .filter-controls select,
+      .filter-controls input[type="text"],
+      .filter-controls button {
+          max-width: 90%;
+      }
+
+      .shows-grid-container {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 2-3 per row on phones */
+          gap: 15px;
+      }
+      .show-card-grid-poster {
+        height: 225px; /* Adjust poster height for smaller cards */
+      }
+    }
+
+    /* Explicitly hide desktop navigation and mobile elements on large screens */
+    @media (min-width: 769px) {
+        .mobile-nav-links,
+        .mobile-menu-toggle { /* Ensure both mobile elements are hidden on desktop */
+            display: none !important; 
+        }
+        .main-nav-header { /* Ensure desktop nav is visible on desktop */
+            display: flex !important;
+        }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Alert/Message Box Structure -->
+  <div id="customAlert" class="custom-alert">
+    <div class="alert-content">
+      <i id="alertIcon" class="alert-icon fas fa-info-circle blue-icon"></i>
+      <p id="alertMessage">This is a custom alert message.</p>
+      <button id="closeAlertBtn">OK</button>
+    </div>
+  </div>
+
+  <header class="main-global-header">
+    <!-- Utility Header: Logo, Search Toggle, Account, Dark Mode, Mobile Menu Toggle -->
+    <div class="utility-header">
+      <div class="logo">
+        <a href="index.html">CineWatch</a>
+      </div>
+      <div class="header-utility-actions">
+        <!-- Search Icon (toggles expanded search bar) -->
+        <div class="search-bar-toggle">
+          <button class="search-toggle-button" id="searchToggleButton" aria-label="Toggle Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        
+        <!-- Account Menu -->
+        <div class="account-menu">
+          <button class="account-button" id="accountButton" aria-label="Account Menu">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div class="account-dropdown" id="accountDropdown">
+            <a href="profile.html" id="desktopProfileLink" class="account-item"><i class="fas fa-user"></i> Profile</a>
+            <a href="settings.html" id="desktopSettingsLink" class="account-item"><i class="fas fa-cog"></i> Settings</a>
+            <a href="watchlist.html" id="desktopWatchlistLink" class="account-item"><i class="fas fa-bookmark"></i> Watchlist</a>
+            <a href="history.html" id="desktopHistoryLink" class="account-item"><i class="fas fa-history"></i> History</a>
+            <a href="login.html" id="desktopLoginLink" class="account-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="register.html" id="desktopRegisterLink" class="account-item"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="#" id="desktopLogoutLink" class="account-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+        
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle-button" id="darkModeToggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Navigation Header (Desktop Only) -->
+    <nav class="main-nav-header" id="mainNavHeader">
+      <a href="movies.html?type=movie">Movies</a>
+      <a href="tvshows.html">TV Shows</a> <!-- Link to the new tvshows.html -->
+      <a href="categories.html">Categories</a>
+      <a href="tv_networks.html">TV Networks</a> <!-- New TV Networks link -->
+      <a href="cinema_guide.html">Cinemaguide</a>
+      <a href="about_us.html">About Us</a>
+    </nav>
+  </header>
+
+  <!-- Mobile Navigation Menu (Hidden by default, shown by JS toggle) -->
+  <nav class="mobile-nav-links" id="mobileNavLinks">
+    <a href="movies.html?type=movie">Movies</a>
+    <a href="tvshows.html">TV Shows</a> <!-- Link to the new tvshows.html -->
+    <a href="categories.html">Categories</a>
+    <a href="tv_networks.html">TV Networks</a> <!-- New TV Networks link -->
+    <a href="cinema_guide.html">Cinemaguide</a>
+    <a href="about_us.html">About Us</a>
+    <!-- Account links for mobile -->
+    <a href="profile.html" id="mobileProfileLink">Profile</a>
+    <a href="settings.html" id="mobileSettingsLink">Settings</a>
+    <a href="watchlist.html" id="mobileWatchlistLink">Watchlist</a>
+    <a href="history.html" id="mobileHistoryLink">History</a>
+    <a href="login.html" id="mobileLoginLink">Login</a>
+    <a href="register.html" id="mobileRegisterLink">Register</a>
+    <a href="#" id="mobileLogoutLink">Logout</a>
+  </nav>
+
+  <!-- Dynamic Search Input Area (Animated reveal) - Copied for consistency -->
+  <section class="dynamic-search-area" id="dynamicSearchArea">
+    <div class="search-input-wrapper">
+      <input type="text" id="expandedSearchBar" placeholder="Search movies, shows, cast..." aria-label="Expanded Search Bar">
+      <button class="search-icon-btn" id="micIconBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+      <button class="search-icon-btn clear-search-btn" id="clearSearchBtn" aria-label="Clear Search"><i class="fas fa-times"></i></button>
+      <button class="search-button-label" id="searchActionBtn">Search</button>
+    </div>
+    <!-- Search Suggestions Container -->
+    <div class="search-suggestions-container" id="searchSuggestionsContainer">
+      <!-- Suggestions will be populated here -->
+    </div>
+    <div class="search-filters">
+      <select id="genreFilter" aria-label="Filter by Genre">
+        <option value="">All Genres</option>
+        <!-- Genres will be dynamically populated here by JS -->
+      </select>
+      <select id="yearFilter" aria-label="Filter by Release Year">
+        <option value="">All Years</option>
+        <!-- Years will be dynamically populated here by JS -->
+      </select>
+      <input type="text" id="castFilter" placeholder="Filter by Cast" aria-label="Filter by Cast">
+    </div>
+  </section>
+
+  <main>
+    <section class="filters-section">
+      <h1 id="pageTitle">All TV Shows</h1> <!-- Changed title to All TV Shows -->
+      <div class="filter-controls">
+        <select id="popularitySort" aria-label="Sort by Popularity">
+          <option value="">Sort by Popularity</option>
+          <option value="desc">Most Popular</option>
+          <option value="asc">Least Popular</option>
+        </select>
+        <select id="yearSort" aria-label="Sort by Release Year">
+          <option value="">Sort by Year</option>
+          <option value="desc">Newest First</option>
+          <option value="asc">Oldest First</option>
+        </select>
+        <select id="countryFilter" aria-label="Filter by Country">
+          <option value="">All Countries</option>
+          <!-- Countries will be dynamically populated -->
+        </select>
+        <select id="languageFilter" aria-label="Filter by Language">
+          <option value="">All Languages</option>
+          <!-- Languages will be dynamically populated -->
+        </select>
+        <input type="text" id="castSearchInput" placeholder="Search by Cast Name" aria-label="Search by Cast Name">
+        <button id="applyFiltersBtn">Apply Filters</button>
+        <button id="resetFiltersBtn">Reset Filters</button>
+      </div>
+    </section>
+
+    <section class="shows-grid-section">
+        <div class="shows-grid-container" id="showsGridContainer">
+            <!-- Loading Spinner added here -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="load-more-btn-grid-wrapper">
+            <button id="loadMoreBtn" class="load-more-btn-grid" style="display:none;">Load More</button>
+        </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About CineWatch</h4>
+        <ul>
+          <li><a href="about_us.html">Our Story</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="investors.html">Investors</a></li>
+          <li><a href="about_developer.html">About Developer</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Help & Support</h4>
+        <ul>
+          <li><a href="support.html">FAQ</a></li>
+          <li><a href="terms_of_service.html">Terms of Service</a></li>
+          <li><a href="privacy_policy.html">Privacy Policy</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="movies.html?type=movie">Movies</a></li>
+          <li><a href="tvshows.html">TV Shows</a></li>
+          <li><a href="categories.html">Genres</a></li>
+          <li><a href="new_releases.html">New Releases</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Connect with Us</h4>
+        <p>Stay updated on our latest releases and news.</p>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/aslekiymastamynd" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/yourhandle" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/alexmalunda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="current-year"></span> CineWatch. All rights reserved.</p>
+      <p>Last Modified: <span id="last-modified"></span></p>
+    </div>
+  </footer>
+
+  <script>
+    // Global state for user login (simulated)
+    let userLoggedIn = false;
+
+    // TMDB API Configuration (only used for genre/year filter population, not content)
+    const TMDB_API_KEY = '9c198aabc1df9fa96ea8d65e183cb8a3'; 
+    const TMDB_BASE_URL = 'https://api.themoviedb.org/3'; 
+    const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
+    const POSTER_SIZE = 'w342'; // For show cards
+    const BACKDROP_SIZE = 'w1280'; // For hero section
+    const PROFILE_SIZE = 'w185'; // For cast images
+    const NETWORK_LOGO_SIZE = 'w92'; // For network logos
+
+    // Transparent GIF for image fallback (avoids external placeholder services)
+    const IMAGE_NOT_FOUND_URL = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+    // Global state for current page type and filters
+    let currentPageType = 'tv'; // This page is specifically for TV shows
+    let currentPage = 1;
+    let totalPages = 1;
+    let currentFilters = {
+        sortBy: 'popularity.desc', // Default sort
+        year: '',
+        country: '',
+        language: '',
+        castId: '' // TMDB person ID for cast filter
+    };
+    let currentSearchQuery = ''; // For the search bar
+
+    /**
+     * Displays a custom alert/message box to the user.
+     * @param {string} message - The message to display.
+     * @param {string} iconClasses - Font Awesome classes for the icon.
+     */
+    function showMessageBox(message, iconClasses = "fas fa-info-circle blue-icon") {
+        const customAlert = document.getElementById('customAlert');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertIcon = customAlert.querySelector('.alert-icon');
+        const closeAlertBtn = document.getElementById('closeAlertBtn');
+
+        if (customAlert && alertMessage && alertIcon && closeAlertBtn) {
+            alertMessage.textContent = message;
+            alertIcon.className = 'alert-icon ' + iconClasses;
+            customAlert.classList.add('show');
+
+            const closeHandler = () => {
+                customAlert.classList.remove('show');
+                closeAlertBtn.removeEventListener('click', closeHandler);
+            };
+            closeAlertBtn.addEventListener('click', closeHandler);
+
+            const overlayClickHandler = (event) => {
+                if (event.target === customAlert) {
+                    customAlert.classList.remove('show');
+                    customAlert.removeEventListener('click', overlayClickHandler);
+                }
+            };
+            customAlert.addEventListener('click', overlayClickHandler);
+        } else {
+            console.error("MessageBox elements not found. Cannot show message.");
+        }
+    }
+
+    /**
+     * Updates the visibility of login/logout/profile links in the account dropdown and mobile menu.
+     * @param {boolean} isLoggedIn - True if the user is logged in, false otherwise.
+     */
+    function updateAccountDropdown(isLoggedIn) {
+        // Desktop links
+        const desktopLoginLink = document.getElementById('desktopLoginLink');
+        const desktopRegisterLink = document.getElementById('desktopRegisterLink');
+        const desktopProfileLink = document.getElementById('desktopProfileLink');
+        const desktopSettingsLink = document.getElementById('desktopSettingsLink');
+        const desktopWatchlistLink = document.getElementById('desktopWatchlistLink');
+        const desktopHistoryLink = document.getElementById('desktopHistoryLink');
+        const desktopLogoutLink = document.getElementById('desktopLogoutLink');
+        
+        // Mobile links
+        const mobileProfileLink = document.getElementById('mobileProfileLink');
+        const mobileSettingsLink = document.getElementById('mobileSettingsLink');
+        const mobileWatchlistLink = document.getElementById('mobileWatchlistLink');
+        const mobileHistoryLink = document.getElementById('mobileHistoryLink');
+        const mobileLoginLink = document.getElementById('mobileLoginLink');
+        const mobileRegisterLink = document.getElementById('mobileRegisterLink');
+        const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+        const elementsToToggle = [
+            { desktop: desktopLoginLink, mobile: mobileLoginLink, display: !isLoggedIn },
+            { desktop: desktopRegisterLink, mobile: mobileRegisterLink, display: !isLoggedIn },
+            { desktop: desktopProfileLink, mobile: mobileProfileLink, display: isLoggedIn },
+            { desktop: desktopSettingsLink, mobile: mobileSettingsLink, display: isLoggedIn },
+            { desktop: desktopWatchlistLink, mobile: mobileWatchlistLink, display: isLoggedIn },
+            { desktop: desktopHistoryLink, mobile: mobileHistoryLink, display: isLoggedIn },
+            { desktop: desktopLogoutLink, mobile: mobileLogoutLink, display: isLoggedIn }
+        ];
+
+        elementsToToggle.forEach(item => {
+            if (item.desktop) item.desktop.style.display = item.display ? 'flex' : 'none';
+            if (item.mobile) item.mobile.style.display = item.display ? 'flex' : 'none';
+        });
+        userLoggedIn = isLoggedIn; // Updates global state
+    }
+
+    /**
+     * Fetches search results from TMDB's multi-search endpoint.
+     * @param {string} query - The search query.
+     * @returns {Promise<Array>} An array of search results (movies, TV shows, people).
+     */
+    async function fetchSearchResults(query) {
+        if (!query) return [];
+        try {
+            const url = `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(query)}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            // Filter out results without a title/name, and media_type not useful for direct display (e.g., 'collection')
+            return data.results.filter(item => 
+                (item.media_type === 'movie' || item.media_type === 'tv' || item.media_type === 'person') && 
+                (item.title || item.name)
+            );
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+            return [];
+        }
+    }
+
+    /**
+     * Displays search results as suggestions in the search suggestions container.
+     * @param {Array} results - An array of search result objects (movies, TV shows, people).
+     */
+    function displaySearchResults(results) {
+        const searchSuggestionsContainer = document.getElementById('searchSuggestionsContainer');
+        if (!searchSuggestionsContainer) return;
+
+        searchSuggestionsContainer.innerHTML = ''; // Clear previous suggestions
+
+        if (results.length > 0) {
+            results.slice(0, 5).forEach(item => { // Display top 5 suggestions
+                const suggestionItem = document.createElement('div');
+                suggestionItem.classList.add('search-suggestion-item');
+
+                const imagePath = item.poster_path ? `${TMDB_IMAGE_BASE_URL}w92${item.poster_path}` : 
+                                  (item.profile_path ? `${TMDB_IMAGE_BASE_URL}w92${item.profile_path}` : 
+                                   'https://placehold.co/92x138/cccccc/555555?text=No+Image'); // Fallback for profile/poster
+                
+                const title = item.title || item.name;
+                let subtitle = '';
+                if (item.media_type === 'movie') {
+                    subtitle = item.release_date ? `Movie (${new Date(item.release_date).getFullYear()})` : 'Movie';
+                } else if (item.media_type === 'tv') {
+                    subtitle = item.first_air_date ? `TV Show (${new Date(item.first_air_date).getFullYear()})` : 'TV Show';
+                } else if (item.media_type === 'person') {
+                    subtitle = item.known_for_department || 'Person';
+                }
+
+                suggestionItem.innerHTML = `
+                    <img src="${imagePath}" alt="${title}" onerror="this.onerror=null; this.src='https://placehold.co/92x138/cccccc/555555?text=No+Image';">
+                    <div class="search-suggestion-info">
+                        <h4>${title}</h4>
+                        <p>${subtitle}</p>
+                    </div>
+                `;
+                searchSuggestionsContainer.appendChild(suggestionItem);
+
+                // Add click listener to fill search bar and potentially navigate
+                suggestionItem.addEventListener('click', () => {
+                    document.getElementById('expandedSearchBar').value = title;
+                    searchSuggestionsContainer.classList.remove('show');
+                    // Optionally, navigate to details page immediately
+                    if (item.media_type === 'movie' || item.media_type === 'tv') {
+                        window.location.href = `details.html?id=${item.id}&type=${item.media_type}`;
+                    } else if (item.media_type === 'person') {
+                        showMessageBox(`Clicked on person: ${item.name}. (Navigation to person details not yet implemented)`, 'fas fa-info-circle blue-icon');
+                    }
+                });
+            });
+            searchSuggestionsContainer.classList.add('show'); // Show the container
+        } else {
+            searchSuggestionsContainer.classList.remove('show'); // Hide if no results
+        }
+    }
+
+    /**
+     * Debounce function to limit how often a function is called.
+     * @param {Function} func - The function to debounce.
+     * @param {number} delay - The delay in milliseconds.
+     * @returns {Function} The debounced function.
+     */
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
+
+    /**
+     * Fetches details for a specific movie or TV show.
+     * NOTE: This function is now intended for details.html page or specific, isolated use.
+     * It is no longer called for every card on movies.html to improve performance.
+     * @param {string} mediaType - 'movie' or 'tv'.
+     * @param {number} id - The TMDB ID of the show.
+     * @returns {Promise<Object|null>} Detailed show object or null.
+     */
+    async function fetchShowDetails(mediaType, id) {
+        try {
+            const url = `${TMDB_BASE_URL}/${mediaType}/${id}?api_key=${TMDB_API_KEY}&language=en-US&append_to_response=credits,keywords,external_ids,release_dates,content_ratings,watch/providers,networks,production_companies`; // Added networks/production_companies to append
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Error fetching ${mediaType} details for ID ${id}: ${response.statusText}`);
+            return await response.json();
+        } catch (error) {
+            console.error(`Could not fetch ${mediaType} details for ID ${id}:`, error);
+            return null;
+        }
+    }
+
+    /**
+     * Fetches a list of countries from TMDB API.
+     * @returns {Promise<Array>} An array of country objects.
+     */
+    async function fetchCountries() {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/configuration/countries?api_key=${TMDB_API_KEY}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            return data; // Returns an array of {iso_3166_1: "US", english_name: "United States"}
+        } catch (error) {
+            console.error("Error fetching countries:", error);
+            return [];
+        }
+    }
+
+    /**
+     * Fetches a list of languages from TMDB API.
+     * @returns {Promise<Array>} An array of language objects.
+     */
+    async function fetchLanguages() {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/configuration/languages?api_key=${TMDB_API_KEY}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            return data; // Returns an array of {iso_639_1: "en", english_name: "English", name: "English"}
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+            return [];
+        }
+    }
+
+    /**
+     * Fetches a list of genres from TMDB API.
+     * @param {string} type - 'movie' or 'tv'.
+     * @returns {Promise<Array>} An array of genre objects.
+     */
+    async function fetchGenres(type) {
+        const url = `${TMDB_BASE_URL}/genre/${type}/list?api_key=${TMDB_API_KEY}&language=en-US`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.warn(`Could not fetch ${type} genres. Status: ${response.status}.`);
+                return []; 
+            }
+            const data = await response.json();
+            return data.genres;
+        } catch (error) {
+            console.warn(`Error fetching ${type} genres:`, error);
+            return [];
+        }
+    }
+
+
+    /**
+     * Populates a select element with options from an array of objects.
+     * @param {HTMLElement} selectElement - The select element to populate.
+     * @param {Array} data - Array of objects with value and text properties.
+     * @param {string} valueKey - Key for the option's value.
+     * @param {string} textKey - Key for the option's display text.
+     */
+    function populateFilterOptions(selectElement, data, valueKey, textKey) {
+        selectElement.innerHTML = `<option value="">All ${selectElement.id.replace('Filter', '')}s</option>`; // Reset and add default
+        data.sort((a, b) => (a[textKey] || '').localeCompare(b[textKey] || '')); // Sort alphabetically
+        data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item[valueKey];
+            option.textContent = item[textKey];
+            selectElement.appendChild(option);
+        });
+    }
+
+    /**
+     * Populates a select element with year options.
+     * @param {HTMLElement} selectElement - The select element to populate.
+     * @param {number} startYear - The starting year.
+     * @param {number} endYear - The ending year.
+     */
+    function populateYearFilter(selectElement, startYear, endYear) {
+        if (!selectElement) return;
+        for (let year = endYear; year >= startYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            selectElement.appendChild(option);
+        }
+    }
+
+
+    /**
+     * Creates a show card for the grid layout using data directly from the discover API.
+     * This function no longer makes individual API calls for each card.
+     * @param {Object} show - Basic show object from initial fetch (discover endpoint).
+     * @param {string} mediaType - 'movie' or 'tv'.
+     * @returns {HTMLElement} The created show card div.
+     */
+    function createShowCardGrid(show, mediaType) {
+        const card = document.createElement('div');
+        card.classList.add('show-card-grid');
+
+        const posterPath = show.poster_path ? `${TMDB_IMAGE_BASE_URL}${POSTER_SIZE}${show.poster_path}` : IMAGE_NOT_FOUND_URL;
+        const title = show.title || show.name;
+        const voteAverage = show.vote_average ? show.vote_average.toFixed(1) : 'N/A';
+        const originalLanguage = show.original_language ? show.original_language.toUpperCase() : 'N/A';
+        
+        let releaseInfo = '';
+        let seasonsEpisodesInfo = '';
+        let countryInfo = '';
+        let networkHtml = '<span>Network: N/A</span>'; // Simplified for discovery data
+
+        if (mediaType === 'movie') {
+            const releaseDate = show.release_date ? new Date(show.release_date).getFullYear() : 'N/A';
+            releaseInfo = `<span><i class="fas fa-calendar-alt"></i> Release: ${releaseDate}</span>`;
+            
+            // For movies, if production_countries is directly available in the discover response (less common but possible)
+            if (show.production_countries && show.production_countries.length > 0) {
+                countryInfo = `<span><i class="fas fa-globe-americas"></i> Country: ${show.production_countries.map(c => c.iso_3166_1).join(', ')}</span>`;
+            } else if (show.origin_country && show.origin_country.length > 0) { // Sometimes origin_country is used for movies too
+                 countryInfo = `<span><i class="fas fa-globe-americas"></i> Country: ${show.origin_country.join(', ')}</span>`;
+            }
+
+            // For movies, if production_companies is available in the basic discover response, use it
+            if (show.production_companies && show.production_companies.length > 0) {
+                const company = show.production_companies[0]; // Take the first one
+                networkHtml = `
+                    <a href="tv_networks.html?id=${company.id}&type=company">
+                        <span>${company.name}</span>
+                    </a>
+                `;
+            }
+
+        } else { // mediaType === 'tv'
+            const firstAirDate = show.first_air_date ? new Date(show.first_air_date).getFullYear() : 'N/A';
+            releaseInfo = `<span><i class="fas fa-calendar-alt"></i> First Air: ${firstAirDate}</span>`;
+            seasonsEpisodesInfo = show.number_of_seasons ? `<span><i class="fas fa-film"></i> Seasons: ${show.number_of_seasons || 'N/A'}</span>` : '';
+            if (show.number_of_episodes) {
+                seasonsEpisodesInfo += show.number_of_seasons ? `, Episodes: ${show.number_of_episodes}` : `<span><i class="fas fa-film"></i> Episodes: ${show.number_of_episodes}</span>`;
+            }
+            
+            // For TV shows, origin_country is often available in discover results
+            if (show.origin_country && show.origin_country.length > 0) {
+                countryInfo = `<span><i class="fas fa-globe-americas"></i> Country: ${show.origin_country.join(', ')}</span>`;
+            }
+
+            // Networks for TV shows - check if networks array is available in basic discover response (it sometimes is)
+            if (show.networks && show.networks.length > 0) {
+                const network = show.networks[0]; // Take the first one
+                networkHtml = `
+                    <a href="tv_networks.html?id=${network.id}&type=network">
+                        <span>${network.name}</span>
+                    </a>
+                `;
+            }
+        }
+
+        if (!show.poster_path) card.classList.add('no-image');
+
+        card.innerHTML = `
+            <a href="details.html?id=${show.id}&type=${mediaType}">
+                <img src="${posterPath}" alt="${title} Poster" class="show-card-grid-poster" onerror="this.onerror=null; this.src='https://placehold.co/342x270/282828/f0f0f0?text=No+Image'; this.closest('.show-card-grid').classList.add('no-image');">
+                <div class="show-card-grid-rating">${voteAverage}</div>
+                <div class="show-card-grid-content">
+                    <h3 class="show-card-grid-title">${title}</h3>
+                    <p class="show-card-grid-meta">
+                        <span><i class="fas fa-play-circle"></i> Type: ${mediaType === 'movie' ? 'Movie' : 'TV Show'}</span>
+                        ${releaseInfo}
+                        ${seasonsEpisodesInfo}
+                        <span><i class="fas fa-language"></i> Lang: ${originalLanguage}</span>
+                        ${countryInfo}
+                        <span><i class="fas fa-info-circle"></i> More details on details page.</span>
+                    </p>
+                    <div class="show-card-grid-network">
+                        ${networkHtml}
+                    </div>
+                </div>
+            </a>
+        `;
+        return card;
+    }
+
+
+    /**
+     * Fetches and displays shows in the grid.
+     * @param {boolean} clearGrid - If true, clears the current grid before adding new shows.
+     */
+    async function fetchAndDisplayShows(clearGrid = true) {
+        const showsGridContainer = document.getElementById('showsGridContainer');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner'); // Get the spinner element
+
+        if (clearGrid) {
+            showsGridContainer.innerHTML = ''; // Clear previous content
+            // Re-add the spinner when clearing for a new load
+            const initialSpinnerHtml = `
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            `;
+            showsGridContainer.innerHTML = initialSpinnerHtml; // Add spinner back
+            currentPage = 1;
+            loadMoreBtn.style.display = 'none';
+        }
+        
+        // Ensure the spinner element is retrieved after potentially re-adding it
+        const currentLoadingSpinner = document.getElementById('loadingSpinner');
+        if (currentLoadingSpinner) {
+             currentLoadingSpinner.style.display = 'flex'; // Show spinner (flex because of CSS)
+        }
+
+
+        let endpoint = `/discover/${currentPageType}`;
+        const params = new URLSearchParams();
+        params.append('api_key', TMDB_API_KEY);
+        params.append('language', 'en-US');
+        params.append('page', currentPage);
+
+        // Apply filters
+        if (currentFilters.sortBy) {
+            params.append('sort_by', currentFilters.sortBy);
+        }
+        if (currentFilters.year) {
+            if (currentPageType === 'movie') {
+                params.append('primary_release_year', currentFilters.year);
+            } else { // tv
+                params.append('first_air_date_year', currentFilters.year);
+            }
+        }
+        if (currentFilters.country) {
+            params.append('with_origin_country', currentFilters.country);
+        }
+        if (currentFilters.language) {
+            params.append('with_original_language', currentFilters.language);
+        }
+        if (currentFilters.castId) {
+            params.append('with_cast', currentFilters.castId);
+        }
+
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}${endpoint}?${params.toString()}`);
+            if (!response.ok) {
+                throw new Error(`Error fetching ${currentPageType}s: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            totalPages = data.total_pages;
+
+            // Remove the spinner before adding content
+            if (currentLoadingSpinner) {
+                currentLoadingSpinner.style.display = 'none';
+            }
+
+            if (data.results && data.results.length > 0) {
+                const fragment = document.createDocumentFragment();
+                for (const show of data.results) {
+                    // Call the non-async createShowCardGrid
+                    const card = createShowCardGrid(show, currentPageType); 
+                    fragment.appendChild(card);
+                }
+                showsGridContainer.appendChild(fragment);
+            } else if (clearGrid) {
+                // If no results and it's an initial load, show a message
+                showsGridContainer.innerHTML = '<p style="text-align: center; width: 100%; opacity: 0.7; color: var(--text);">No content found matching your criteria.</p>';
+            }
+
+            // Manage Load More button visibility
+            if (currentPage < totalPages) {
+                loadMoreBtn.style.display = 'inline-block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+
+        } catch (error) {
+            console.error(`Failed to load ${currentPageType}s:`, error);
+            // Hide spinner and display error message
+            if (currentLoadingSpinner) {
+                currentLoadingSpinner.style.display = 'none';
+            }
+            showsGridContainer.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.7; color: var(--danger);">Failed to load content: ${error.message}</p>`;
+            loadMoreBtn.style.display = 'none';
+        } finally {
+            // Ensure spinner is hidden in all cases after fetch attempt
+            if (currentLoadingSpinner) {
+                currentLoadingSpinner.style.display = 'none';
+            }
+        }
+    }
+
+    /**
+     * Applies the selected filters and reloads the grid content.
+     */
+    async function applyFilters() {
+        const popularitySort = document.getElementById('popularitySort');
+        const yearSort = document.getElementById('yearSort');
+        const countryFilter = document.getElementById('countryFilter');
+        const languageFilter = document.getElementById('languageFilter');
+        const castSearchInput = document.getElementById('castSearchInput');
+        
+        currentFilters.sortBy = popularitySort.value;
+        
+        // Handle year sort based on selected option
+        if (yearSort.value === 'desc') {
+            currentFilters.sortBy = (currentPageType === 'movie' ? 'primary_release_date.desc' : 'first_air_date.desc');
+        } else if (yearSort.value === 'asc') {
+            currentFilters.sortBy = (currentPageType === 'movie' ? 'primary_release_date.asc' : 'first_air_date.asc');
+        }
+
+        currentFilters.country = countryFilter.value;
+        currentFilters.language = languageFilter.value;
+        
+        // Handle cast search
+        const castName = castSearchInput.value.trim();
+        if (castName) {
+            // Cast search will trigger a search on TMDB for a person
+            // For simplicity, we'll use a multi-search and pick the first person result.
+            // A more robust solution might involve a separate people search API or dedicated UI.
+            try {
+                const searchResults = await fetchSearchResults(castName); // Reuse existing search function
+                const foundPerson = searchResults.find(r => r.media_type === 'person' && r.name.toLowerCase() === castName.toLowerCase());
+                if (foundPerson) {
+                    currentFilters.castId = foundPerson.id;
+                } else {
+                    currentFilters.castId = ''; // No matching cast found
+                    showMessageBox(`No cast member found with name "${castName}". Please try a different name or clear the filter.`, 'fas fa-exclamation-triangle yellow-icon');
+                }
+            } catch (error) {
+                console.error("Error searching for cast member:", error);
+                currentFilters.castId = ''; // Clear if search fails
+                showMessageBox("Failed to search for cast member. Please try again.", 'fas fa-exclamation-triangle yellow-icon');
+            }
+        } else {
+            currentFilters.castId = ''; // Clear cast filter if input is empty
+        }
+
+        fetchAndDisplayShows(true); // Clear grid and fetch with new filters
+    }
+
+    /**
+     * Resets all filters to their default values and reloads content.
+     */
+    function resetFilters() {
+        document.getElementById('popularitySort').value = 'popularity.desc'; // Default
+        document.getElementById('yearSort').value = ''; // Default
+        document.getElementById('countryFilter').value = '';
+        document.getElementById('languageFilter').value = '';
+        document.getElementById('castSearchInput').value = '';
+        
+        currentFilters = {
+            sortBy: 'popularity.desc',
+            year: '',
+            country: '',
+            language: '',
+            castId: ''
+        };
+        fetchAndDisplayShows(true);
+    }
+
+    // Toggles Dark Mode
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun'); // Update icon
+                darkModeToggle.setAttribute('aria-label', 'Toggle Light Mode'); // Update aria-label
+                darkModeToggle.setAttribute('title', 'Toggle Light Mode'); // Update title
+                localStorage.setItem('theme', 'dark'); // Saves preference
+            } else {
+                darkModeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon'); // Update icon
+                darkModeToggle.setAttribute('aria-label', 'Toggle Dark Mode'); // Update aria-label
+                darkModeToggle.setAttribute('title', 'Toggle Dark Mode'); // Update title
+                localStorage.setItem('theme', 'light'); // Saves preference
+            }
+        }
+    }
+
+
+    // DOMContentLoaded event listener
+    document.addEventListener('DOMContentLoaded', async () => {
+        const accountButton = document.getElementById('accountButton');
+        const accountDropdown = document.getElementById('accountDropdown');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileNavLinks = document.getElementById('mobileNavLinks');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const desktopLogoutLink = document.getElementById('desktopLogoutLink'); 
+        const mobileLogoutLink = document.getElementById('mobileLogoutLink'); 
+        const searchToggleButton = document.getElementById('searchToggleButton');
+        const dynamicSearchArea = document.getElementById('dynamicSearchArea');
+        const expandedSearchBar = document.getElementById('expandedSearchBar');
+        const micIconBtn = document.getElementById('micIconBtn');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const searchActionBtn = document.getElementById('searchActionBtn');
+        const genreFilter = document.getElementById('genreFilter');
+        const yearFilter = document.getElementById('yearFilter');
+        const searchSuggestionsContainer = document.getElementById('searchSuggestionsContainer');
+
+        const pageTitleElement = document.getElementById('pageTitle');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+        const popularitySort = document.getElementById('popularitySort');
+        const yearSort = document.getElementById('yearSort');
+        const countryFilter = document.getElementById('countryFilter');
+        const languageFilter = document.getElementById('languageFilter');
+        const castSearchInput = document.getElementById('castSearchInput');
+
+        // Initialize page type explicitly for TV shows
+        // currentPageType is already set to 'tv' globally for this file
+        
+        // Update page title
+        pageTitleElement.textContent = 'All TV Shows';
+
+
+        // --- Common Header/Footer/Search Bar Logic ---
+        // Toggles Account Dropdown
+        if (accountButton && accountDropdown) {
+            accountButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                accountDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if (!accountDropdown.contains(e.target) && !accountButton.contains(e.target)) {
+                    accountDropdown.classList.remove('show');
+                }
+                // Hide search suggestions if clicked outside
+                if (searchSuggestionsContainer && !expandedSearchBar.contains(e.target) && !searchSuggestionsContainer.contains(e.target)) {
+                    searchSuggestionsContainer.classList.remove('show');
+                }
+            });
+        }
+
+        // Toggles Mobile Menu
+        if (mobileMenuToggle && mobileNavLinks) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileNavLinks.classList.toggle('show-mobile-menu');
+            });
+        }
+        
+        // Toggles Dark Mode
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+        }
+
+        // Handles Logout functionality (simulated)
+        const performLogout = () => {
+            showMessageBox('You have been logged out.', 'fas fa-check-circle green-icon');
+            updateAccountDropdown(false);
+            // Close mobile menu if open after logout
+            if (mobileNavLinks) {
+                mobileNavLinks.classList.remove('show-mobile-menu');
+            }
+        };
+
+        if (desktopLogoutLink) {
+            desktopLogoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                performLogout();
+            });
+        }
+        if (mobileLogoutLink) {
+            mobileLogoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                performLogout();
+            });
+        }
+
+        // Initializes Dark Mode based on localStorage
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            if (darkModeToggle) {
+                darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                darkModeToggle.setAttribute('aria-label', 'Toggle Light Mode');
+                darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+            }
+        }
+        updateAccountDropdown(false); // Initializes account dropdown based on userLoggedIn state (simulated as logged out)
+
+        // Updates the current year in the footer
+        const currentYearSpan = document.getElementById('current-year');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Sets Last Modified Date in footer
+        const lastModifiedSpan_footer = document.getElementById('last-modified');
+        if (lastModifiedSpan_footer) {
+            lastModifiedSpan_footer.textContent = new Date(document.lastModified).toLocaleDateString();
+        }
+
+        // Handles Dynamic Search Bar Logic
+        if (searchToggleButton && dynamicSearchArea && expandedSearchBar && searchActionBtn) {
+            searchToggleButton.addEventListener('click', () => {
+                const isShowing = dynamicSearchArea.classList.toggle('show');
+                if (isShowing) {
+                    expandedSearchBar.focus();
+                } else {
+                    // When hiding, also hide suggestions
+                    if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+                }
+            });
+
+            // Debounced search input for suggestions
+            const debouncedSearch = debounce(async (query) => {
+                const results = await fetchSearchResults(query);
+                displaySearchResults(results);
+            }, 300); // 300ms debounce delay
+
+            expandedSearchBar.addEventListener('input', () => {
+                const query = expandedSearchBar.value.trim();
+                if (query.length > 2) { // Start suggesting after 2 characters
+                    debouncedSearch(query);
+                } else {
+                    if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+                }
+                // Shows/hides searchActionBtn and manages clearSearchBtn based on input
+                if (expandedSearchBar.value.length > 0) {
+                    searchActionBtn.style.display = 'inline-block';
+                    clearSearchBtn.style.display = 'inline-block';
+                } else {
+                    searchActionBtn.style.display = 'none';
+                    clearSearchBtn.style.display = 'none';
+                }
+            });
+
+            // Handles clear search button click
+            clearSearchBtn.addEventListener('click', () => {
+                expandedSearchBar.value = '';
+                searchActionBtn.style.display = 'none';
+                clearSearchBtn.style.display = 'none';
+                if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
+            });
+
+            // Handles mic icon button click (placeholder)
+            micIconBtn.addEventListener('click', () => {
+                showMessageBox('Voice search activated. (Functionality not yet implemented)', 'fas fa-microphone blue-icon');
+            });
+
+            // Handles search action button click or Enter key press
+            const performSearch = () => {
+                const query = expandedSearchBar.value.trim();
+                const genreId = genreFilter.value;
+                const year = yearFilter.value;
+                const cast = document.getElementById('castFilter').value.trim();
+
+                if (query || genreId || year || cast) {
+                    // For broad searches, redirect to a category_details page with search parameters
+                    let searchParams = new URLSearchParams();
+                    searchParams.append('categoryName', `Search Results for "${query || 'All'}"`); // Generic category name
+                    searchParams.append('query', query);
+                    if (genreId) searchParams.append('genre', genreId);
+                    if (year) searchParams.append('year', year);
+                    if (cast) searchParams.append('cast', cast); // This would need further logic on category_details.html
+                    searchParams.append('endpoint', '/search/multi'); // Generic search endpoint
+                    searchParams.append('mediaType', 'all'); // Can be movie/tv/person/all
+                    window.location.href = `category_details.html?${searchParams.toString()}`;
+
+                    if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show'); // Hide suggestions on explicit search
+                } else {
+                    showMessageBox('Please enter a search term or select filters.', 'fas fa-info-circle yellow-icon');
+                }
+            };
+
+            searchActionBtn.addEventListener('click', performSearch);
+            expandedSearchBar.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Populates filters on load
+            const currentYear = new Date().getFullYear();
+            populateYearFilter(yearFilter, 1950, currentYear); // Years from 1950 to current
+
+            // Fetch TV genres specifically for this page
+            const tvGenres = await fetchGenres('tv');
+            tvGenres.sort((a, b) => a.name.localeCompare(b.name));
+            populateFilterOptions(genreFilter, tvGenres, 'id', 'name'); // Use populateFilterOptions for genres
+        } 
+        // Ensures search button label and clear button are hidden initially
+        if (searchActionBtn) searchActionBtn.style.display = 'none';
+        if (clearSearchBtn) clearSearchBtn.style.display = 'none';
+
+        // --- Page Specific Logic for tvshows.html ---
+        
+        // Populate filter dropdowns
+        const currentYear = new Date().getFullYear();
+        populateYearFilter(yearSort, 1950, currentYear);
+
+        const countries = await fetchCountries();
+        populateFilterOptions(countryFilter, countries, 'iso_3166_1', 'english_name');
+
+        const languages = await fetchLanguages();
+        populateFilterOptions(languageFilter, languages, 'iso_639_1', 'english_name');
+
+        // Event Listeners for filters and load more
+        applyFiltersBtn.addEventListener('click', applyFilters);
+        resetFiltersBtn.addEventListener('click', resetFilters);
+        loadMoreBtn.addEventListener('click', () => {
+            currentPage++;
+            fetchAndDisplayShows(false); // Append shows
+        });
+
+        // Initial load of shows
+        fetchAndDisplayShows(true);
+    });
+  </script>
+</body>
+</html>
