@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CineWatch - Careers</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Root Theme Variables */
+    :root {
+      --bg: #fff;
+      --text: #111;
+      --header-bg: #f0ecec;
+      --search-bg: #f4f4f4;
+      --card-border: #eee;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --highlight: #007bff;
+      --accent: #28a745;
+      --danger: #dc3545;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --modal-bg: rgba(0, 0, 0, 0.5);
+      --modal-content-bg: #fff;
+      --modal-text: #111;
+      --search-area-height: 120px;
+      --hero-overlay: rgba(0, 0, 0, 0.6);
+      --section-padding: 40px 20px;
+      --carousel-gap: 20px;
+      --card-bg: #fff;
+      --card-text: #111;
+      --card-rating-bg: var(--accent);
+      --card-rating-text: #fff;
+      --button-hover: #0056b3;
+      --suggestions-bg: #fff;
+      --suggestions-border: #ddd;
+      --suggestions-item-hover-bg: #f0f0f0;
+      --carousel-arrow-bg: rgba(0, 0, 0, 0.5);
+      --carousel-arrow-color: #fff;
+      --carousel-arrow-hover-bg: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Dark Mode Variables */
+    body.dark-mode {
+      --bg: #1a1a1a;
+      --text: #f0f0f0;
+      --header-bg: #2a2a2a;
+      --search-bg: #333;
+      --card-border: #444;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --highlight: #66b3ff;
+      --accent: #4CAF50;
+      --danger: #ff6b6b;
+      --info: #00bcd4;
+      --warning: #ffeb3b;
+      --modal-bg: rgba(0, 0, 0, 0.7);
+      --modal-content-bg: #282828;
+      --modal-text: #f0f0f0;
+      --hero-overlay: rgba(0, 0, 0, 0.75);
+      --card-bg: #282828;
+      --card-text: #f0f0f0;
+      --card-rating-bg: var(--accent);
+      --card-rating-text: #fff;
+      --button-hover: #4a90d9;
+      --suggestions-bg: #282828;
+      --suggestions-border: #444;
+      --suggestions-item-hover-bg: #3a3a3a;
+      --carousel-arrow-bg: rgba(255, 255, 255, 0.2);
+      --carousel-arrow-color: #f0f0f0;
+      --carousel-arrow-hover-bg: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--highlight);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--accent);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--highlight);
+      outline-offset: 2px;
+    }
+
+    /* Global Header Wrapper */
+    .main-global-header {
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    /* Utility Header (Top Row) */
+    .utility-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--highlight);
+      text-transform: capitalize;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-utility-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-bar-toggle button {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .search-bar-toggle button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-menu {
+      position: relative;
+    }
+
+    .account-button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .account-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .theme-toggle-button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .account-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: var(--header-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+      padding: 10px 0;
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .account-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .account-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      color: var(--text);
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .account-dropdown a:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--highlight);
+    }
+
+    .account-dropdown a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Main Navigation Header (Bottom Row - Desktop Nav) */
+    .main-nav-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .main-nav-header a {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 1rem;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .main-nav-header a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--highlight);
+      transition: width 0.3s ease;
+    }
+
+    .main-nav-header a:hover::after {
+      width: 100%;
+    }
+
+    /* Dynamic Search Area */
+    .dynamic-search-area {
+      background-color: var(--header-bg);
+      padding: 15px 20px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .dynamic-search-area.show {
+      max-height: var(--search-area-height);
+      opacity: 1;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1050;
+    }
+
+    .dynamic-search-area input[type="text"] {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--card-border);
+      border-radius: 25px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .dynamic-search-area input[type="text"]:focus {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    .search-icon-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.2s ease;
+    }
+    .search-icon-btn:hover {
+        color: var(--highlight);
+    }
+
+    .search-button-label {
+      background-color: var(--highlight);
+      color: #fff;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-button-label:hover {
+      background-color: #0056b3;
+    }
+
+    .search-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .search-filters select,
+    .search-filters input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background-color: var(--search-bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      min-width: 120px;
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .search-suggestions-container {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        right: 0;
+        background-color: var(--suggestions-bg);
+        border: 1px solid var(--suggestions-border);
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+    }
+
+    .search-suggestions-container.show {
+        display: block;
+    }
+
+    .search-suggestion-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid var(--suggestions-border);
+    }
+
+    .search-suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-suggestion-item:hover {
+        background-color: var(--suggestions-item-hover-bg);
+    }
+
+    .search-suggestion-item img {
+        width: 40px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .search-suggestion-info {
+        flex-grow: 1;
+        color: var(--text);
+    }
+
+    .search-suggestion-info h4 {
+        font-size: 1rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .search-suggestion-info p {
+        font-size: 0.85rem;
+        color: var(--text);
+        opacity: 0.7;
+    }
+
+    /* Main Content Area */
+    main {
+      flex-grow: 1;
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    main h1 {
+      font-size: 2.5rem;
+      color: var(--highlight);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .careers-section {
+        margin-bottom: 40px;
+        background-color: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        box-shadow: 0 2px 5px var(--card-shadow);
+        padding: 30px;
+    }
+
+    .careers-section h2 {
+        font-size: 2rem;
+        color: var(--text);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .careers-section p,
+    .careers-section ul {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 15px;
+        color: var(--text);
+    }
+
+    .careers-section ul {
+        list-style: disc;
+        margin-left: 25px;
+        margin-bottom: 20px;
+    }
+
+    .careers-section ul li {
+        margin-bottom: 10px;
+    }
+
+    .job-listing {
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: var(--search-bg);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .job-listing:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px var(--card-shadow);
+    }
+
+    .job-listing h3 {
+        font-size: 1.5rem;
+        color: var(--highlight);
+        margin-bottom: 10px;
+    }
+
+    .job-listing p {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+
+    .job-listing .location,
+    .job-listing .department {
+        color: var(--text);
+        opacity: 0.8;
+    }
+
+    .apply-btn {
+        display: inline-block;
+        background-color: var(--accent);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 15px;
+        transition: background-color 0.2s ease;
+    }
+
+    .apply-btn:hover {
+        background-color: #218838;
+    }
+
+    /* Footer Styles (from index.html) */
+    .main-footer {
+      background-color: var(--header-bg);
+      color: var(--text);
+      padding: 30px 20px;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 50px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .footer-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--highlight);
+    }
+
+    .footer-section p,
+    .footer-section ul {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.8;
+      list-style: none; /* Remove default list styling */
+      padding: 0; /* Remove default padding */
+    }
+
+    .footer-section ul li a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: block; /* Make links block level for better click area */
+      padding: 2px 0;
+    }
+
+    .footer-section ul li a:hover {
+      color: var(--highlight);
+      text-decoration: underline;
+    }
+
+    .social-icons a {
+      color: var(--text);
+      font-size: 1.5rem;
+      margin-right: 15px;
+      transition: color 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--highlight);
+    }
+
+    .footer-bottom {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+      .main-nav-header {
+        display: none; /* Hide desktop nav on small screens */
+      }
+
+      .mobile-menu-toggle {
+        display: block; /* Show hamburger menu */
+      }
+
+      .utility-header {
+        padding: 10px 15px;
+      }
+
+      .logo a {
+        font-size: 1.5rem;
+      }
+
+      .search-bar-toggle button,
+      .account-button,
+      .theme-toggle-button {
+        font-size: 1.3rem;
+      }
+
+      .dynamic-search-area.show {
+        max-height: 200px; /* Adjust height for mobile search */
+      }
+
+      .search-filters {
+        flex-direction: column; /* Stack filters vertically */
+        align-items: stretch; /* Stretch filters to full width */
+      }
+
+      .search-filters select,
+      .search-filters input[type="text"] {
+        max-width: 100%; /* Full width on mobile */
+      }
+
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+
+      .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-buttons .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .hero-quote-card {
+        position: static; /* Remove absolute positioning */
+        margin: 20px auto 0; /* Center and add space */
+        max-width: 90%;
+        text-align: left;
+      }
+
+      .content-section {
+        padding: 20px 15px;
+      }
+
+      .content-section h2 {
+        font-size: 1.8rem;
+      }
+
+      .show-carousel {
+        padding: 0 10px;
+      }
+
+      .carousel-arrow {
+        display: none; /* Hide arrows on small screens, rely on scroll */
+      }
+
+      .card {
+        min-width: 150px; /* Adjust card size for mobile */
+      }
+
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-section {
+        min-width: unset;
+        width: 100%;
+      }
+
+      .social-icons {
+        margin-top: 15px;
+      }
+    }
+
+    /* Mobile Navigation Overlay */
+    .mobile-nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-out;
+    }
+
+    .mobile-nav-overlay.show {
+      transform: translateX(0);
+    }
+
+    .mobile-nav-overlay .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .mobile-nav-links {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+    }
+
+    .mobile-nav-links li {
+      margin-bottom: 20px;
+    }
+
+    .mobile-nav-links a {
+      color: #fff;
+      font-size: 1.8rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .mobile-nav-links a:hover {
+      color: var(--highlight);
+    }
+
+    /* Utility classes for display (used in JS for login/logout) */
+    .d-none { display: none !important; }
+    .d-flex { display: flex !important; }
+    .d-block { display: block !important; }
+  </style>
+</head>
+<body>
+
+  <header class="main-global-header">
+    <div class="utility-header">
+      <div class="logo">
+        <a href="index.html">CineWatch</a>
+      </div>
+      <div class="header-utility-actions">
+        <div class="search-bar-toggle">
+          <button id="searchToggleBtn" aria-label="Toggle Search Bar">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="account-menu">
+          <button id="accountBtn" class="account-button" aria-label="Account Menu">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div id="accountDropdown" class="account-dropdown">
+            <a href="#" id="desktopLoginLink"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" id="desktopRegisterLink"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="#" id="desktopProfileLink"><i class="fas fa-user"></i> Profile</a>
+            <a href="#" id="desktopSettingsLink"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" id="desktopWatchlistLink"><i class="fas fa-bookmark"></i> Watchlist</a>
+            <a href="#" id="desktopHistoryLink"><i class="fas fa-history"></i> History</a>
+            <a href="#" id="desktopLogoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+        <button id="darkModeToggle" class="theme-toggle-button" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button id="hamburgerMenu" class="mobile-menu-toggle" aria-label="Open Mobile Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <nav class="main-nav-header">
+      <a href="index.html">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="tvshows.html">TV Shows</a>
+      <a href="tv_networks.html">TV Networks</a>
+      <a href="cinema_guide.html">Cinema Guide</a>
+    </nav>
+
+    <div id="dynamicSearchArea" class="dynamic-search-area">
+      <div class="search-input-wrapper">
+        <input type="text" id="searchInput" placeholder="Search for movies, TV shows, actors..." />
+        <button id="searchActionBtn" class="search-button-label d-none">Search</button>
+        <button id="clearSearchBtn" class="search-button-label d-none">Clear</button>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions-container">
+        </div>
+      <div class="search-filters">
+        <select id="searchScope">
+          <option value="">All Categories</option>
+          <option value="movie">Movies</option>
+          <option value="tv">TV Shows</option>
+          <option value="person">Actors/Directors</option>
+        </select>
+        <select id="genreFilter">
+          <option value="">All Genres</option>
+          </select>
+        <select id="yearFilter">
+          <option value="">All Years</option>
+          </select>
+        <select id="countryFilter">
+          <option value="">All Countries</option>
+          </select>
+        <select id="languageFilter">
+          <option value="">All Languages</option>
+          </select>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileNavOverlay" class="mobile-nav-overlay">
+    <button id="closeMobileNavBtn" class="close-btn" aria-label="Close Mobile Menu">
+      <i class="fas fa-times"></i>
+    </button>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="movies.html">Movies</a></li>
+      <li><a href="tvshows.html">TV Shows</a></li>
+      <li><a href="tv_networks.html">TV Networks</a></li>
+      <li><a href="cinema_guide.html">Cinema Guide</a></li>
+      <li><a href="#" id="mobileLoginLink">Login</a></li>
+      <li><a href="#" id="mobileRegisterLink">Register</a></li>
+      <li><a href="#" id="mobileProfileLink">Profile</a></li>
+      <li><a href="#" id="mobileSettingsLink">Settings</a></li>
+      <li><a href="#" id="mobileWatchlistLink">Watchlist</a></li>
+      <li><a href="#" id="mobileHistoryLink">History</a></li>
+      <li><a href="#" id="mobileLogoutLink">Logout</a></li>
+      <li><a href="about_us.html">About Us</a></li>
+      <li><a href="faqs.html">FAQs</a></li>
+      <li><a href="privacy_policy.html">Privacy Policy</a></li>
+      <li><a href="sources.html">Sources</a></li>
+      <li><a href="developer.html">About Developer</a></li>
+      <li><a href="sitemap.html">Sitemap</a></li>
+      <li><a href="contact_us.html">Contact Us</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="investors.html">Investors</a></li>
+      <li><a href="our_story.html">Our Story</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <h1>Careers at CineWatch</h1>
+
+    <section class="careers-section">
+      <h2>Join Our Team</h2>
+      <p>
+        Are you passionate about movies, TV shows, and technology? Do you want to be part of a dynamic team
+        that brings entertainment to millions? CineWatch is always looking for talented and enthusiastic
+        individuals to join us. We offer a vibrant work environment, opportunities for growth, and the chance
+        to work on exciting projects that shape the future of digital entertainment.
+      </p>
+      <p>
+        At CineWatch, we believe in fostering creativity, collaboration, and continuous learning. We value
+        diversity and are committed to building an inclusive workplace where everyone feels welcome and can thrive.
+      </p>
+    </section>
+
+    <section class="careers-section">
+      <h2>Why Work With Us?</h2>
+      <ul>
+        <li><strong>Impactful Work:</strong> Contribute to a product used and loved by a global audience.</li>
+        <li><strong>Innovative Environment:</strong> Work with cutting-edge technologies in a fast-paced industry.</li>
+        <li><strong>Growth Opportunities:</strong> Continuous learning and professional development.</li>
+        <li><strong>Collaborative Culture:</strong> Be part of a supportive and diverse team.</li>
+        <li><strong>Competitive Benefits:</strong> We offer attractive compensation packages and benefits.</li>
+      </ul>
+    </section>
+
+    <section class="careers-section">
+      <h2>Current Opportunities</h2>
+      <p>We are constantly expanding our team. Check out our current openings below:</p>
+
+      <div class="job-listing">
+        <h3>Senior Software Engineer (Frontend)</h3>
+        <p class="department">Engineering Department</p>
+        <p class="location">Remote / Los Angeles, CA</p>
+        <p>
+          We are seeking a highly skilled Senior Frontend Engineer to build responsive and intuitive user interfaces.
+          Proficiency in React, Vue.js, or Angular required.
+        </p>
+        <a href="#" class="apply-btn">Apply Now</a>
+      </div>
+
+      <div class="job-listing">
+        <h3>Content Acquisition Specialist</h3>
+        <p class="department">Content Department</p>
+        <p class="location">New York, NY</p>
+        <p>
+          Responsible for identifying, negotiating, and acquiring film and TV content licenses.
+          Experience in media rights or content distribution preferred.
+        </p>
+        <a href="#" class="apply-btn">Apply Now</a>
+      </div>
+
+      <div class="job-listing">
+        <h3>Product Manager (User Experience)</h3>
+        <p class="department">Product Department</p>
+        <p class="location">Los Angeles, CA</p>
+        <p>
+          Lead the product lifecycle from ideation to launch, focusing on enhancing user experience.
+          Strong background in UX/UI design and agile methodologies.
+        </p>
+        <a href="#" class="apply-btn">Apply Now</a>
+      </div>
+
+      <div class="job-listing">
+        <h3>Marketing Coordinator</h3>
+        <p class="department">Marketing Department</p>
+        <p class="location">Remote</p>
+        <p>
+          Assist with marketing campaigns, social media management, and content creation to promote CineWatch.
+          Excellent communication and organizational skills are a must.
+        </p>
+        <a href="#" class="apply-btn">Apply Now</a>
+      </div>
+
+      <p>Don't see a role that fits your profile? Send us your resume to <a href="mailto:careers@cinewatch.com">careers@cinewatch.com</a>
+        and tell us how you can contribute to CineWatch. We're always interested in passionate talent!</p>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>CineWatch</h3>
+        <p>Your ultimate guide to movies, TV shows, and cinema experiences.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="movies.html">Movies</a></li>
+          <li><a href="tvshows.html">TV Shows</a></li>
+          <li><a href="cinema_guide.html">Cinema Guide</a></li>
+          <li><a href="tv_networks.html">TV Networks</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>About</h3>
+        <ul>
+          <li><a href="about_us.html">About Us</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="investors.html">Investors</a></li>
+          <li><a href="contact_us.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="privacy_policy.html">Privacy Policy</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+          <li><a href="sources.html">Sources</a></li>
+          <li><a href="developer.html">About Developer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="current-year">2023</span> CineWatch. All rights reserved.</p>
+      <p>Last Modified: <span id="last-modified"></span></p>
+    </div>
+  </footer>
+
+  <script>
+    // General JavaScript for header and footer common functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchToggleBtn = document.getElementById('searchToggleBtn');
+      const dynamicSearchArea = document.getElementById('dynamicSearchArea');
+      const accountBtn = document.getElementById('accountBtn');
+      const accountDropdown = document.getElementById('accountDropdown');
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+      const closeMobileNavBtn = document.getElementById('closeMobileNavBtn');
+
+      // --- Search Bar Toggle ---
+      if (searchToggleBtn && dynamicSearchArea) {
+        searchToggleBtn.addEventListener('click', () => {
+          dynamicSearchArea.classList.toggle('show');
+          if (accountDropdown) {
+            accountDropdown.classList.remove('show'); // Hide account dropdown if search opens
+          }
+        });
+      }
+
+      // --- Account Dropdown Toggle ---
+      if (accountBtn && accountDropdown) {
+        accountBtn.addEventListener('click', (event) => {
+          accountDropdown.classList.toggle('show');
+          if (dynamicSearchArea) {
+            dynamicSearchArea.classList.remove('show'); // Hide search if account dropdown opens
+          }
+          event.stopPropagation(); // Prevent document click from immediately closing
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', (event) => {
+          if (!accountBtn.contains(event.target) && !accountDropdown.contains(event.target)) {
+            accountDropdown.classList.remove('show');
+          }
+        });
+      }
+
+      // --- Dark Mode Toggle ---
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode');
+          // Save preference to localStorage
+          if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            darkModeToggle.classList.replace('fa-moon', 'fa-sun');
+            darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+          } else {
+            localStorage.setItem('theme', 'light');
+            darkModeToggle.classList.replace('fa-sun', 'fa-moon');
+            darkModeToggle.setAttribute('title', 'Toggle Dark Mode');
+          }
+        });
+
+        // Apply saved theme on load
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+          document.body.classList.add('dark-mode');
+          darkModeToggle.classList.replace('fa-moon', 'fa-sun');
+          darkModeToggle.setAttribute('title', 'Toggle Light Mode');
+        }
+      }
+
+      // --- Mobile Navigation (Hamburger Menu) ---
+      if (hamburgerMenu && mobileNavOverlay && closeMobileNavBtn) {
+          hamburgerMenu.addEventListener('click', () => {
+              mobileNavOverlay.classList.add('show');
+          });
+
+          // Close mobile nav when clicking on overlay itself or a link inside
+          mobileNavOverlay.addEventListener('click', (event) => {
+              if (event.target === mobileNavOverlay || event.target.tagName === 'A') {
+                  mobileNavOverlay.classList.remove('show');
+              }
+          });
+          // Close button inside mobile nav
+          closeMobileNavBtn.addEventListener('click', () => {
+              mobileNavOverlay.classList.remove('show');
+          });
+      }
+
+      // --- Footer Dynamic Content ---
+      // Update the current year in the footer
+      const currentYearSpan = document.getElementById('current-year');
+      if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+      }
+
+      // Last Modified Date (footer) - This typically needs server-side processing or specific build steps
+      // For client-side, we can use document.lastModified which reflects when the document was last modified on the server
+      const lastModifiedSpan = document.getElementById('last-modified');
+      if (lastModifiedSpan) {
+        lastModifiedSpan.textContent = new Date(document.lastModified).toLocaleDateString();
+      } else {
+        console.warn("Last Modified span not found.");
+      }
+
+      // Placeholder for user login status update function (from index.html)
+      // This would typically involve checking a cookie or session storage for login state
+      const updateAccountDropdown = (userLoggedIn) => {
+          const desktopLoginLink = document.getElementById('desktopLoginLink');
+          const desktopRegisterLink = document.getElementById('desktopRegisterLink');
+          const desktopProfileLink = document.getElementById('desktopProfileLink');
+          const desktopSettingsLink = document.getElementById('desktopSettingsLink');
+          const desktopWatchlistLink = document.getElementById('desktopWatchlistLink');
+          const desktopHistoryLink = document.getElementById('desktopHistoryLink');
+          const desktopLogoutLink = document.getElementById('desktopLogoutLink');
+
+          const mobileLoginLink = document.getElementById('mobileLoginLink');
+          const mobileRegisterLink = document.getElementById('mobileRegisterLink');
+          const mobileProfileLink = document.getElementById('mobileProfileLink');
+          const mobileSettingsLink = document.getElementById('mobileSettingsLink');
+          const mobileWatchlistLink = document.getElementById('mobileWatchlistLink');
+          const mobileHistoryLink = document.getElementById('mobileHistoryLink');
+          const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+          if (userLoggedIn) {
+              // Show profile/logout, hide login/register
+              if (desktopLoginLink) desktopLoginLink.style.display = 'none';
+              if (desktopRegisterLink) desktopRegisterLink.style.display = 'none';
+              if (desktopProfileLink) desktopProfileLink.style.display = 'block'; // Or 'flex' as appropriate
+              if (desktopSettingsLink) desktopSettingsLink.style.display = 'block';
+              if (desktopWatchlistLink) desktopWatchlistLink.style.display = 'block';
+              if (desktopHistoryLink) desktopHistoryLink.style.display = 'block';
+              if (desktopLogoutLink) desktopLogoutLink.style.display = 'block';
+
+              if (mobileLoginLink) mobileLoginLink.style.display = 'none';
+              if (mobileRegisterLink) mobileRegisterLink.style.display = 'none';
+              if (mobileProfileLink) mobileProfileLink.style.display = 'flex';
+              if (mobileSettingsLink) mobileSettingsLink.style.display = 'flex';
+              if (mobileWatchlistLink) mobileWatchlistLink.style.display = 'flex';
+              if (mobileHistoryLink) mobileHistoryLink.style.display = 'flex';
+              if (mobileLogoutLink) mobileLogoutLink.style.display = 'flex';
+          } else {
+              // Show login/register, hide profile/logout
+              if (desktopLoginLink) desktopLoginLink.style.display = 'flex';
+              if (desktopRegisterLink) desktopRegisterLink.style.display = 'flex';
+              if (desktopProfileLink) desktopProfileLink.style.display = 'none';
+              if (desktopSettingsLink) desktopSettingsLink.style.display = 'none';
+              if (desktopWatchlistLink) desktopWatchlistLink.style.display = 'none';
+              if (desktopHistoryLink) desktopHistoryLink.style.display = 'none';
+              if (desktopLogoutLink) desktopLogoutLink.style.display = 'none';
+
+              if (mobileLoginLink) mobileLoginLink.style.display = 'flex';
+              if (mobileRegisterLink) mobileRegisterLink.style.display = 'flex';
+              if (mobileProfileLink) mobileProfileLink.style.display = 'none';
+              if (mobileSettingsLink) mobileSettingsLink.style.display = 'none';
+              if (mobileWatchlistLink) mobileWatchlistLink.style.display = 'none';
+              if (mobileHistoryLink) mobileHistoryLink.style.display = 'none';
+              if (mobileLogoutLink) mobileLogoutLink.style.display = 'none';
+          }
+      };
+      // Initial update of account dropdown state (assuming not logged in by default on page load)
+      updateAccountDropdown(false);
+    });
+  </script>
+</body>
+</html>

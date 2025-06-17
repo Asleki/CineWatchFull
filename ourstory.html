@@ -9,70 +9,72 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Root Theme Variables */
-    :root {
-      --bg: #fff;
-      --text: #111;
-      --header-bg: #f0ecec;
-      --search-bg: #f4f4f4;
-      --card-border: #eee;
-      --card-shadow: rgba(0, 0, 0, 0.05);
-      --highlight: #007bff;
-      --accent: #28a745;
-      --danger: #dc3545;
-      --info: #17a2b8;
-      --warning: #ffc107;
-      --modal-bg: rgba(0, 0, 0, 0.5);
-      --modal-content-bg: #fff;
-      --modal-text: #111;
-      --search-area-height: 120px;
-      --hero-overlay: rgba(0, 0, 0, 0.6);
-      --section-padding: 40px 20px;
-      --carousel-gap: 20px;
-      --card-bg: #fff;
-      --card-text: #111;
-      --card-rating-bg: var(--accent);
-      --card-rating-text: #fff;
-      --button-hover: #0056b3;
-      --suggestions-bg: #fff;
-      --suggestions-border: #ddd;
-      --suggestions-item-hover-bg: #f0f0f0;
-      --carousel-arrow-bg: rgba(0, 0, 0, 0.5);
-      --carousel-arrow-color: #fff;
-      --carousel-arrow-hover-bg: rgba(0, 0, 0, 0.7);
-    }
+        /* Root Theme Variables - Unified with cinewatch_home.html */
+        :root {
+            --bg: #fff;
+            --text: #111;
+            --header-bg: #f0ecec;
+            --search-bg: #f4f4f4;
+            --highlight: rgb(28, 12, 241); /* Blue used for highlight */
+            --danger: #f44336;
+            --cinewatch-blue: #000080; /* Dark blue color for CineWatch name */
 
-    /* Dark Mode Variables */
-    body.dark-mode {
-      --bg: #1a1a1a;
-      --text: #f0f0f0;
-      --header-bg: #2a2a2a;
-      --search-bg: #333;
-      --card-border: #444;
-      --card-shadow: rgba(0, 0, 0, 0.3);
-      --highlight: #66b3ff;
-      --accent: #4CAF50;
-      --danger: #ff6b6b;
-      --info: #00bcd4;
-      --warning: #ffeb3b;
-      --modal-bg: rgba(0, 0, 0, 0.7);
-      --modal-content-bg: #282828;
-      --modal-text: #f0f0f0;
-      --hero-overlay: rgba(0, 0, 0, 0.75);
-      --card-bg: #282828;
-      --card-text: #f0f0f0;
-      --card-rating-bg: var(--accent);
-      --card-rating-text: #fff;
-      --button-hover: #4a90d9;
-      --suggestions-bg: #282828;
-      --suggestions-border: #444;
-      --suggestions-item-hover-bg: #3a3a3a;
-      --carousel-arrow-bg: rgba(255, 255, 255, 0.2);
-      --carousel-arrow-color: #f0f0f0;
-      --carousel-arrow-hover-bg: rgba(255, 255, 255, 0.3);
-    }
+            /* Variables for custom message box & dropdown in light mode */
+            --message-box-bg: #fff;
+            --message-box-text: #111;
+            --message-box-border: #ccc;
+            --message-box-button-bg: #007bff;
+            --message-box-button-text: white;
+            --message-box-button-hover-bg: #0056b3;
 
-    /* Global Styles */
+            --dropdown-bg: #fff;
+            --dropdown-item-hover-bg: #f0f0f0;
+            --dropdown-border: #ddd;
+
+            /* Specific for carousel (though not directly used here, for consistency) */
+            --carousel-bg: #f0f0f0;
+            --card-bg: #ffffff;
+            --card-border: #e0e0e0;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark Mode Theme Variables - Unified with cinewatch_home.html */
+        body.dark-mode {
+            --bg: #1a1a1a;
+            --text: #f0f0f0;
+            --header-bg: #2a2a2a;
+            --search-bg: #3a3a3a;
+            --highlight: #6699ff; /* Lighter blue for dark mode highlight */
+            --danger: #ff6b6b;
+            --cinewatch-blue: #ADD8E6; /* Light blue for CineWatch name in dark mode */
+
+            /* Variables for custom message box & dropdown in dark mode */
+            --message-box-bg: #333;
+            --message-box-text: #f0f0f0;
+            --message-box-border: #555;
+            --message-box-button-bg: #6699ff;
+            --message-box-button-text: #111;
+            --message-box-button-hover-bg: #4477ee;
+
+            --dropdown-bg: #333;
+            --dropdown-item-hover-bg: #444;
+            --dropdown-border: #555;
+
+            /* Specific for carousel in dark mode */
+            --carousel-bg: #2a2a2a;
+            --card-bg: #3a3a3a;
+            --card-border: #444;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Base Styles - Unified with cinewatch_home.html */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+/* Global Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -454,412 +456,718 @@
       text-align: center;
     }
 
-    .story-section {
-      margin-bottom: 40px;
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      box-shadow: 0 2px 5px var(--card-shadow);
-      padding: 30px;
-    }
+        
 
-    .story-section h2 {
-      font-size: 2rem;
-      color: var(--text);
-      margin-bottom: 20px;
-      text-align: center;
-    }
+            .main-subheader {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px 15px;
+            }
+            .site-tagline {
+                margin-bottom: 10px;
+            }
 
-    .story-section p {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 15px;
-      text-align: justify;
-    }
+            .hero-section {
+                height: 500px;
+            }
 
-    .story-section ul {
-      list-style: disc;
-      padding-left: 25px;
-      margin-bottom: 15px;
-    }
+            .hero-content {
+                flex-direction: column;
+                gap: 25px;
+                text-align: center;
+                padding: 15px;
+            }
 
-    .story-section ul li {
-      margin-bottom: 8px;
-      font-size: 1.05rem;
-    }
+            .hero-show-card {
+                max-width: 200px;
+                min-width: 180px;
+                order: 1;
+            }
 
-    /* Footer Styles (from index.html) */
-    .main-footer {
-      background-color: var(--header-bg);
-      color: var(--text);
-      padding: 30px 20px;
-      border-top: 1px solid var(--card-border);
-      text-align: center;
-      font-size: 0.9rem;
-      margin-top: 50px;
-      transition: background-color 0.3s, color 0.3s;
-    }
+            .hero-quote-card {
+                max-width: 90%;
+                padding: 20px;
+                order: 2;
+            }
 
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      gap: 20px;
-      text-align: left;
-    }
+            .hero-quote {
+                font-size: 1.6rem;
+            }
 
-    .footer-section {
-      flex: 1;
-      min-width: 200px;
-      margin-bottom: 20px;
-    }
+            .category-section {
+                padding: 15px;
+                margin-bottom: 30px;
+            }
+            .category-section .category-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            .show-card {
+                width: calc(33.333% - 13.333px);
+            }
+            .show-card-details {
+                padding: 10px;
+            }
+            .show-card-title {
+                font-size: 1.1rem;
+            }
+            .show-card-meta, .show-card-description, .show-card-actions button {
+                font-size: 0.8rem;
+            }
 
-    .footer-section h3 {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      color: var(--highlight);
-    }
+           
+        
 
-    .footer-section p,
-    .footer-section ul {
-      font-size: 0.9rem;
-      color: var(--text);
-      line-height: 1.8;
-      list-style: none; /* Remove default list styling */
-      padding: 0; /* Remove default padding */
-    }
+        @media (max-width: 600px) {
+            .show-card {
+                width: calc(50% - 10px);
+            }
+            .carousel-track {
+                gap: 15px;
+            }
+        }
 
-    .footer-section ul li a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      display: block; /* Make links block level for better click area */
-      padding: 2px 0;
-    }
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            .hero-section .tagline {
+                font-size: 1rem;
+            }
+            .story-section h2, .team-section h2, .location-contact-section h2, .cta-section h2 {
+                font-size: 1.5rem;
+            }
+            .team-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .cta-buttons .btn {
+                width: 100%; /* Full width buttons */
+            }
+        }
 
-    .footer-section ul li a:hover {
-      color: var(--highlight);
-      text-decoration: underline;
-    }
+        /* --- ABOUT US SPECIFIC STYLES --- (Retained and adapted from original about_us.css) */
+        /* General Layout */
+        .about-page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Inter', sans-serif; /* Ensuring consistent font */
+        }
 
-    .social-icons a {
-      color: var(--text);
-      font-size: 1.5rem;
-      margin-right: 15px;
-      transition: color 0.2s ease;
-    }
+        .section-padding {
+            padding: 60px 0;
+        }
 
-    .social-icons a:hover {
-      color: var(--highlight);
-    }
+        .bg-light {
+            background-color: var(--header-bg); /* Use header-bg for light sections */
+            border-radius: 15px; /* Added for softer look */
+            margin-bottom: 40px; /* Space between sections */
+            padding: 40px; /* Adjust padding for rounded sections */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        }
 
-    .footer-bottom {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid var(--card-border);
-      font-size: 0.8rem;
-      color: var(--text);
-      opacity: 0.8;
-    }
+        .bg-dark {
+            background-color: var(--search-bg); /* Use search-bg for dark sections */
+            color: var(--text); /* Text color adjusts with dark mode */
+            border-radius: 15px; /* Added for softer look */
+            margin-bottom: 40px;
+            padding: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
 
-    /* Responsive adjustments for smaller screens */
-    @media (max-width: 768px) {
-      .main-nav-header {
-        display: none; /* Hide desktop nav on small screens */
-      }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-      .mobile-menu-toggle {
-        display: block; /* Show hamburger menu */
-      }
+        .text-center {
+            text-align: center;
+        }
 
-      .utility-header {
-        padding: 10px 15px;
-      }
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/myteam/man-watching-show-his-tv_926199-1957605.webp') no-repeat center center/cover;
+            padding: 100px 0;
+            text-align: center;
+            color: #ffffff;
+            width: 100%; /* Hero section spans full width */
+            box-sizing: border-box;
+            /* Retaining other relevant styles from previous hero, adapting to new background */
+            position: relative; /* Needed for any absolute positioning of content */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0; /* Ensure no border-radius */
+            margin-bottom: 40px; /* Spacing below hero */
+        }
 
-      .logo a {
-        font-size: 1.5rem;
-      }
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
 
-      .search-bar-toggle button,
-      .account-button,
-      .theme-toggle-button {
-        font-size: 1.3rem;
-      }
+        .hero-section .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
 
-      .dynamic-search-area.show {
-        max-height: 200px; /* Adjust height for mobile search */
-      }
+        /* Story Section */
+        .story-section .content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
 
-      .search-filters {
-        flex-direction: column; /* Stack filters vertically */
-        align-items: stretch; /* Stretch filters to full width */
-      }
+        .story-section .text-content {
+            flex: 1;
+        }
 
-      .search-filters select,
-      .search-filters input[type="text"] {
-        max-width: 100%; /* Full width on mobile */
-      }
+        .story-section h2 {
+            font-size: 2.5rem;
+            color: var(--highlight);
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--highlight);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
 
-      .hero-content h1 {
-        font-size: 2.5rem;
-      }
+        .story-section p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: var(--text);
+        }
 
-      .hero-content p {
-        font-size: 1rem;
-      }
+        .story-section .image-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-      .hero-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
+        .story-section .story-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
 
-      .hero-buttons .btn {
-        width: 100%;
-        text-align: center;
-      }
+        /* Team Section */
+        .team-section h2 {
+            font-size: 2.2rem;
+            color: var(--highlight);
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-      .hero-quote-card {
-        position: static; /* Remove absolute positioning */
-        margin: 20px auto 0; /* Center and add space */
-        max-width: 90%;
-        text-align: left;
-      }
+        .team-section .section-description {
+            font-size: 1.1rem;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
 
-      .content-section {
-        padding: 20px 15px;
-      }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
 
-      .content-section h2 {
-        font-size: 1.8rem;
-      }
+        .team-member {
+            background-color: var(--bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-      .show-carousel {
-        padding: 0 10px;
-      }
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--card-shadow);
+        }
 
-      .carousel-arrow {
-        display: none; /* Hide arrows on small screens, rely on scroll */
-      }
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid var(--highlight);
+            transition: border-color 0.3s ease;
+        }
 
-      .card {
-        min-width: 150px; /* Adjust card size for mobile */
-      }
+        .team-member h3 {
+            font-size: 1.8rem;
+            color: var(--cinewatch-blue);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
 
-      .footer-content {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
+        .team-member .role {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
 
-      .footer-section {
-        min-width: unset;
-        width: 100%;
-      }
+        .team-member p {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
 
-      .social-icons {
-        margin-top: 15px;
-      }
+        /* Location and Contact Section */
+        .location-contact-section {
+            padding: 60px 0;
+            background-color: var(--bg); /* Use base background, adjust for dark mode */
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
 
-      .story-section {
-        padding: 20px;
-      }
-    }
+        .location-contact-section h2 {
+            font-size: 2.2rem;
+            color: var(--highlight);
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--highlight);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
 
-    /* Mobile Navigation Overlay */
-    .mobile-nav-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transform: translateX(100%);
-      transition: transform 0.3s ease-out;
-    }
+        .map-container {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--dropdown-border);
+        }
 
-    .mobile-nav-overlay.show {
-      transform: translateX(0);
-    }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
-    .mobile-nav-overlay .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 2rem;
-      cursor: pointer;
-    }
+        .contact-button-container {
+            margin-top: 30px;
+        }
 
-    .mobile-nav-links {
-      list-style: none;
-      padding: 0;
-      text-align: center;
-    }
+        .contact-button {
+            display: inline-block;
+            background-color: var(--cinewatch-blue);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .mobile-nav-links li {
-      margin-bottom: 20px;
-    }
+        .contact-button:hover {
+            background-color: var(--highlight);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
 
-    .mobile-nav-links a {
-      color: #fff;
-      font-size: 1.8rem;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
 
-    .mobile-nav-links a:hover {
-      color: var(--highlight);
-    }
+        /* CTA Section - unified button styles */
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--highlight); /* Use highlight color */
+        }
 
-    /* Utility classes for display (used in JS for login/logout) */
-    .d-none { display: none !important; }
-    .d-flex { display: flex !important; }
-    .d-block { display: block !important; }
-  </style>
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: var(--text); /* Text color adjusts */
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .cta-buttons .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            white-space: nowrap; /* Prevent buttons from wrapping text */
+        }
+
+        .cta-buttons .btn-primary {
+            background-color: var(--highlight);
+            color: white;
+            border: 2px solid var(--highlight);
+        }
+
+        .cta-buttons .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .cta-buttons .btn-secondary {
+            background-color: transparent;
+            color: var(--cinewatch-blue);
+            border: 2px solid var(--cinewatch-blue);
+        }
+
+        body.dark-mode .cta-buttons .btn-secondary {
+            color: var(--text);
+            border-color: var(--text);
+        }
+
+        .cta-buttons .btn-secondary:hover {
+            background-color: var(--cinewatch-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+        body.dark-mode .cta-buttons .btn-secondary:hover {
+            background-color: var(--highlight);
+            color: white;
+            border-color: var(--highlight);
+        }
+
+        /* Responsive adjustments for About Us content */
+        @media (max-width: 900px) {
+            .story-section .content-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+            .story-section .image-content {
+                order: -1; /* Image above text on smaller screens */
+                margin-bottom: 30px;
+            }
+            .story-section h2 {
+                font-size: 2rem;
+                text-align: center;
+            }
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.8rem;
+            }
+            .hero-section .tagline {
+                font-size: 1.2rem;
+            }
+            .section-padding {
+                padding: 40px 0;
+            }
+            .bg-light, .bg-dark, .location-contact-section {
+                padding: 30px 20px;
+            }
+            .story-section h2, .team-section h2, .location-contact-section h2, .cta-section h2 {
+                font-size: 1.8rem;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .story-section p, .team-section .section-description, .team-member p {
+                font-size: 1rem;
+            }
+            .team-member img {
+                width: 120px;
+                height: 120px;
+            }
+            .team-member h3 {
+                font-size: 1.5rem;
+            }
+            .contact-button {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            .cta-buttons .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            .footer-info, .footer-nav ul, .social-links {
+                justify-content: center; /* Center footer items on small screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            .hero-section .tagline {
+                font-size: 1rem;
+            }
+            .story-section h2, .team-section h2, .location-contact-section h2, .cta-section h2 {
+                font-size: 1.5rem;
+            }
+            .team-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .cta-buttons .btn {
+                width: 100%; /* Full width buttons */
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Custom Alert/Message Box Structure -->
+  <div id="customAlert" class="custom-alert">
+    <div class="alert-content">
+      <i id="alertIcon" class="alert-icon fas fa-info-circle blue-icon"></i>
+      <p id="alertMessage">This is a custom alert message.</p>
+      <button id="closeAlertBtn">OK</button>
+    </div>
+  </div>
 
   <header class="main-global-header">
+    <!-- Utility Header: Logo, Search Toggle, Account, Dark Mode, Mobile Menu Toggle -->
     <div class="utility-header">
       <div class="logo">
         <a href="index.html">CineWatch</a>
       </div>
       <div class="header-utility-actions">
+        <!-- Search Icon (toggles expanded search bar) -->
         <div class="search-bar-toggle">
-          <button id="searchToggleBtn" aria-label="Toggle Search Bar">
+          <button class="search-toggle-button" id="searchToggleButton" aria-label="Toggle Search">
             <i class="fas fa-search"></i>
           </button>
         </div>
+        
+        <!-- Account Menu -->
         <div class="account-menu">
-          <button id="accountBtn" class="account-button" aria-label="Account Menu">
+          <button class="account-button" id="accountButton" aria-label="Account Menu">
             <i class="fas fa-user-circle"></i>
           </button>
-          <div id="accountDropdown" class="account-dropdown">
-            <a href="#" id="desktopLoginLink"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="#" id="desktopRegisterLink"><i class="fas fa-user-plus"></i> Register</a>
-            <a href="#" id="desktopProfileLink"><i class="fas fa-user"></i> Profile</a>
-            <a href="#" id="desktopSettingsLink"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" id="desktopWatchlistLink"><i class="fas fa-bookmark"></i> Watchlist</a>
-            <a href="#" id="desktopHistoryLink"><i class="fas fa-history"></i> History</a>
-            <a href="#" id="desktopLogoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <div class="account-dropdown" id="accountDropdown">
+            <a href="profile.html" id="desktopProfileLink" class="account-item"><i class="fas fa-user"></i> Profile</a>
+            <a href="settings.html" id="desktopSettingsLink" class="account-item"><i class="fas fa-cog"></i> Settings</a>
+            <a href="watchlist.html" id="desktopWatchlistLink" class="account-item"><i class="fas fa-bookmark"></i> Watchlist</a>
+            <a href="history.html" id="desktopHistoryLink" class="account-item"><i class="fas fa-history"></i> History</a>
+            <a href="login.html" id="desktopLoginLink" class="account-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="register.html" id="desktopRegisterLink" class="account-item"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="#" id="desktopLogoutLink" class="account-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </div>
-        <button id="darkModeToggle" class="theme-toggle-button" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle-button" id="darkModeToggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
           <i class="fas fa-moon"></i>
         </button>
-        <button id="hamburgerMenu" class="mobile-menu-toggle" aria-label="Open Mobile Menu">
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
           <i class="fas fa-bars"></i>
         </button>
       </div>
     </div>
 
-    <nav class="main-nav-header">
-      <a href="index.html">Home</a>
+    <!-- Main Navigation Header (Desktop Only) -->
+    <nav class="main-nav-header" id="mainNavHeader">
       <a href="movies.html">Movies</a>
       <a href="tvshows.html">TV Shows</a>
-      <a href="tv_networks.html">TV Networks</a>
-      <a href="cinema_guide.html">Cinema Guide</a>
+      <a href="tv_networks.html">TV Networks</a> <!-- New TV Networks link -->
+      <a href="cinema_guide.html">Cinemaguide</a>
+      <a href="about_us.html">About Us</a>
     </nav>
-
-    <div id="dynamicSearchArea" class="dynamic-search-area">
-      <div class="search-input-wrapper">
-        <input type="text" id="searchInput" placeholder="Search for movies, TV shows, actors..." />
-        <button id="searchActionBtn" class="search-button-label d-none">Search</button>
-        <button id="clearSearchBtn" class="search-button-label d-none">Clear</button>
-      </div>
-      <div id="searchSuggestions" class="search-suggestions-container">
-        </div>
-      <div class="search-filters">
-        <select id="searchScope">
-          <option value="">All Categories</option>
-          <option value="movie">Movies</option>
-          <option value="tv">TV Shows</option>
-          <option value="person">Actors/Directors</option>
-        </select>
-        <select id="genreFilter">
-          <option value="">All Genres</option>
-          </select>
-        <select id="yearFilter">
-          <option value="">All Years</option>
-          </select>
-        <select id="countryFilter">
-          <option value="">All Countries</option>
-          </select>
-        <select id="languageFilter">
-          <option value="">All Languages</option>
-          </select>
-      </div>
-    </div>
   </header>
 
-  <div id="mobileNavOverlay" class="mobile-nav-overlay">
-    <button id="closeMobileNavBtn" class="close-btn" aria-label="Close Mobile Menu">
-      <i class="fas fa-times"></i>
-    </button>
-    <ul class="mobile-nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="movies.html">Movies</a></li>
-      <li><a href="tvshows.html">TV Shows</a></li>
-      <li><a href="tv_networks.html">TV Networks</a></li>
-      <li><a href="cinema_guide.html">Cinema Guide</a></li>
-      <li><a href="#" id="mobileLoginLink">Login</a></li>
-      <li><a href="#" id="mobileRegisterLink">Register</a></li>
-      <li><a href="#" id="mobileProfileLink">Profile</a></li>
-      <li><a href="#" id="mobileSettingsLink">Settings</a></li>
-      <li><a href="#" id="mobileWatchlistLink">Watchlist</a></li>
-      <li><a href="#" id="mobileHistoryLink">History</a></li>
-      <li><a href="#" id="mobileLogoutLink">Logout</a></li>
-      <li><a href="about_us.html">About Us</a></li>
-      <li><a href="faqs.html">FAQs</a></li>
-      <li><a href="privacy_policy.html">Privacy Policy</a></li>
-      <li><a href="sources.html">Sources</a></li>
-      <li><a href="developer.html">About Developer</a></li>
-      <li><a href="sitemap.html">Sitemap</a></li>
-      <li><a href="contact_us.html">Contact Us</a></li>
-      <li><a href="careers.html">Careers</a></li>
-      <li><a href="investors.html">Investors</a></li>
-      <li><a href="our_story.html">Our Story</a></li>
-    </ul>
-  </div>
+  <!-- Mobile Navigation Menu (Hidden by default, shown by JS toggle) -->
+  <nav class="mobile-nav-links" id="mobileNavLinks">
+    <a href="movies.html">Movies</a>
+    <a href="tvshows.html">TV Shows</a>
+    <a href="tv_networks.html">TV Networks</a> <!-- New TV Networks link -->
+    <a href="cinema_guide.html">Cinemaguide</a>
+    <a href="about_us.html">About Us</a>
+    <!-- Account links for mobile -->
+    <a href="profile.html" id="mobileProfileLink">Profile</a>
+    <a href="settings.html" id="mobileSettingsLink">Settings</a>
+    <a href="watchlist.html" id="mobileWatchlistLink">Watchlist</a>
+    <a href="history.html" id="mobileHistoryLink">History</a>
+    <a href="login.html" id="mobileLoginLink">Login</a>
+    <a href="register.html" id="mobileRegisterLink">Register</a>
+    <a href="#" id="mobileLogoutLink">Logout</a>
+  </nav>
 
-  <main>
-    <h1>Our Story</h1>
-    <section class="story-section">
-      <h2>The Beginning of CineWatch</h2>
-      <p>CineWatch was born out of a shared passion for cinema and television. Our founders envisioned a platform where movie buffs and TV series enthusiasts could easily discover, explore, and connect with their favorite content. Frustrated by fragmented information and clunky interfaces, they set out to create a seamless, intuitive, and comprehensive guide to the world of entertainment.</p>
-      <p>From humble beginnings as a small project, CineWatch has grown into a vibrant community. We believe that great stories deserve to be easily accessible and that the journey of discovering new content should be as enjoyable as the content itself.</p>
-    </section>
+  <!-- Dynamic Search Input Area (Animated reveal) -->
+  <section class="dynamic-search-area" id="dynamicSearchArea">
+    <div class="search-input-wrapper">
+      <input type="text" id="expandedSearchBar" placeholder="Search movies, shows, cast..." aria-label="Expanded Search Bar">
+      <button class="search-icon-btn" id="micIconBtn" aria-label="Voice Search"><i class="fas fa-microphone"></i></button>
+      <button class="search-icon-btn clear-search-btn" id="clearSearchBtn" aria-label="Clear Search"><i class="fas fa-times"></i></button>
+      <button class="search-button-label" id="searchActionBtn">Search</button>
+    </div>
+    <!-- Search Suggestions Container -->
+    <div class="search-suggestions-container" id="searchSuggestionsContainer">
+      <!-- Suggestions will be populated here -->
+    </div>
+    <div class="search-filters">
+      <select id="genreFilter" aria-label="Filter by Genre">
+        <option value="">All Genres</option>
+        <!-- Genres will be dynamically populated here by JS -->
+      </select>
+      <select id="yearFilter" aria-label="Filter by Release Year">
+        <option value="">All Years</option>
+        <!-- Years will be dynamically populated here by JS -->
+      </select>
+      <input type="text" id="castFilter" placeholder="Filter by Cast" aria-label="Filter by Cast">
+    </div>
+  </section>
 
-    <section class="story-section">
-      <h2>Our Mission & Vision</h2>
-      <p><strong>Our Mission:</strong> To empower entertainment lovers by providing an unparalleled platform for discovering, tracking, and engaging with movies and TV shows from around the globe.</p>
-      <p><strong>Our Vision:</strong> To be the world's leading destination for comprehensive, personalized, and community-driven entertainment exploration.</p>
-      <p>We are committed to:</p>
-      <ul>
-        <li><strong>Innovation:</strong> Continuously improving our features and user experience.</li>
-        <li><strong>Accuracy:</strong> Providing up-to-date and reliable information.</li>
-        <li><strong>Community:</strong> Fostering a welcoming space for shared passions.</li>
-        <li><strong>Accessibility:</strong> Ensuring CineWatch is easy to use for everyone.</li>
-      </ul>
-    </section>
 
-    <section class="story-section">
-      <h2>The CineWatch Team</h2>
-      <p>Behind CineWatch is a dedicated team of developers, designers, content curators, and customer support specialists. We are cinephiles and TV addicts ourselves, constantly striving to enhance your experience. Every feature, every design choice, and every piece of content is a result of our collective effort to bring you the best entertainment guide possible.</p>
-      <p>Thank you for being a part of our story. We're excited to see what the future holds for CineWatch and for you, our valued users!</p>
-    </section>
-  </main>
 
+    <main class="about-page-content">
+        <section class="hero-section">
+            <div class="container">
+                <h1>About Us</h1>
+                <p class="tagline">Behind every great show, there's a passionate story.</p>
+            </div>
+        </section>
+
+        <section class="story-section section-padding">
+            <div class="container">
+                <div class="content-wrapper">
+                    <div class="text-content">
+                        <h2>Our Story: From a Couch Idea to Your Binge Destination</h2>
+                        <p>Welcome to CineWatch! We're thrilled you're here. Our journey began with a simple idea: to create a dedicated space for TV show enthusiasts to discover, stream, and celebrate their favorite series.</p>
+                        <p>It all started back in 2024, in a small apartment in Mlolongo, Machakos County, Kenya. Our founder, <a href="developer.html">Alex Malunda</a>, was having a particularly intense TV show marathon. Frustrated with endlessly searching across various platforms and battling buffering screens (a common Nairobi issue, as you might know!), a thought sparked: "There has to be a better way!" What began as a passion project, fueled by countless cups of coffee and late-night coding sessions, quickly grew into something more. We envisioned a platform that wasn't just about watching shows, but about building a community where every click felt like coming home to your next binge-worthy adventure.</p>
+                        <p>We've poured our hearts into building CineWatch to be intuitive, comprehensive, and above all, a joy to use. We believe that finding your next favorite show should be as entertaining as watching it!</p>
+                    </div>
+                    <div class="image-content">
+                        <img src="images/myteam/aboutus_hero.webp" alt="A depiction of the site's origin, perhaps a person watching TV with ideas floating around." class="story-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team-section section-padding bg-light">
+            <div class="container">
+                <h2>Meet Our Passionate Team</h2>
+                <p class="section-description">Behind every great streaming experience is a dedicated group of individuals who love TV shows as much as you do. Meet some of the key players who make it all happen:</p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="images/myteam/kari-rasmussen.webp" alt="Team Member Photo of Kari Rasmussen">
+                        <h3>Kari Rasmussen</h3>
+                        <p class="role">The Visionary & Lead Developer</p>
+                        <p>As the driving force behind CineWatch, Kari not only conceived the idea for our platform but also built it from the ground up. They're responsible for the site's technical architecture, ensuring a smooth and seamless streaming experience, and constantly innovating new features to enhance your enjoyment.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="images/myteam/nala-goins.webp" alt="Team Member Photo of Nala Goins">
+                        <h3>Nala Goins</h3>
+                        <p class="role">Head of Content Curation</p>
+                        <p>This is where the magic of discovery happens! Our Head of Content Curation tirelessly sifts through countless titles, handpicking the best TV shows to add to our library. They ensure a diverse, high-quality selection that caters to all tastes, from hidden gems to the latest must-watch series.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://placehold.co/150x150/000080/FFFFFF?text=Aisha+Ahmed" alt="Team Member Photo of Aisha Ahmed">
+                        <h3>Aisha Ahmed</h3>
+                        <p class="role">Lead UX/UI Designer</p>
+                        <p>Aisha ensures that every interaction on CineWatch is intuitive and visually appealing. With a keen eye for detail and a deep understanding of user behavior, she crafts seamless navigation and a delightful aesthetic that makes finding your next favorite show a breeze.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="images/myteam/noah-pierre.webp" alt="Team Member Photo of Noah Pierre">
+                        <h3>Noah Pierre</h3>
+                        <p class="role">Former User Experience (UX) Designer</p>
+                        <p>Noah contributed significantly to the initial design framework, focusing on the core usability of the platform. His early work helped establish the user-friendly foundation upon which CineWatch continues to build.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://placehold.co/150x150/000080/FFFFFF?text=Kwame+Nkrumah" alt="Team Member Photo of Kwame Nkrumah">
+                        <h3>Kwame Nkrumah</h3>
+                        <p class="role">Chief Technology Officer</p>
+                        <p>Kwame oversees all technological aspects of CineWatch, from server architecture to data security. His expertise ensures that our streaming infrastructure is robust, scalable, and delivers content efficiently, providing you with a smooth, buffer-free viewing experience.</p>
+                    </div>
+                     <div class="team-member">
+                        <img src="images/myteam/riley-moore.webp" alt="Team Member Photo of Riley Moore">
+                        <h3>Riley Moore</h3>
+                        <p class="role">Streaming Operations Specialist</p>
+                        <p>Ever wonder how those shows stream so flawlessly? Our Streaming Operations Specialist is the wizard behind the curtain, optimizing our servers and streaming infrastructure to guarantee high-quality playback with minimal buffering. They're all about ensuring your binge-watching sessions go off without a hitch.</p>
+                    </div>
+                     <div class="team-member">
+                        <img src="https://placehold.co/150x150/000080/FFFFFF?text=Zola+Moyo" alt="Team Member Photo of Zola Moyo">
+                        <h3>Zola Moyo</h3>
+                        <p class="role">Content Acquisition Manager</p>
+                        <p>Zola is the driving force behind expanding our diverse content library. She meticulously researches and negotiates licensing agreements with studios and distributors, ensuring CineWatch continuously offers a fresh and exciting array of movies and TV shows for our audience.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="images/myteam/freya-browning.webp" alt="Team Member Photo of Freya Browning">
+                        <h3>Freya Browning</h3> <p class="role">Community & Engagement Lead</p>
+                        <p>We're more than just a streaming platform; we're a community! Our Community & Engagement Lead fosters connections among our users, manages our social media presence, and is always listening to your feedback. They ensure that your voice is heard and that CineWatch remains a vibrant hub for TV lovers.</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://placehold.co/150x150/000080/FFFFFF?text=Jelani+Ndlovu" alt="Team Member Photo of Jelani Ndlovu">
+                        <h3>Jelani Ndlovu</h3>
+                        <p class="role">Data Analyst</p>
+                        <p>Jelani helps us understand what you love! By analyzing viewing patterns and user feedback, he provides insights that guide our content strategy and feature development. His work ensures that CineWatch is always evolving to meet the demands of our audience.</p>
+                    </div>
+                     <div class="team-member">
+                        <img src="https://placehold.co/150x150/000080/FFFFFF?text=Imani+Okoro" alt="Team Member Photo of Imani Okoro">
+                        <h3>Imani Okoro</h3>
+                        <p class="role">Marketing & Growth Specialist</p>
+                        <p>Imani is responsible for getting the word out about CineWatch. She develops innovative marketing campaigns and strategies to reach new users, ensuring that our platform continues to grow and connect with TV show enthusiasts worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Location and Contact Section -->
+        <section class="location-contact-section section-padding">
+            <div class="container text-center">
+                <h2>Visit Our Headquarters</h2>
+                <p class="section-description">While our content reaches screens everywhere, our heart is rooted right here in Nairobi.</p>
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.587823525175!2d36.9209594747761!3d-1.423984198539091!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f733cd88b0a99%3A0x2a0c4f8d295050f4!2sSignature%20Mall!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                        width="600"
+                        height="450"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="contact-button-container">
+                    <p class="section-description">Have questions or want to collaborate? We'd love to hear from you!</p>
+                    <a href="contact_us.html" class="contact-button">Contact Us</a>
+                </div>
+            </div>
+        </section>
+       
+        <section class="cta-section section-padding bg-dark">
+            <div class="container text-center">
+                <h2>Join Our Streaming Family!</h2>
+                <p>We're more than just a streaming site; we're a community of TV show lovers. Follow us on social media and dive into your next favorite series!</p>
+                <div class="cta-buttons">
+                    <a href="tv_shows.html" class="btn btn-primary">Start Watching Now</a>
+                    <a href="https://facebook.com/aslekiymastamynd" target="_blank" rel="noopener" class="btn btn-secondary">Follow on Facebook</a>
+                    <a href="https://twitter.com/yourhandle" target="_blank" rel="noopener" class="btn btn-secondary">Follow on X (Twitter)</a>
+                </div>
+            </div>
+        </section>
+    </main>
   <footer class="main-footer">
     <div class="footer-content">
       <div class="footer-section">
