@@ -1025,7 +1025,7 @@
       <a href="tvshows.html">TV Shows</a>
       <a href="watchlist.html">Watchlist</a>
       <a href="tv_networks.html">TV Networks</a>
-      <a href="cinema_guide.html">Cinemaguide</a>
+      <a href="cinema_guide.html">Cinema Guide</a>
       <a href="about_us.html">About Us</a>
     </nav>
   </header>
@@ -1036,7 +1036,7 @@
     <a href="tvshows.html">TV Shows</a>
     <a href="watchlist.html">Watchlist</a>
     <a href="tv_networks.html">TV Networks</a>
-    <a href="cinema_guide.html">Cinemaguide</a>
+    <a href="cinema_guide.html">Cinema Guide</a>
     <a href="about_us.html">About Us</a>
     <!-- Account links for mobile -->
     <a href="profile.html" id="mobileProfileLink">Profile</a>
@@ -1757,36 +1757,56 @@
                 showMessageBox('Voice search activated. (Functionality not yet implemented)', 'fas fa-microphone blue-icon');
             });
 
-            // Handles search action button click or Enter key press
-            const performSearch = () => {
-                const query = expandedSearchBar.value.trim();
-                const genreId = genreFilter.value;
-                const year = yearFilter.value;
-                const cast = document.getElementById('castFilter').value.trim();
+            // index.html
 
-                if (query || genreId || year || cast) {
-                    let searchParams = new URLSearchParams();
-                    searchParams.append('categoryName', `Search Results for "${query || 'All'}"`);
-                    searchParams.append('query', query);
-                    if (genreId) searchParams.append('genre', genreId);
-                    if (year) searchParams.append('year', year);
-                    if (cast) searchParams.append('cast', cast);
-                    searchParams.append('endpoint', '/search/multi');
-                    searchParams.append('mediaType', 'all');
-                    window.location.href = `category_details.html?${searchParams.toString()}`;
+/**
+ * Fetches search results and redirects to the top result's detail page.
+ */
+const performSearch = async () => {
+    const query = expandedSearchBar.value.trim();
+    if (!query) {
+        showMessageBox('Please enter a search term.', 'fas fa-info-circle yellow-icon');
+        return;
+    }
 
-                    if (searchSuggestionsContainer) searchSuggestionsContainer.classList.remove('show');
-                } else {
-                    showMessageBox('Please enter a search term or select filters.', 'fas fa-info-circle yellow-icon');
-                }
-            };
+    // Hide suggestions dropdown
+    if (searchSuggestionsContainer) {
+        searchSuggestionsContainer.classList.remove('show');
+    }
 
-            searchActionBtn.addEventListener('click', performSearch);
-            expandedSearchBar.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    performSearch();
-                }
-            });
+    try {
+        // Fetch the search results
+        const results = await fetchSearchResults(query);
+
+        if (results && results.length > 0) {
+            // Get the first valid result (movie, TV show, or person)
+            const topResult = results[0];
+
+            // Check if the top result has a valid media type for the details page
+            if (topResult.media_type === 'movie' || topResult.media_type === 'tv' || topResult.media_type === 'person') {
+                // Redirect to the details page with the correct ID and type
+                window.location.href = `details.html?id=${topResult.id}&type=${topResult.media_type}`;
+            } else {
+                // Fallback for cases where the top result is not a supported type
+                showMessageBox(`No direct match found for "${query}". Try selecting from the suggestions.`, 'fas fa-search blue-icon');
+            }
+        } else {
+            showMessageBox(`No results found for "${query}". Please try a different search term.`, 'fas fa-exclamation-triangle red-icon');
+        }
+    } catch (error) {
+        console.error('Search failed:', error);
+        showMessageBox('An error occurred during the search. Please try again.', 'fas fa-server red-icon');
+    }
+};
+
+// ... inside the DOMContentLoaded event listener ...
+
+searchActionBtn.addEventListener('click', performSearch);
+expandedSearchBar.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        performSearch();
+    }
+});
 
             // Populates genres for the search bar filter (all genres combined)
             const movieGenresForSearch = await fetchGenres('movie');
